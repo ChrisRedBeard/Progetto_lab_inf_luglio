@@ -10,11 +10,13 @@
 */
 
 #include <stdio.h>
+#include "coda.h"
 // Sequenze di escape ANSI per i colori
 const char *RED = "\033[31m";    // Rosso
 const char *GREEN = "\033[32m";  // Verde
 const char *YELLOW = "\033[33m"; // Giallo
 const char *RESET = "\033[0m";   // Reset del colore
+
 
 int main()
 {
@@ -34,6 +36,7 @@ int main()
     puts("6. Stampa statistiche spedizioni");
     puts("7. Esci");
     scanf("%hd", &scelta);
+
 
     switch (scelta)
     {

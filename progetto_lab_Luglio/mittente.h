@@ -1,3 +1,6 @@
+#ifndef MITTENTE_H
+#define MITTENTE_H
+
 typedef struct
 {
     char nome[30];
@@ -5,9 +8,11 @@ typedef struct
     char telefono[15]; // formato: +39 123 456 7890
     char via[100];     // Indirizzo (via, numero civico, ecc.)
     char citta[50];    // Città
-    char provincia[2]; // Provincia
-    char cap[5];       // CAP
+    char provincia[3]; // Provincia (2 chars + null terminator)
+    char cap[6];       // CAP (5 chars + null terminator)
     char email[50];    // e-mail
 
-} Mittente; 
+} Mittente;
+
+#endif // MITTENTE_H
 

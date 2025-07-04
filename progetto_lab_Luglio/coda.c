@@ -1,6 +1,7 @@
 
 
 #include "coda.h"
+#include "spedizione.h"
 
  
  void printQueue( QueueNodePtr currentPtr ){
@@ -12,7 +13,9 @@
     }else{
         while (currentPtr!=NULL)
         {
+            /*inserimento_file_spedizioni(Spedizione s)*/
             inserimento_file_spedizioni(currentPtr->sp_nodo); // Inserisce la spedizione nel file delle spedizioni
+            currentPtr = currentPtr->nextPtr; // spostamento al nodo successivo
         }
         
     }
@@ -31,7 +34,7 @@ void dequeue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr ){
    Spedizione s;
     QueueNodePtr tempPtr; // puntatore al nodo da rimuovere
 
-    s = (*headPtr)->sp_nodo; // recupero la spedizione dal nodo da rimuovere
+    s = ( *headPtr )->sp_nodo; // recupero la spedizione dal nodo da rimuovere
     tempPtr = *headPtr; 
     *headPtr = (*headPtr)->nextPtr;
     
@@ -43,14 +46,14 @@ void dequeue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr ){
     free(tempPtr); // rilascio la memoria del nodo rimosso
     
     s.stato = spedito; // Modifica lo stato della spedizione a "spedito"
-    inserimento_file_spedizione(s); // Inserisce la spedizione nel file delle spedizioni
+   inserimento_file_spedizioni(s); // Inserisce la spedizione nel file delle spedizioni
 
 }
 
 
 
 
- void enqueue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s ){
+ void enqueue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s){
 
     QueueNodePtr newPtr; // puntatore al nuovo nodo
     newPtr = malloc( sizeof( QueueNode ) ); // allocazione memoria per il nuovo nodo    

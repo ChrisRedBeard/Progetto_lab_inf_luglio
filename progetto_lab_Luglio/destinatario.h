@@ -1,5 +1,7 @@
+#ifndef DESTINATARIO_H
+#define DESTINATARIO_H
 
-typedef struct
+typedef struct 
 {
     char nome[30];
     char cognome[30];
@@ -18,3 +20,4 @@ void modifica_indirizzo(Destinatario d);
 void modifica_destinatario(Destinatario dest);
 
 
+#endif // DESTINATARIO_H
