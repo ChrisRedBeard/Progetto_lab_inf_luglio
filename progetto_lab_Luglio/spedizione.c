@@ -68,3 +68,42 @@ void stampa_file_spedizioni(){
 
     fclose(fp);
 }
+
+
+
+void mod_stato_sped(Spedizione *s){
+    int scelta;
+    while(scelta < 1 || scelta > 5) {
+        puts("Modifica stato della spedizione:");
+        puts("1. Ordinato");
+        puts("2. Spedito");
+        puts("3. In consegna");
+        puts("4. Consegnato");
+        puts("5. Annullato");
+        printf("Inserisci la tua scelta (1-5): ");
+        scanf("%d", &scelta);
+        
+    switch (scelta) {
+        case 1:
+            s->stato = ordinato; // Modifica lo stato della spedizione a "ordinato"
+            break;
+        case 2:
+            s->stato = spedito; // Modifica lo stato della spedizione a "spedito"
+            break;
+        case 3:
+            s->stato = in_consegna; // Modifica lo stato della spedizione a "in_consegna"
+            break;
+        case 4:
+            s->stato = consegnato; // Modifica lo stato della spedizione a "consegnato"
+            break;
+        case 5:
+            s->stato = annullato; // Modifica lo stato della spedizione a "annullato"
+            break;
+        default:
+            puts("Scelta non valida.");
+        
+    }
+   }
+
+
+}
