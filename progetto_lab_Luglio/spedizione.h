@@ -25,6 +25,7 @@ typedef struct
 void stampa_file_spedizioni();
 void inserimento_spedizione(Spedizione s);
 void inserimento_file_spedizioni(Spedizione s);
+void mod_stato_sped(Spedizione *s);
 
 #endif // SPEDIZIONE_H
 
