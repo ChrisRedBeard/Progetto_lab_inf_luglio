@@ -2,7 +2,6 @@
 #ifndef SPEDIZIONE_H
 #define SPEDIZIONE_H
 
-
 #include "pacco.h"
 #include "mittente.h"
 #include "destinatario.h"
@@ -22,9 +21,10 @@ typedef struct
     enum Stati stato; 
 } Spedizione;
 
-void stampa_file_spedizioni();
-void inserimento_spedizione(Spedizione s);
+void input_string(const char *prompt, char *dest, size_t size);
+void inserimento_spedizione();
 void inserimento_file_spedizioni(Spedizione s);
+void stampa_file_spedizioni();
 void mod_stato_sped(Spedizione *s);
 
 #endif // SPEDIZIONE_H
