@@ -9,7 +9,7 @@
 #include <time.h>
 #include <stdbool.h>
 
-enum Stati {ordinato = 10, spedito, in_consegna, consegnato, annullato};
+enum Stati {ordinato = 1, spedito, in_consegna, consegnato, annullato};
 
 typedef struct 
 { 

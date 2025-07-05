@@ -74,7 +74,7 @@ void dequeue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr ){
     }    
         else{
 
-            printf("la spedizione con id: %d %s non è stata inserita nella coda, poiché non c'è memoria disponibile!! \n", s.p.n.numero, s.p.n.provincia);
+            printf("la spedizione con id: %s non è stata inserita nella coda, poiché non c'è memoria disponibile!! \n", s.p.n);
         }
   }
 

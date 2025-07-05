@@ -5,7 +5,7 @@
 void inserimento_file_spedizioni(Spedizione s){
     FILE *fp;
 
-    fp = fopen("spedizioni.txt", "a");
+    fp = fopen("spedizioni.dat", "ab");
     if (fp == NULL) {
         perror("Errore nell'apertura del file");
         return;
@@ -26,23 +26,23 @@ void stampa_file_spedizioni(){
     FILE *fp;
     Spedizione s;
 
-    fp = fopen("spedizioni.txt", "r");
+    fp = fopen("spedizioni.dat", "rb");
     if (fp == NULL) {
         perror("Errore nell'apertura del file");
         return;
     }
 
-    printf("Contenuto del file spedizioni.txt:\n");
+    printf("Contenuto del file spedizioni.dat:\n");
     while (fread(&s, sizeof(Spedizione), 1, fp)) {
         puts("<-------------------------------->");
         printf("ID Pacco: %s \n", s.p.n);
         printf("Peso e volume del pacco: %f grammi, %f cm^3 \n", s.p.peso, s.p.volume);
         
         printf("Spedito in data: %d/%d/%d ,", s.data_invio.tm_mday, s.data_invio.tm_mon /*+ 1*/, s.data_invio.tm_year /*+1900*/);
-        printf("da: %s \n", s.mittente);       
-
+        /*Aggiungere stampa completa per mitt e dest*/
+        printf("da: %s \n", s.mittente.nome);       
         printf("Consegna prevista in data: %d/%d/%d ,", s.data_consegna.tm_mday, s.data_consegna.tm_mon /*+ 1*/, s.data_consegna.tm_year /*+1900*/);
-        printf("a: %s \n", s.destinatario);
+        printf("a: %s \n", s.destinatario.nome);
 
         printf("Stato della spedizione: ");
         switch (s.stato) {
