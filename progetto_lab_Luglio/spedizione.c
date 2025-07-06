@@ -4,7 +4,7 @@
 #include <string.h>
 
 void input_string(const char *prompt, char *dest, size_t size)
-{   
+{
     fflush(stdin);
     printf("%s", prompt);
     if (fgets(dest, size, stdin))
@@ -94,6 +94,49 @@ void inserimento_file_spedizioni(Spedizione s)
     fclose(fp);
 }
 
+void stampa_spedizione(Spedizione s){
+    puts("<-------------------------------->");
+    printf("ID Pacco: %s \n", s.p.n);
+    printf("Peso: %.2f grammi, Volume: %.2f cm^3 \n", s.p.peso, s.p.volume);
+    printf("Priorità: %s\n", s.priorita ? "Alta" : "Normale");
+
+    printf("Spedito in data: %d/%d/%d \n", s.data_invio.tm_mday, s.data_invio.tm_mon, s.data_invio.tm_year);
+
+    printf("da: %s %s, ", s.mittente.nome, s.mittente.cognome);
+    printf("Telefono: %s, Email: %s\n", s.mittente.telefono, s.mittente.email);
+    printf("Indirizzo: %s, Città: %s, Provincia: %s, CAP: %s\n",
+           s.mittente.via, s.mittente.citta, s.mittente.provincia, s.mittente.cap);
+
+    printf("Consegna prevista in data: %d/%d/%d \n", s.data_consegna.tm_mday, s.data_consegna.tm_mon, s.data_consegna.tm_year);
+
+    printf("a: %s %s, ", s.destinatario.nome, s.destinatario.cognome);
+    printf("Telefono: %s, Email: %s\n", s.destinatario.telefono, s.destinatario.email);
+    printf("Indirizzo: %s, Città: %s, Provincia: %s, CAP: %s\n",
+           s.destinatario.via, s.destinatario.citta, s.destinatario.provincia, s.destinatario.cap);
+
+    printf("Stato della spedizione: ");
+    switch (s.stato)
+    {
+    case ordinato:
+        puts("Ordinato");
+        break;
+    case spedito:
+        puts("Spedito");
+        break;
+    case in_consegna:
+        puts("In consegna");
+        break;
+    case consegnato:
+        puts("Consegnato");
+        break;
+    case annullato:
+        puts("Annullato");
+        break;
+    default:
+        puts("Stato sconosciuto");
+    }
+}
+
 void stampa_file_spedizioni()
 {
     FILE *fp;
@@ -109,46 +152,7 @@ void stampa_file_spedizioni()
     printf("Contenuto del file spedizioni.dat:\n");
     while (fread(&s, sizeof(Spedizione), 1, fp))
     {
-        puts("<-------------------------------->");
-        printf("ID Pacco: %s \n", s.p.n);
-        printf("Peso: %.2f grammi, Volume: %.2f cm^3 \n", s.p.peso, s.p.volume);
-        printf("Priorità: %s\n", s.priorita ? "Alta" : "Normale");
-        
-        printf("Spedito in data: %d/%d/%d \n", s.data_invio.tm_mday, s.data_invio.tm_mon, s.data_invio.tm_year);
-       
-        printf("da: %s %s, ", s.mittente.nome, s.mittente.cognome);
-        printf("Telefono: %s, Email: %s\n", s.mittente.telefono, s.mittente.email);
-        printf("Indirizzo: %s, Città: %s, Provincia: %s, CAP: %s\n",
-               s.mittente.via, s.mittente.citta, s.mittente.provincia, s.mittente.cap);
-
-        printf("Consegna prevista in data: %d/%d/%d \n", s.data_consegna.tm_mday, s.data_consegna.tm_mon, s.data_consegna.tm_year);
-
-        printf("a: %s %s, ", s.destinatario.nome, s.destinatario.cognome);
-        printf("Telefono: %s, Email: %s\n", s.destinatario.telefono, s.destinatario.email);
-        printf("Indirizzo: %s, Città: %s, Provincia: %s, CAP: %s\n",
-               s.destinatario.via, s.destinatario.citta, s.destinatario.provincia, s.destinatario.cap);
-
-        printf("Stato della spedizione: ");
-        switch (s.stato)
-        {
-        case ordinato:
-            puts("Ordinato");
-            break;
-        case spedito:
-            puts("Spedito");
-            break;
-        case in_consegna:
-            puts("In consegna");
-            break;
-        case consegnato:
-            puts("Consegnato");
-            break;
-        case annullato:
-            puts("Annullato");
-            break;
-        default:
-            puts("Stato sconosciuto");
-        }
+        stampa_spedizione(s);
     }
 
     fclose(fp);
@@ -189,4 +193,78 @@ void mod_stato_sped(Spedizione *s)
             puts("Scelta non valida.");
         }
     }
+}
+
+void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
+{
+    FILE *fp = fopen("spedizioni.dat", "rb+");
+    if (!fp)
+    {
+        puts("Errore apertura file!");
+        return;
+    }
+
+    fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
+
+    int scelta;
+    while (scelta < 1 || scelta > 5)
+    {
+        puts("Modifica stato della spedizione:");
+        puts("1. Ordinato");
+        puts("2. Spedito");
+        puts("3. In consegna");
+        puts("4. Consegnato");
+        puts("5. Annullato");
+        printf("Inserisci la tua scelta (1-5): ");
+        scanf("%d", &scelta);
+
+        switch (scelta)
+        {
+        case 1:
+            s_mod->stato = ordinato; // Modifica lo stato della spedizione a "ordinato"
+            break;
+        case 2:
+            s_mod->stato = spedito; // Modifica lo stato della spedizione a "spedito"
+            break;
+        case 3:
+            s_mod->stato = in_consegna; // Modifica lo stato della spedizione a "in_consegna"
+            break;
+        case 4:
+            s_mod->stato = consegnato; // Modifica lo stato della spedizione a "consegnato"
+            break;
+        case 5:
+            s_mod->stato = annullato; // Modifica lo stato della spedizione a "annullato"
+            break;
+        default:
+            puts("Scelta non valida.");
+        }
+    }
+
+    fwrite(s_mod, sizeof(Spedizione), 1, fp);
+    fclose(fp);
+}
+
+int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
+{
+    FILE *fp = fopen("spedizioni.dat", "rb");
+    if (!fp)
+    {
+        puts("Errore apertura file!");
+        return -1;
+    }
+    Spedizione s;
+    int index = 0;
+    while (fread(&s, sizeof(Spedizione), 1, fp) == 1)
+    {
+        if (strcmp(s.p.n, id_pacco) == 0)
+        {
+            if (result)
+                *result = s;
+            fclose(fp);
+            return index; // Restituisce la posizione
+        }
+        index++;
+    }
+    fclose(fp);
+    return -1; // Non trovato
 }

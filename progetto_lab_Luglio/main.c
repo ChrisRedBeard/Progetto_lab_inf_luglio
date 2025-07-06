@@ -34,7 +34,7 @@ int main()
 
     while (scelta != 7)
     {
-        puts("Scelta delle operazioni");
+        puts("<----Scelta delle operazioni---->");
         puts("1. Stampa del file con le spedizioni");
         puts("2. Inserimento nuove spedizioni"); // una volta inserita la spedizione, se il pacco è "ordinato" l'oggetto verrà messo in una coda, successivamente all'inserimento verrà convalidato e "spedito"
         puts("3. Modifica stato spedizioni");
@@ -48,7 +48,7 @@ int main()
         {
         case 1:
             stampa_file_spedizioni(); // Funzione per stampare il file con le spedizioni
-            puts("\n<----Stampa completata---->");
+            puts("\n<----Stampa completata---->\n");
             break;
         case 2:
             // Funzione per inserire nuove spedizioni
@@ -76,14 +76,47 @@ int main()
 
             break;
         case 3:
-            // Funzione per modificare lo stato delle spedizioni
-            break;
+        { // Funzione per modificare lo stato delle spedizioni
+            // ricerca per id pacco
+            char id[10];
+            Spedizione trovata;
+            printf("Inserisci l'ID del pacco da modificare lo stato: ");
+            scanf("%s", id);
+            int pos = ricerca_spedizione_per_id(id, &trovata);
+            if (pos != -1)
+            {
+                modifica_stato_spedizione_in_file(pos, &trovata);
+                puts("Stato della spedizione modificato con successo!");
+            }
+            else
+            {
+                puts("Spedizione non trovata.");
+            }
+        }
+        break;
         case 4:
             // Funzione per modificare i dati delle spedizioni
             break;
         case 5:
+        {
             // Funzione per la ricerca nel file
-            break;
+            // ricerca per id pacco
+            char id[10];
+            Spedizione trovata;
+            printf("Inserisci l'ID del pacco da cercare: ");
+            scanf("%s", id);
+            int pos = ricerca_spedizione_per_id(id, &trovata);
+            if (pos != -1)
+            {
+                printf("Spedizione trovata! ID: %s\n", trovata.p.n);
+                stampa_spedizione(trovata);
+            }
+            else
+            {
+                puts("Spedizione non trovata.");
+            }
+        }
+        break;
         case 6:
             // Funzione per stampare le statistiche delle spedizioni
             break;
