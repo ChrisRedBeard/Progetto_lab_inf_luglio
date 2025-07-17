@@ -10,27 +10,70 @@ void input_string(const char *prompt, char *dest, size_t size)
     if (fgets(dest, size, stdin))
     {
         dest[strcspn(dest, "\n")] = 0; // Rimuove il newline finale
+    }else{
+        perror("Errore nella lettura della stringa");
+        dest[0] = '\0';
     }
 }
 
 void inserimento_spedizione()
 {
-    Spedizione nuova_sped;
+    Spedizione nuova_sped = {0};
 
     puts("Inserisci i dati della spedizione:");
+
     input_string("ID Pacco [IT1234567]: ", nuova_sped.p.n, sizeof(nuova_sped.p.n));
+    if (strlen(nuova_sped.p.n) == 0) {
+        puts("ID Pacco non valido.");
+        return;
+    }
+
     printf("Peso del pacco (in grammi): ");
-    scanf("%f", &nuova_sped.p.peso);
+    if (scanf("%f", &nuova_sped.p.peso) != 1 || nuova_sped.p.peso <= 0) {
+        puts("Peso non valido.");
+        while(getchar() != '\n');
+        return;
+    }
+
     printf("Volume del pacco (in centimetri cubi): ");
-    scanf("%f", &nuova_sped.p.volume);
+    if (scanf("%f", &nuova_sped.p.volume) != 1 || nuova_sped.p.volume <= 0) {
+        puts("Volume non valido.");
+        while(getchar() != '\n');
+        return;
+    }
 
     printf("Priorità (1 per alta, 0 per normale): ");
-    scanf("%d", &nuova_sped.priorita);
+    if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1)) {
+        puts("Priorità non valida.");
+        while(getchar() != '\n');
+        return;
+    }
 
     printf("Data di invio (formato: gg mm aaaa): ");
-    scanf("%d %d %d", &nuova_sped.data_invio.tm_mday, &nuova_sped.data_invio.tm_mon, &nuova_sped.data_invio.tm_year);
+    if (scanf("%d %d %d", &nuova_sped.data_invio.tm_mday, &nuova_sped.data_invio.tm_mon, &nuova_sped.data_invio.tm_year) != 3 ||
+        nuova_sped.data_invio.tm_mday < 1 || nuova_sped.data_invio.tm_mday > 31 ||
+        nuova_sped.data_invio.tm_mon < 1 || nuova_sped.data_invio.tm_mon > 12 ||
+        nuova_sped.data_invio.tm_year < 1900) {
+        puts("Data di invio non valida.");
+        while(getchar() != '\n');
+        return;
+    }
+
     printf("Data di consegna prevista (formato: gg mm aaaa): ");
-    scanf("%d %d %d", &nuova_sped.data_consegna.tm_mday, &nuova_sped.data_consegna.tm_mon, &nuova_sped.data_consegna.tm_year);
+    if (scanf("%d %d %d", &nuova_sped.data_consegna.tm_mday, &nuova_sped.data_consegna.tm_mon, &nuova_sped.data_consegna.tm_year) != 3 ||
+        nuova_sped.data_consegna.tm_mday < 1 || nuova_sped.data_consegna.tm_mday > 31 ||
+        nuova_sped.data_consegna.tm_mon < 1 || nuova_sped.data_consegna.tm_mon > 12 ||
+        nuova_sped.data_consegna.tm_year < 1900) {
+        puts("Data di consegna non valida.");
+        while(getchar() != '\n');
+        return;
+    }
+
+    //TODO: Aggiungere un controllo per verificare che la data di consegna sia successiva alla data di invio
+
+
+
+    while(getchar() != '\n'); // Pulisci il buffer
 
     puts("Dati del mittente:");
     input_string("Nome: ", nuova_sped.mittente.nome, sizeof(nuova_sped.mittente.nome));
@@ -53,7 +96,12 @@ void inserimento_spedizione()
     input_string("Email: ", nuova_sped.destinatario.email, sizeof(nuova_sped.destinatario.email));
 
     puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
-    scanf("%d", &nuova_sped.stato);
+    if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5) {
+        puts("Stato non valido.");
+        while(getchar() != '\n');
+        return;
+    }
+    while(getchar() != '\n'); // Pulisci il buffer
 
     if (nuova_sped.stato == 1)
     {
@@ -74,7 +122,7 @@ void inserimento_file_spedizioni(Spedizione s)
     FILE *fp;
 
     fp = fopen("spedizioni.dat", "ab");
-    if (fp == NULL)
+    if (!fp)
     {
         perror("Errore nell'apertura del file");
         return;
@@ -246,6 +294,12 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
 
 int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
 {
+
+    if(!id_pacco || !result){
+        perror("Parametri inseriti non validi");
+        return -1;
+    }
+
     FILE *fp = fopen("spedizioni.dat", "rb");
     if (!fp)
     {

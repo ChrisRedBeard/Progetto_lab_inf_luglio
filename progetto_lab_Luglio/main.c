@@ -81,7 +81,10 @@ int main()
             char id[10];
             Spedizione trovata;
             printf("Inserisci l'ID del pacco da modificare lo stato: ");
-            scanf("%s", id);
+            if (scanf("%s", id) != 1) {
+                puts("Errore nella lettura dell'ID.");
+                continue;
+            }
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
             {
@@ -104,7 +107,12 @@ int main()
             char id[10];
             Spedizione trovata;
             printf("Inserisci l'ID del pacco da cercare: ");
-            scanf("%s", id);
+            
+            if (scanf("%s", id) != 1) {
+                puts("Errore nella lettura dell'ID.");
+                continue;
+            }
+
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
             {
