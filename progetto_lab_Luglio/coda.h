@@ -21,4 +21,4 @@
  void enqueue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s ); 
 
  //da implementare
- void convalida_spedizioni(QueueNode coda);
+ void convalida_spedizioni(QueueNodePtr headPtr,QueueNodePtr tailPtr);

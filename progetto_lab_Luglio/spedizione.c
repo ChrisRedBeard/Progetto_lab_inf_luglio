@@ -10,7 +10,8 @@
 #include <string.h>
 
 // inizializzo la coda vuota
-QueueNode coda=NULL;
+QueueNodePtr headPtr = NULL; /* initialize headPtr */
+QueueNodePtr tailPtr = NULL; /* initialize tailPtr */ 
  
 bool verifica_data(struct tm data)
 {
@@ -87,7 +88,7 @@ void inserimento_spedizione()
         // Se il pacco è "ordinato", viene inserito in una coda
         printf("Pacco con ID %s inserito in coda.\n", nuova_sped.p.n);
         // Qui si dovrebbe chiamare la funzione enqueue per inserire il pacco nella coda
-        enqueue(&coda.sp_nodo,&coda.nextPtr, nuova_sped);
+        enqueue(&headPtr,&tailPtr, nuova_sped);
 
     }
     else

@@ -91,21 +91,21 @@ void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s)
                 se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
                 */
             
-void convalida_spedizioni(QueueNode coda){
+void convalida_spedizioni(QueueNodePtr headPtr, QueueNodePtr tailPtr){
 
 
 
     short int convalida=0;
-    while(!isEmpty(&coda)){
+    while(!isEmpty(headPtr)){
 
     printf("Il primo elemento della coda è:\n");
-        stampa_spedizione(coda.sp_nodo);
+        stampa_spedizione(headPtr->sp_nodo);
     
         printf("Vuoi convalidare il pacco? (1=>Si 0=>No) : ");
         scanf("%hd",&convalida);
         if(convalida==1){
             //lo tolgo dalla coda e poi gli campo lo stato per stamparlo nel file
-            dequeue(&(coda.sp_nodo),&(coda.nextPtr));
+            dequeue(&headPtr,&tailPtr);
         }else{
 
             //come sposto un elemento alla fine della coda?
