@@ -1,33 +1,24 @@
-
+#include "utils.h"
 #include "destinatario.h"
+
 #include <stdio.h>
 #include <string.h>
 
-// gli passo il puntatore per modificare direttamente l'indirizzo del destinatario
-void modifica_indirizzo(Destinatario *d){
- printf("\n Inserisci il nuovo indirizzo del destinatario\n");
- printf("Inserire via: ");
- scanf("%100s", d->via);
- printf("Inserire città: ");
- scanf("%50s", d->citta);
- printf("Inserire provincia: ");
- scanf("%2s", d->provincia);
- printf("Inserire CAP: ");
- scanf("%5s", d->cap);
+void inserimento_destinatario(Destinatario *d)
+{
+    input_string("Nome: ", d->nome, sizeof(d->nome));
+    input_string("Cognome: ", d->cognome, sizeof(d->cognome));
+    input_string("Numero di telefono [+00 123 456 7890]: ", d->telefono, sizeof(d->telefono));
+    input_string("Email: ", d->email, sizeof(d->email));
+    input_string("Indirizzo [via, num. civico]: ", d->via, sizeof(d->via));
+    input_string("Città: ", d->citta, sizeof(d->citta));
+    input_string("Provincia [CC]: ", d->provincia, sizeof(d->provincia));
+    input_string("CAP: ", d->cap, sizeof(d->cap));
 }
 
 void stampa_destinatario(Destinatario d) {
-    printf("Destinatario:\n");
-    printf("Nome: %s\n", d.nome);
-    printf("Cognome: %s\n", d.cognome);
-    printf("Telefono: %16s\n", d.telefono);
-    printf("Via: %s\n", d.via);
-    printf("Città: %s\n", d.citta);
-    printf("Provincia: %2s\n", d.provincia);
-    printf("CAP: %5s\n", d.cap);
-    printf("Email: %s\n", d.email);
+    printf("Destinatario: %s %s \n",d.nome, d.cognome);
+    printf("Telefono: %16s, Email: %s \n", d.telefono, d.email);
+    printf("Indirizzo: %s, Città: %s, Provincia: %2s, CAP: %5s\n", d.via, d.citta, d.provincia, d.cap);
 }
 
-
-//controllare prima se il pacco sia stato spedito o meno
-void modifica_destinatario(Destinatario dest);

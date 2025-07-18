@@ -21,14 +21,16 @@ typedef struct
     enum Stati stato; 
 } Spedizione;
 
-void input_string(const char *prompt, char *dest, size_t size);
+bool verifica_data(struct tm data);
 void inserimento_spedizione();
+bool controllo_date(struct tm data_invio, struct tm data_consegna);
 void inserimento_file_spedizioni(Spedizione s);
 void stampa_spedizione(Spedizione s);
 void stampa_file_spedizioni();
 void mod_stato_sped(Spedizione *s);
-int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result);
 void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod);
+int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result);
+
 
 #endif // SPEDIZIONE_H
 

@@ -14,5 +14,8 @@ typedef struct
 
 } Mittente;
 
+void inserimento_mittente(Mittente *m);
+void stampa_mittente(Mittente m);
+
 #endif // MITTENTE_H
 

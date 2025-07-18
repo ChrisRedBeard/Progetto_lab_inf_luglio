@@ -19,3 +19,6 @@
  void dequeue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr );
 
  void enqueue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s ); 
+
+ //da implementare
+ void convalida_spedizioni(QueueNode coda);

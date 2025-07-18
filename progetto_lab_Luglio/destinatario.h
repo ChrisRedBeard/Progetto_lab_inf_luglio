@@ -14,13 +14,7 @@ typedef struct
 
 } Destinatario; 
 
+void inserimento_destinatario(Destinatario *d);
 void stampa_destinatario(Destinatario d);
-
-
-void modifica_indirizzo(Destinatario *d);
-
-//controllare prima se il pacco sia stato spedito o meno
-void modifica_destinatario(Destinatario dest);
-
 
 #endif // DESTINATARIO_H

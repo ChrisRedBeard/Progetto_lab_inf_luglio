@@ -28,9 +28,7 @@ int main()
 {
     short int scelta;
     // Stampa di benvenuto colorata
-    printf("%sBenvenuto nel Gestore di Magazzino!%s\n", GREEN, RESET);
-    printf("%sSiamo lieti di avere il tuo supporto.%s\n", YELLOW, RESET);
-    printf("%sGestisci le tue spedizioni e il tuo inventario con facilità!%s\n", RED, RESET);
+    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto.Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", GREEN, RESET);
 
     while (scelta != 7)
     {
@@ -42,20 +40,20 @@ int main()
         puts("5. Ricerca nel file");
         puts("6. Stampa statistiche spedizioni");
         puts("7. Esci");
+        printf("Inserisci: ");
         scanf("%hd", &scelta);
 
         switch (scelta)
         {
         case 1:
             stampa_file_spedizioni(); // Funzione per stampare il file con le spedizioni
-            puts("\n<----Stampa completata---->\n");
+
             break;
         case 2:
-            // Funzione per inserire nuove spedizioni
             /*
             Inserimento di una nuova spedizione:
             1. L'utente inserisce varie spedizioni finchè non decide di uscire.
-            2. Dopo l'inserimento si passa alla convalida.
+            2. Dopo l'inserimento si passa alla convalida, se ci sono pacchi da convalidare.
             3. Se il pacco è "ordinato", viene inserito in una coda.
                 3.1 Si chiede all'utente se vuole convalidare il pacco.
                 3.2 Se l'utente risponde "si", il pacco viene convalidato e lo stato viene cambiato in "spedito".
@@ -70,11 +68,18 @@ int main()
             while (scelta_ins != 0)
             {
                 inserimento_spedizione();
-                puts("Inserisci 1 per inserire una nuova spedizione, 0 per uscire: ");
+                printf("Inserisci 1 per inserire una nuova spedizione, 0 per uscire: ");
                 scanf("%hd", &scelta_ins);
             }
 
+            //metodo per la convalida
+                /*
+                viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
+                se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
+                se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
+                */
             break;
+            
         case 3:
         { // Funzione per modificare lo stato delle spedizioni
             // ricerca per id pacco
@@ -99,6 +104,8 @@ int main()
         break;
         case 4:
             // Funzione per modificare i dati delle spedizioni
+            
+
             break;
         case 5:
         {
@@ -108,7 +115,7 @@ int main()
             Spedizione trovata;
             printf("Inserisci l'ID del pacco da cercare: ");
             
-            if (scanf("%s", id) != 1) {
+            if (scanf("%s", id) != 1 || strlen(id)!= 9) {
                 puts("Errore nella lettura dell'ID.");
                 continue;
             }

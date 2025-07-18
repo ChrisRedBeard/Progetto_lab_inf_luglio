@@ -1,19 +1,26 @@
 #include "spedizione.h"
+#include "coda.h"
+#include "destinatario.h"
+#include "mittente.h"
+#include "utils.h"
+#include "pacco.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void input_string(const char *prompt, char *dest, size_t size)
+// inizializzo la coda vuota
+QueueNode coda=NULL;
+ 
+bool verifica_data(struct tm data)
 {
-    fflush(stdin);
-    printf("%s", prompt);
-    if (fgets(dest, size, stdin))
+    // Verifica che la data sia valida
+    if (data.tm_year < 1900 || data.tm_mon < 1 || data.tm_mon > 12 || data.tm_mday < 1 || data.tm_mday > 31)
     {
-        dest[strcspn(dest, "\n")] = 0; // Rimuove il newline finale
-    }else{
-        perror("Errore nella lettura della stringa");
-        dest[0] = '\0';
+        return false;
     }
+    // Aggiungere ulteriori controlli per i giorni del mese, considerando gli anni bisestili, ecc.
+    return true;
 }
 
 void inserimento_spedizione()
@@ -22,99 +29,101 @@ void inserimento_spedizione()
 
     puts("Inserisci i dati della spedizione:");
 
-    input_string("ID Pacco [IT1234567]: ", nuova_sped.p.n, sizeof(nuova_sped.p.n));
-    if (strlen(nuova_sped.p.n) == 0) {
-        puts("ID Pacco non valido.");
-        return;
-    }
-
-    printf("Peso del pacco (in grammi): ");
-    if (scanf("%f", &nuova_sped.p.peso) != 1 || nuova_sped.p.peso <= 0) {
-        puts("Peso non valido.");
-        while(getchar() != '\n');
-        return;
-    }
-
-    printf("Volume del pacco (in centimetri cubi): ");
-    if (scanf("%f", &nuova_sped.p.volume) != 1 || nuova_sped.p.volume <= 0) {
-        puts("Volume non valido.");
-        while(getchar() != '\n');
-        return;
-    }
+    inserimento_pacco(&nuova_sped.p);
 
     printf("Priorità (1 per alta, 0 per normale): ");
-    if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1)) {
+    if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1))
+    {
         puts("Priorità non valida.");
-        while(getchar() != '\n');
+        while (getchar() != '\n')
+            ;
         return;
     }
 
-    printf("Data di invio (formato: gg mm aaaa): ");
-    if (scanf("%d %d %d", &nuova_sped.data_invio.tm_mday, &nuova_sped.data_invio.tm_mon, &nuova_sped.data_invio.tm_year) != 3 ||
-        nuova_sped.data_invio.tm_mday < 1 || nuova_sped.data_invio.tm_mday > 31 ||
-        nuova_sped.data_invio.tm_mon < 1 || nuova_sped.data_invio.tm_mon > 12 ||
-        nuova_sped.data_invio.tm_year < 1900) {
-        puts("Data di invio non valida.");
-        while(getchar() != '\n');
-        return;
-    }
+    do
+    {
 
-    printf("Data di consegna prevista (formato: gg mm aaaa): ");
-    if (scanf("%d %d %d", &nuova_sped.data_consegna.tm_mday, &nuova_sped.data_consegna.tm_mon, &nuova_sped.data_consegna.tm_year) != 3 ||
-        nuova_sped.data_consegna.tm_mday < 1 || nuova_sped.data_consegna.tm_mday > 31 ||
-        nuova_sped.data_consegna.tm_mon < 1 || nuova_sped.data_consegna.tm_mon > 12 ||
-        nuova_sped.data_consegna.tm_year < 1900) {
-        puts("Data di consegna non valida.");
-        while(getchar() != '\n');
-        return;
-    }
+        printf("Data di invio (formato: gg mm aaaa): ");
+        if (scanf("%d %d %d", &nuova_sped.data_invio.tm_mday, &nuova_sped.data_invio.tm_mon, &nuova_sped.data_invio.tm_year) != 3 || !verifica_data(nuova_sped.data_invio))
+        {
+            puts("Data di invio non valida.");
+            while (getchar() != '\n')
+                ;
+            return;
+        }
 
-    //TODO: Aggiungere un controllo per verificare che la data di consegna sia successiva alla data di invio
+        printf("Data di consegna prevista (formato: gg mm aaaa): ");
+        if (scanf("%d %d %d", &nuova_sped.data_consegna.tm_mday, &nuova_sped.data_consegna.tm_mon, &nuova_sped.data_consegna.tm_year) != 3 || !verifica_data(nuova_sped.data_consegna))
+        {
+            puts("Data di consegna non valida.");
+            while (getchar() != '\n');
+            return;
+        }
 
+    } while (controllo_date(nuova_sped.data_invio, nuova_sped.data_consegna) == false);
 
-
-    while(getchar() != '\n'); // Pulisci il buffer
+    while (getchar() != '\n')
+        ; // Pulisci il buffer
 
     puts("Dati del mittente:");
-    input_string("Nome: ", nuova_sped.mittente.nome, sizeof(nuova_sped.mittente.nome));
-    input_string("Cognome: ", nuova_sped.mittente.cognome, sizeof(nuova_sped.mittente.cognome));
-    input_string("Numero di telefono [+00 123 456 7890]: ", nuova_sped.mittente.telefono, sizeof(nuova_sped.mittente.telefono));
-    input_string("Indirizzo (via, num. civico): ", nuova_sped.mittente.via, sizeof(nuova_sped.mittente.via));
-    input_string("Città: ", nuova_sped.mittente.citta, sizeof(nuova_sped.mittente.citta));
-    input_string("Provincia [CC]: ", nuova_sped.mittente.provincia, sizeof(nuova_sped.mittente.provincia));
-    input_string("CAP: ", nuova_sped.mittente.cap, sizeof(nuova_sped.mittente.cap));
-    input_string("Email: ", nuova_sped.mittente.email, sizeof(nuova_sped.mittente.email));
+    inserimento_mittente(&nuova_sped.mittente);
 
     puts("Dati del destinatario:");
-    input_string("Nome: ", nuova_sped.destinatario.nome, sizeof(nuova_sped.destinatario.nome));
-    input_string("Cognome: ", nuova_sped.destinatario.cognome, sizeof(nuova_sped.destinatario.cognome));
-    input_string("Numero di telefono [+00 123 456 7890]: ", nuova_sped.destinatario.telefono, sizeof(nuova_sped.destinatario.telefono));
-    input_string("Indirizzo (via, num. civico): ", nuova_sped.destinatario.via, sizeof(nuova_sped.destinatario.via));
-    input_string("Città: ", nuova_sped.destinatario.citta, sizeof(nuova_sped.destinatario.citta));
-    input_string("Provincia [CC]: ", nuova_sped.destinatario.provincia, sizeof(nuova_sped.destinatario.provincia));
-    input_string("CAP: ", nuova_sped.destinatario.cap, sizeof(nuova_sped.destinatario.cap));
-    input_string("Email: ", nuova_sped.destinatario.email, sizeof(nuova_sped.destinatario.email));
+    inserimento_destinatario(&nuova_sped.destinatario);
 
     puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
-    if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5) {
+    if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5)
+    {
         puts("Stato non valido.");
-        while(getchar() != '\n');
+        while (getchar() != '\n')
+            ;
         return;
     }
-    while(getchar() != '\n'); // Pulisci il buffer
+    while (getchar() != '\n')
+        ; // Pulisci il buffer
 
     if (nuova_sped.stato == 1)
     {
         // Se il pacco è "ordinato", viene inserito in una coda
         printf("Pacco con ID %s inserito in coda.\n", nuova_sped.p.n);
         // Qui si dovrebbe chiamare la funzione enqueue per inserire il pacco nella coda
-        // enqueue(&headPtr, &tailPtr, nuova_sped);
+        enqueue(&coda.sp_nodo,&coda.nextPtr, nuova_sped);
+
     }
     else
     {
         // Altrimenti, viene inserito nel file delle spedizioni
         inserimento_file_spedizioni(nuova_sped);
     }
+}
+
+
+
+
+
+// verifica che la data di invio sia inferiore a quella di consegna
+bool controllo_date(struct tm d_invio, struct tm d_cons)
+{
+
+    bool corretto = true;
+
+    if (d_invio.tm_year > d_cons.tm_year)
+    {
+        corretto = false;
+        return corretto;
+    }
+    else if (d_invio.tm_mon > d_cons.tm_mon)
+    {
+        corretto = false;
+        return corretto;
+    }
+    else if (d_invio.tm_mday > d_cons.tm_mday)
+    {
+        corretto = false;
+        return corretto;
+    }
+
+    return corretto;
 }
 
 void inserimento_file_spedizioni(Spedizione s)
@@ -134,33 +143,27 @@ void inserimento_file_spedizioni(Spedizione s)
     }
     else
     {
+
         printf("Spedizione inserita correttamente nel file.\n");
     }
 
-    /*Creare una funzione che riordini il file rispetto alla data di invio*/
+    //TODO: Creare una funzione che riordini il file rispetto alla data di invio
 
     fclose(fp);
 }
 
-void stampa_spedizione(Spedizione s){
+void stampa_spedizione(Spedizione s)
+{
     puts("<-------------------------------->");
-    printf("ID Pacco: %s \n", s.p.n);
-    printf("Peso: %.2f grammi, Volume: %.2f cm^3 \n", s.p.peso, s.p.volume);
+
+    stampa_pacco(s.p);
+
     printf("Priorità: %s\n", s.priorita ? "Alta" : "Normale");
 
     printf("Spedito in data: %d/%d/%d \n", s.data_invio.tm_mday, s.data_invio.tm_mon, s.data_invio.tm_year);
-
-    printf("da: %s %s, ", s.mittente.nome, s.mittente.cognome);
-    printf("Telefono: %s, Email: %s\n", s.mittente.telefono, s.mittente.email);
-    printf("Indirizzo: %s, Città: %s, Provincia: %s, CAP: %s\n",
-           s.mittente.via, s.mittente.citta, s.mittente.provincia, s.mittente.cap);
-
+    stampa_mittente(s.mittente);
     printf("Consegna prevista in data: %d/%d/%d \n", s.data_consegna.tm_mday, s.data_consegna.tm_mon, s.data_consegna.tm_year);
-
-    printf("a: %s %s, ", s.destinatario.nome, s.destinatario.cognome);
-    printf("Telefono: %s, Email: %s\n", s.destinatario.telefono, s.destinatario.email);
-    printf("Indirizzo: %s, Città: %s, Provincia: %s, CAP: %s\n",
-           s.destinatario.via, s.destinatario.citta, s.destinatario.provincia, s.destinatario.cap);
+    stampa_destinatario(s.destinatario);
 
     printf("Stato della spedizione: ");
     switch (s.stato)
@@ -204,6 +207,7 @@ void stampa_file_spedizioni()
     }
 
     fclose(fp);
+    puts("\n<----Stampa completata---->\n");
 }
 
 void mod_stato_sped(Spedizione *s)
@@ -254,39 +258,7 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
 
     fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
 
-    int scelta;
-    while (scelta < 1 || scelta > 5)
-    {
-        puts("Modifica stato della spedizione:");
-        puts("1. Ordinato");
-        puts("2. Spedito");
-        puts("3. In consegna");
-        puts("4. Consegnato");
-        puts("5. Annullato");
-        printf("Inserisci la tua scelta (1-5): ");
-        scanf("%d", &scelta);
-
-        switch (scelta)
-        {
-        case 1:
-            s_mod->stato = ordinato; // Modifica lo stato della spedizione a "ordinato"
-            break;
-        case 2:
-            s_mod->stato = spedito; // Modifica lo stato della spedizione a "spedito"
-            break;
-        case 3:
-            s_mod->stato = in_consegna; // Modifica lo stato della spedizione a "in_consegna"
-            break;
-        case 4:
-            s_mod->stato = consegnato; // Modifica lo stato della spedizione a "consegnato"
-            break;
-        case 5:
-            s_mod->stato = annullato; // Modifica lo stato della spedizione a "annullato"
-            break;
-        default:
-            puts("Scelta non valida.");
-        }
-    }
+    mod_stato_sped(s_mod);
 
     fwrite(s_mod, sizeof(Spedizione), 1, fp);
     fclose(fp);
@@ -295,7 +267,8 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
 int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
 {
 
-    if(!id_pacco || !result){
+    if (!id_pacco || !result)
+    {
         perror("Parametri inseriti non validi");
         return -1;
     }
