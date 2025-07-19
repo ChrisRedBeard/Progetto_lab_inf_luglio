@@ -11,18 +11,21 @@ void inserimento_data(const char *prompt, struct tm *data)
     do
     {
         printf("%s (formato: gg mm aaaa): ", prompt);
-        if (scanf("%d %d %d", data->tm_mday, data->tm_mon, data->tm_year) != 3 ||
+        if (scanf("%d %d %d", &data->tm_mday, &data->tm_mon, &data->tm_year) != 3 ||
             data->tm_mday < 1 || data->tm_mday > 31 ||
             data->tm_mon < 1 || data->tm_mon > 12 ||
             data->tm_year < 1900)
         {
 
-            printf("%sData non valida, riprova.%s", RED, RESET);
+            printf("%sData non valida, riprova.%s\n", RED, RESET);
             while (getchar() != '\n')
                 ;
             flag = true;
+        }else{
+            flag = false;
         }
-    } while (!flag);
+        
+    } while (flag);
 }
 
 void inserimento_spedizione(Coda *c)
@@ -63,7 +66,9 @@ void inserimento_spedizione(Coda *c)
         puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
         if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5)
         {
+            printf("%s",RED);
             puts("Stato non valido.");
+            printf("%s",RESET);
             while (getchar() != '\n')
                 ;
         }
@@ -94,19 +99,19 @@ bool controllo_date(struct tm d_invio, struct tm d_cons)
     if (d_invio.tm_year > d_cons.tm_year)
     {
         corretto = false;
-        puts("Hai inserito una data superiore a quella di consegna");
+        printf("%sHai inserito una data superiore a quella di consegna%s",RED,RESET);
         return corretto;
     }
     else if (d_invio.tm_mon > d_cons.tm_mon)
     {
         corretto = false;
-        puts("Hai inserito una data superiore a quella di consegna");
+        printf("%sHai inserito una data superiore a quella di consegna%s",RED,RESET);
         return corretto;
     }
     else if (d_invio.tm_mday > d_cons.tm_mday)
     {
         corretto = false;
-        puts("Hai inserito una data superiore a quella di consegna");
+        printf("%sHai inserito una data superiore a quella di consegna%s",RED,RESET);
         return corretto;
     }
 
@@ -208,7 +213,9 @@ void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod)
     FILE *fp = fopen("spedizioni.dat", "rb+");
     if (!fp)
     {
+        printf("%s", RED);
         puts("Errore apertura file!");
+        printf("%s", RESET);
         return;
     }
 
@@ -225,7 +232,9 @@ void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod)
     FILE *fp = fopen("spedizioni.dat", "rb+");
     if (!fp)
     {
+        printf("%s", RED);
         puts("Errore apertura file!");
+        printf("%s", RESET);
         return;
     }
 
@@ -246,7 +255,9 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
     FILE *fp = fopen("spedizioni.dat", "rb+");
     if (!fp)
     {
+        printf("%s", RED);
         puts("Errore apertura file!");
+        printf("%s",RESET);
         return;
     }
 
@@ -282,7 +293,9 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
             s_mod->stato = annullato; // Modifica lo stato della spedizione a "annullato"
             break;
         default:
+            printf("%s", RED);
             puts("Scelta non valida.");
+            printf("%s", RESET);
         }
     }
 
@@ -295,14 +308,18 @@ int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
 
     if (!id_pacco || !result)
     {
+        printf("%s", RED);
         perror("Parametri inseriti non validi");
+        printf("%s", RESET);
         return -1;
     }
 
     FILE *fp = fopen("spedizioni.dat", "rb");
     if (!fp)
     {
+        printf("%s", RED);
         puts("Errore apertura file!");
+        printf("%s", RESET);
         return -1;
     }
     Spedizione s;
