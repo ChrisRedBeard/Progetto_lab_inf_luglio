@@ -22,12 +22,12 @@ typedef struct
 
 Coda *coda_init();
 
-void printQueue(QueueNodePtr currentPtr);
+void printQueue(Coda c);
 
-int isEmpty(QueueNodePtr headPtr);
+int isEmpty(Coda c);
 
-Spedizione* dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr);
+Spedizione* dequeue(Coda *c);
 
-void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s);
+void enqueue(Coda *c, Spedizione s);
 
 void convalida_spedizioni(Coda* c);

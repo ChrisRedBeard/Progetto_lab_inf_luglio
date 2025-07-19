@@ -1,7 +1,7 @@
 #include "utils.h"
 
 #include <stdbool.h>
-#include <stdio.h>
+
 #include <string.h>
 
 void input_string(const char *prompt, char *dest, int_pos size, int_pos lunghezza)

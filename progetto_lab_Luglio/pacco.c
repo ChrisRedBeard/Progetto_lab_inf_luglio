@@ -1,8 +1,6 @@
 #include "pacco.h"
 #include "utils.h"
 
-#include <stdio.h>
-
 void inserimento_pacco(Pacco *p)
 {
 

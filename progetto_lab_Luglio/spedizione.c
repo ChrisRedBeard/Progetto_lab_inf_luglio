@@ -2,8 +2,8 @@
 #include "coda.h"
 #include "utils.h"
 
-#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 void inserimento_data(const char *prompt, struct tm *data)
 {
@@ -16,7 +16,8 @@ void inserimento_data(const char *prompt, struct tm *data)
             data->tm_mon < 1 || data->tm_mon > 12 ||
             data->tm_year < 1900)
         {
-            puts("Data non valida, riprova.");
+
+            printf("%sData non valida, riprova.%s", RED, RESET);
             while (getchar() != '\n')
                 ;
             flag = true;
@@ -35,7 +36,7 @@ void inserimento_spedizione(Coda *c)
     printf("Priorità (1 per alta, 0 per normale): ");
     if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1))
     {
-        puts("Priorità non valida.");
+        printf("%sPriorità non valida.%s", RED, RESET);
         while (getchar() != '\n')
             ;
         return;
@@ -57,7 +58,6 @@ void inserimento_spedizione(Coda *c)
     puts("Dati del destinatario:");
     inserimento_destinatario(&nuova_sped.destinatario);
 
-    
     do
     {
         puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
@@ -66,7 +66,6 @@ void inserimento_spedizione(Coda *c)
             puts("Stato non valido.");
             while (getchar() != '\n')
                 ;
-            
         }
     } while (nuova_sped.stato < 1 || nuova_sped.stato > 5);
 
@@ -77,7 +76,7 @@ void inserimento_spedizione(Coda *c)
     {
         // Se il pacco è "ordinato", viene inserito in una coda
         printf("Pacco con ID %s inserito in coda.\n", nuova_sped.p.n);
-        enqueue(&(c->headPtr), &(c->tailPtr), nuova_sped);
+        enqueue(c, nuova_sped);
     }
     else
     {
@@ -121,22 +120,26 @@ void inserimento_file_spedizioni(Spedizione s)
     fp = fopen("spedizioni.dat", "ab");
     if (!fp)
     {
+        printf("%s", RED);
         perror("Errore nell'apertura del file");
+        printf("%s", RESET);
         return;
     }
 
     if (fwrite(&s, sizeof(Spedizione), 1, fp) != 1)
     {
+        printf("%s", RED);
         perror("Errore nella scrittura nel file");
+        printf("%s", RESET);
     }
     else
     {
 
-        printf("Spedizione inserita correttamente nel file.\n");
+        printf("%sSpedizione inserita correttamente nel file.%s\n", GREEN, RESET);
     }
 
-    // TODO: Creare una funzione che riordini il file rispetto alla data di invio
-
+    // TODO: Creare una funzione che riordini il file rispetto alla data di invio////////////////
+    order_by_date();
     fclose(fp);
 }
 
@@ -184,7 +187,9 @@ void stampa_file_spedizioni()
     fp = fopen("spedizioni.dat", "rb");
     if (fp == NULL)
     {
+        printf("%s", RED);
         perror("Errore nell'apertura del file");
+        printf("%s", RESET);
         return;
     }
 
@@ -198,8 +203,55 @@ void stampa_file_spedizioni()
     puts("\n<----Stampa completata---->\n");
 }
 
-void mod_stato_sped(Spedizione *s)
+void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod)
 {
+    FILE *fp = fopen("spedizioni.dat", "rb+");
+    if (!fp)
+    {
+        puts("Errore apertura file!");
+        return;
+    }
+
+    fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
+
+    inserimento_destinatario(&s_mod->destinatario);
+
+    fwrite(s_mod, sizeof(Spedizione), 1, fp);
+    fclose(fp);
+}
+
+void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod)
+{
+    FILE *fp = fopen("spedizioni.dat", "rb+");
+    if (!fp)
+    {
+        puts("Errore apertura file!");
+        return;
+    }
+
+    fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
+
+    do
+    {
+        inserimento_data("Data di consegna ", &s_mod->data_consegna);
+
+    } while (!controllo_date(s_mod->data_invio, s_mod->data_consegna));
+
+    fwrite(s_mod, sizeof(Spedizione), 1, fp);
+    fclose(fp);
+}
+
+void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
+{
+    FILE *fp = fopen("spedizioni.dat", "rb+");
+    if (!fp)
+    {
+        puts("Errore apertura file!");
+        return;
+    }
+
+    fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
+
     int scelta;
     while (scelta < 1 || scelta > 5)
     {
@@ -215,38 +267,24 @@ void mod_stato_sped(Spedizione *s)
         switch (scelta)
         {
         case 1:
-            s->stato = ordinato; // Modifica lo stato della spedizione a "ordinato"
+            s_mod->stato = ordinato; // Modifica lo stato della spedizione a "ordinato"
             break;
         case 2:
-            s->stato = spedito; // Modifica lo stato della spedizione a "spedito"
+            s_mod->stato = spedito; // Modifica lo stato della spedizione a "spedito"
             break;
         case 3:
-            s->stato = in_consegna; // Modifica lo stato della spedizione a "in_consegna"
+            s_mod->stato = in_consegna; // Modifica lo stato della spedizione a "in_consegna"
             break;
         case 4:
-            s->stato = consegnato; // Modifica lo stato della spedizione a "consegnato"
+            s_mod->stato = consegnato; // Modifica lo stato della spedizione a "consegnato"
             break;
         case 5:
-            s->stato = annullato; // Modifica lo stato della spedizione a "annullato"
+            s_mod->stato = annullato; // Modifica lo stato della spedizione a "annullato"
             break;
         default:
             puts("Scelta non valida.");
         }
     }
-}
-
-void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
-{
-    FILE *fp = fopen("spedizioni.dat", "rb+");
-    if (!fp)
-    {
-        puts("Errore apertura file!");
-        return;
-    }
-
-    fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
-
-    mod_stato_sped(s_mod);
 
     fwrite(s_mod, sizeof(Spedizione), 1, fp);
     fclose(fp);
@@ -282,4 +320,59 @@ int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
     }
     fclose(fp);
     return -1; // Non trovato
+}
+
+int compare_spedizioni(const void *a, const void *b)
+{
+
+    const Spedizione *spedizioneA = (const Spedizione *)a;
+    const Spedizione *spedizioneB = (const Spedizione *)b;
+    // Convertire struct tm in time_t per il confronto
+    time_t timeA = mktime((struct tm *)&spedizioneA->data_invio);
+    time_t timeB = mktime((struct tm *)&spedizioneB->data_invio);
+    return difftime(timeA, timeB);
+}
+
+void order_by_date()
+{
+
+    FILE *fp = fopen("spedizioni.dat", "rb");
+    if (!fp)
+    {
+        perror("Errore nell'aprire il file");
+        return;
+    }
+    // Contare il numero di spedizioni
+    fseek(fp, 0, SEEK_END);
+    long file_size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    size_t shipment_count = file_size / sizeof(Spedizione);
+    // Allocare memoria per le spedizioni
+    Spedizione *spedizioni = malloc(file_size);
+    if (!spedizioni)
+    {
+        printf("%s", RED);
+        perror("Errore nell'allocare memoria");
+        printf("%s", RESET);
+        fclose(fp);
+        return;
+    }
+    // Leggere le spedizioni dal file
+    fread(spedizioni, sizeof(Spedizione), shipment_count, fp);
+    fclose(fp);
+    // Ordinare le spedizioni in base alla data di invio
+    qsort(spedizioni, shipment_count, sizeof(Spedizione), compare_spedizioni);
+    // Scrivere le spedizioni ordinate in un nuovo file
+    FILE *nuovo_file = fopen("sped_ord.dat", "wb");
+    if (!fp)
+    {
+        perror("Errore nell'aprire il file di output");
+        free(spedizioni);
+        return;
+    }
+    fwrite(spedizioni, sizeof(Spedizione), shipment_count, nuovo_file);
+    fclose(nuovo_file);
+    fp = nuovo_file;
+
+    free(spedizioni);
 }

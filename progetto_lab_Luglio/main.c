@@ -2,7 +2,6 @@
     Progetto di laboratorio di informatica
     Autori: Barbarossa Christian Savino - 825007
             Di Santo Gabriele - 825303
-            Lorusso Marila - 827384
 
     Descrizione: Progetto per la gestione di un sistema di spedizioni.
 
@@ -15,19 +14,10 @@
 #include "pacco.h"
 #include "utils.h"
 
-#include <stdio.h>
-
-// Sequenze di escape ANSI per i colori
-const char *RED = "\033[31m";    // Rosso
-const char *GREEN = "\033[32m";  // Verde
-const char *BLUE = "\033[34m";   // Blu
-const char *YELLOW = "\033[33m"; // Giallo
-const char *RESET = "\033[0m";   // Reset del colore
-
 int main()
 {
 
-   Coda *coda= coda_init();
+    Coda *coda = coda_init();
 
     int_pos scelta;
     // Stampa di benvenuto colorata
@@ -38,10 +28,8 @@ int main()
         puts("<----Scelta delle operazioni---->");
         puts("1. Stampa del file con le spedizioni");
         puts("2. Inserimento nuove spedizioni"); // una volta inserita la spedizione, se il pacco è "ordinato" l'oggetto verrà messo in una coda, successivamente all'inserimento verrà convalidato e "spedito"
-        puts("3. Modifica stato spedizioni");
         puts("4. Modifica dati spedizioni");
-        puts("5. Ricerca nel file");
-        puts("6. Stampa statistiche spedizioni");
+        puts("5. Ricerca spedizione per ID nel file");
         puts("7. Esci");
         printf("Inserisci: ");
         scanf("%hd", &scelta);
@@ -53,17 +41,7 @@ int main()
 
             break;
         case 2:
-            /*
-            Inserimento di una nuova spedizione:
-            1. L'utente inserisce varie spedizioni finchè non decide di uscire.
-            2. Dopo l'inserimento si passa alla convalida, se ci sono pacchi da convalidare.
-            3. Se il pacco è "ordinato", viene inserito in una coda.
-                3.1 Si chiede all'utente se vuole convalidare il pacco.
-                3.2 Se l'utente risponde "si", il pacco viene convalidato e lo stato viene cambiato in "spedito".
-                3.3 Se l'utente risponde "no", il pacco rimane in stato "ordinato" e viene inserito nella coda (in coda).
-            4. Se il pacco è in un qualsiasi altro stato, viene inserito nel file delle spedizioni.
-            */
-
+        {
             puts("Inserimento nuove spedizioni");
 
             int_pos scelta_ins = 1;
@@ -75,43 +53,58 @@ int main()
                 scanf("%hd", &scelta_ins);
             }
 
-            // metodo per la convalida
-            /*
-            viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
-            se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
-            se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
-            */
-
             convalida_spedizioni(coda);
 
-            break;
+            order_by_date(); //ordina il file in BASE ALLA DATA
+        }
+        break;
 
-        case 3:
-        { // Funzione per modificare lo stato delle spedizioni
-            // ricerca per id pacco
+        case 4:
+        {
+            // Funzione per modificare i dati delle spedizioni
+
             char id[10];
+            int_pos scelta_modifica;
             Spedizione trovata;
 
-            input_string("Inserisci l'ID del pacco da modificare lo stato: ", id, sizeof(id), 9);
+            input_string("Inserisci l'ID del pacco da modificare: ", id, sizeof(id), 9);
 
             int pos = ricerca_spedizione_per_id(id, &trovata);
-
             if (pos != -1)
             {
-                modifica_stato_spedizione_in_file(pos, &trovata);
-                printf("%sStato della spedizione modificato con successo!%s\n", GREEN, RESET);
+                puts("Quali dati vuoi modificare?");
+                puts("1. Stato");
+                puts("2. Destinatario");
+                puts("3. Data di consegna");
+                scanf("%hd", &scelta_modifica);
+
+                switch (scelta_modifica)
+                {
+
+                case 1:
+                    modifica_stato_spedizione_in_file(pos, &trovata);
+                    printf("%sStato della spedizione modificato con successo!%s\n", GREEN, RESET);
+                    break;
+
+                case 2:
+                    modifica_destinatario_spedizione_in_file(pos, &trovata);
+                    printf("%sDestinatario della spedizione modificato con successo!%s\n", GREEN, RESET);
+                    break;
+                case 3:
+                    modifica_data_consegna_spedizione_in_file(pos, &trovata);
+                    printf("%sData di consegna della spedizione modificata con successo!%s\n", GREEN, RESET);
+                    break;
+                default:
+                    printf("%sScelta non valida, riprova.%s\n", YELLOW, RESET);
+                    break;
+                }
             }
             else
             {
                 printf("%sSpedizione non trovata.%s\n", RED, RESET);
-
             }
         }
         break;
-        case 4:
-            // Funzione per modificare i dati delle spedizioni
-
-            break;
         case 5:
         {
             // Funzione per la ricerca nel file
@@ -124,7 +117,7 @@ int main()
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
             {
-                printf("%sSpedizione trovata!%s ID: %s\n",GREEN, RESET, trovata.p.n);
+                printf("%sSpedizione trovata!%s ID: %s\n", GREEN, RESET, trovata.p.n);
                 stampa_spedizione(trovata);
             }
             else
@@ -133,9 +126,7 @@ int main()
             }
         }
         break;
-        case 6:
-            // Funzione per stampare le statistiche delle spedizioni
-            break;
+
         case 7:
             puts("Uscita dal programma...");
             return 0; // Esce dal programma

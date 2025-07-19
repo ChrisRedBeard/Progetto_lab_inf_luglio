@@ -2,7 +2,6 @@
 #include "spedizione.h"
 #include "utils.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 Coda *coda_init()
@@ -10,7 +9,10 @@ Coda *coda_init()
     Coda *coda = (Coda *)malloc(sizeof(Coda));
     if (coda == NULL)
     {
+        printf("%s",RED);
         fprintf(stderr, "Errore di allocazione della memoria per la coda.\n");
+        printf("%s",RESET);
+
         exit(EXIT_FAILURE); // Termina il programma in caso di errore
     }
     coda->headPtr = NULL; // Inizializza il puntatore front a NULL
@@ -19,47 +21,48 @@ Coda *coda_init()
 }
 
 // per noi stampa la coda significa stamparli nel file
-void printQueue(QueueNodePtr currentPtr)
+void printQueue(Coda c)
 {
 
     /* Se la coda è vuota  */
-    if (currentPtr == NULL)
+    if (isEmpty(c)==1)
     {
-        printf("La coda è vuota.\n");
+        printf("%sLa coda è vuota.%s\n",YELLOW,RESET);
     }
     else
     {
-        while (currentPtr != NULL)
+        while (c.headPtr != NULL)
         {
             /*inserimento_file_spedizioni(Spedizione s)*/
-            inserimento_file_spedizioni(currentPtr->sp_nodo); // Inserisce la spedizione nel file delle spedizioni
-            currentPtr = currentPtr->nextPtr;                 // spostamento al nodo successivo
+            inserimento_file_spedizioni(c.headPtr->sp_nodo); // Inserisce la spedizione nel file delle spedizioni
+            c.headPtr = c.headPtr->nextPtr;                 // spostamento al nodo successivo
         }
     }
 }
 
-int isEmpty(QueueNodePtr headPtr)
+int isEmpty(Coda c)
 {
 
-    return headPtr == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
+    
+    return (c.headPtr) == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
 }
 
 /* Rimuove un nodo(quindi una spedizione) dalla coda */
 /*modifica da fare, modificare lo stato della spedizione */
-Spedizione* dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr)
+Spedizione* dequeue(Coda* c)
 {
 
     Spedizione *s=(Spedizione*)malloc(sizeof(Spedizione));
     QueueNodePtr tempPtr; // puntatore al nodo da rimuovere
 
-    *s = (*headPtr)->sp_nodo; // recupero la spedizione dal nodo da rimuovere
-    tempPtr = *headPtr;
-    *headPtr = (*headPtr)->nextPtr;
+    *s = (c->headPtr)->sp_nodo; // recupero la spedizione dal nodo da rimuovere
+    tempPtr = c->headPtr;
+    c->headPtr = c->headPtr->nextPtr;
 
     /*Se la coda è vuota   */
-    if (*headPtr == NULL)
+    if (c->headPtr == NULL)
     {
-        *tailPtr = NULL; // se la coda è vuota, il puntatore alla coda viene impostato a NULL
+        c->tailPtr = NULL; // se la coda è vuota, il puntatore alla coda viene impostato a NULL
     }
 
     free(tempPtr); // rilascio la memoria del nodo rimosso
@@ -67,7 +70,7 @@ Spedizione* dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr)
    return s;
 }
 
-void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s)
+void enqueue(Coda* c, Spedizione s)
 {
 
     QueueNodePtr newPtr;                // puntatore al nuovo nodo
@@ -79,21 +82,22 @@ void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s)
         newPtr->sp_nodo = s; // inserimento della spedizione nel nodo
         newPtr->nextPtr = NULL;
 
-        if (isEmpty(*headPtr))
+        if (isEmpty(*c))
         {
-            *headPtr = newPtr; // se è vuota, il nuovo nodo diventa la testa della coda
+            c->headPtr = newPtr; // se è vuota, il nuovo nodo diventa la testa della coda
         }
         else
         {
-            (*tailPtr)->nextPtr = newPtr; // altrimenti il nuovo nodo viene inserito alla fine della coda
+            (c->tailPtr)->nextPtr = newPtr; // altrimenti il nuovo nodo viene inserito alla fine della coda
         }
 
-        *tailPtr = newPtr; // il nuovo nodo diventa la coda della coda
+        c->tailPtr = newPtr; // il nuovo nodo diventa la coda della coda
     }
     else
     {
+       
+        printf("\n%sLa spedizione con id: %s non è stata inserita nella coda, poiché non c'è memoria disponibile!!\n",RED,s.p.n,RESET);
 
-        printf("la spedizione con id: %s non è stata inserita nella coda, poiché non c'è memoria disponibile!! \n", s.p.n);
     }
 }
 
@@ -111,11 +115,11 @@ void convalida_spedizioni(Coda *c)
     int_pos scelta;
     Spedizione *s;
 
-    while (!isEmpty(c->headPtr))
+    while (!isEmpty(*c))
     {
         stampa_spedizione(c->headPtr->sp_nodo);
         
-       s = dequeue(&(c->headPtr), &(c->tailPtr));
+       s = dequeue(c);
 
        stampa_spedizione(*s); //stampa sul terminale e poi chiede all'utente se vuole convalidarlo o meno
 
@@ -135,7 +139,8 @@ void convalida_spedizioni(Coda *c)
 
             //flag =true
             c->tailPtr->flag=true;
-            enqueue(&(c->headPtr), &(c->tailPtr),*s);
+            //la coda e la spedizione
+            enqueue(c,*s);
             
 
             if (c->tailPtr->flag==true && convalida == 0)
@@ -143,7 +148,7 @@ void convalida_spedizioni(Coda *c)
                 puts("Vuoi eliminare la spedizione? (1=>Si 0=>No)");
                 scanf("%hd",&scelta);
                 if(scelta==1){
-                      s = dequeue(&(c->headPtr), &(c->tailPtr));
+                      s = dequeue(c);
                 }else
                 {
 

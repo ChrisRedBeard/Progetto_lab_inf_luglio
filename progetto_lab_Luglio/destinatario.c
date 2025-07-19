@@ -1,8 +1,6 @@
 #include "utils.h"
 #include "destinatario.h"
 
-#include <stdio.h>
-
 void inserimento_destinatario(Destinatario *d)
 {
     input_string("Nome: ", d->nome, sizeof(d->nome), 29);

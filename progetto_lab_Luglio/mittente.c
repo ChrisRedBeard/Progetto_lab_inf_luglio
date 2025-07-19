@@ -1,8 +1,6 @@
 #include "mittente.h"
 #include "utils.h"
 
-#include <stdio.h>
-
 void inserimento_mittente(Mittente *m)
 {
     input_string("Nome: ", m->nome, sizeof(m->nome), 29);

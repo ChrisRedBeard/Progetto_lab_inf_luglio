@@ -35,8 +35,13 @@ bool controllo_date(struct tm data_invio, struct tm data_consegna);
 void inserimento_file_spedizioni(Spedizione s);
 void stampa_spedizione(Spedizione s);
 void stampa_file_spedizioni();
-void mod_stato_sped(Spedizione *s);
+void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod);
+void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod);
 void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod);
 int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result);
+int compare_spedizioni(const void *a, const void *b);
+void order_by_date();
+
+//TODO Elimina spedizione da file tramite id 
 
 #endif // SPEDIZIONE_H
