@@ -2,11 +2,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <stdio.h>
-#include <string.h>
+typedef unsigned short int int_pos;
 
-void input_string(const char *prompt, char *dest, size_t size);
-
-
+void input_string(const char *prompt, char *dest, int_pos size, int_pos lunghezza);
+void input_float(const char *prompt, float *dest, float min);
 
 #endif

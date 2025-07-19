@@ -1,7 +1,22 @@
-
-
 #include "coda.h"
 #include "spedizione.h"
+#include "utils.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+Coda *coda_init()
+{
+    Coda *coda = (Coda *)malloc(sizeof(Coda));
+    if (coda == NULL)
+    {
+        fprintf(stderr, "Errore di allocazione della memoria per la coda.\n");
+        exit(EXIT_FAILURE); // Termina il programma in caso di errore
+    }
+    coda->headPtr = NULL; // Inizializza il puntatore front a NULL
+    coda->tailPtr = NULL; // Inizializza il puntatore rear a NULL
+    return coda;
+}
 
 // per noi stampa la coda significa stamparli nel file
 void printQueue(QueueNodePtr currentPtr)
@@ -31,13 +46,13 @@ int isEmpty(QueueNodePtr headPtr)
 
 /* Rimuove un nodo(quindi una spedizione) dalla coda */
 /*modifica da fare, modificare lo stato della spedizione */
-void dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr)
+Spedizione* dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr)
 {
 
-    Spedizione s;
+    Spedizione *s=(Spedizione*)malloc(sizeof(Spedizione));
     QueueNodePtr tempPtr; // puntatore al nodo da rimuovere
 
-    s = (*headPtr)->sp_nodo; // recupero la spedizione dal nodo da rimuovere
+    *s = (*headPtr)->sp_nodo; // recupero la spedizione dal nodo da rimuovere
     tempPtr = *headPtr;
     *headPtr = (*headPtr)->nextPtr;
 
@@ -49,8 +64,7 @@ void dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr)
 
     free(tempPtr); // rilascio la memoria del nodo rimosso
 
-    s.stato = spedito;              // Modifica lo stato della spedizione a "spedito"
-    inserimento_file_spedizioni(s); // Inserisce la spedizione nel file delle spedizioni
+   return s;
 }
 
 void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s)
@@ -83,41 +97,64 @@ void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s)
     }
 }
 
+// metodo per la convalida
+/*
+viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
+se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
+se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
+*/
 
-//metodo per la convalida
-                /*
-                viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
-                se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
-                se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
-                */
-            
-void convalida_spedizioni(QueueNodePtr headPtr, QueueNodePtr tailPtr){
+void convalida_spedizioni(Coda *c)
+{
 
+    int_pos convalida = 0;
+    int_pos scelta;
+    Spedizione *s;
 
+    while (!isEmpty(c->headPtr))
+    {
+        stampa_spedizione(c->headPtr->sp_nodo);
+        
+       s = dequeue(&(c->headPtr), &(c->tailPtr));
 
-    short int convalida=0;
-    while(!isEmpty(headPtr)){
+       stampa_spedizione(*s); //stampa sul terminale e poi chiede all'utente se vuole convalidarlo o meno
 
-    printf("Il primo elemento della coda è:\n");
-        stampa_spedizione(headPtr->sp_nodo);
-    
         printf("Vuoi convalidare il pacco? (1=>Si 0=>No) : ");
-        scanf("%hd",&convalida);
-        if(convalida==1){
-            //lo tolgo dalla coda e poi gli campo lo stato per stamparlo nel file
-            dequeue(&headPtr,&tailPtr);
-        }else{
-
-            //come sposto un elemento alla fine della coda?
+        scanf("%hd", &convalida);
+        if (convalida == 1)
+        {
+            // lo tolgo dalla coda e poi gli cambio lo stato per stamparlo nel file
+     
+            s->stato= spedito;
+            inserimento_file_spedizioni(*s);
 
         }
-
-
-    }
-    
+        else
+        {
      
- 
 
-  
+            //flag =true
+            c->tailPtr->flag=true;
+            enqueue(&(c->headPtr), &(c->tailPtr),*s);
+            
+
+            if (c->tailPtr->flag==true && convalida == 0)
+            {
+                puts("Vuoi eliminare la spedizione? (1=>Si 0=>No)");
+                scanf("%hd",&scelta);
+                if(scelta==1){
+                      s = dequeue(&(c->headPtr), &(c->tailPtr));
+                }else
+                {
+
+                //   enqueue(&(c->headPtr), &(c->tailPtr),*s);
+
+                }
+                
+
+            }
+            
+        }
+    }
 
 }

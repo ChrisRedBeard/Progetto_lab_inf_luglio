@@ -8,27 +8,30 @@
 
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "coda.h"
 #include "spedizione.h"
 #include "mittente.h"
 #include "destinatario.h"
 #include "pacco.h"
+#include "utils.h"
+
+#include <stdio.h>
 
 // Sequenze di escape ANSI per i colori
 const char *RED = "\033[31m";    // Rosso
 const char *GREEN = "\033[32m";  // Verde
+const char *BLUE = "\033[34m";   // Blu
 const char *YELLOW = "\033[33m"; // Giallo
 const char *RESET = "\033[0m";   // Reset del colore
 
 int main()
 {
-    short int scelta;
+
+   Coda *coda= coda_init();
+
+    int_pos scelta;
     // Stampa di benvenuto colorata
-    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto.Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", GREEN, RESET);
+    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", BLUE, RESET);
 
     while (scelta != 7)
     {
@@ -63,7 +66,7 @@ int main()
 
             puts("Inserimento nuove spedizioni");
 
-            short int scelta_ins = 1;
+            int_pos scelta_ins = 1;
 
             while (scelta_ins != 0)
             {
@@ -72,39 +75,41 @@ int main()
                 scanf("%hd", &scelta_ins);
             }
 
-            //metodo per la convalida
-                /*
-                viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
-                se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
-                se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
-                */
+            // metodo per la convalida
+            /*
+            viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
+            se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
+            se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
+            */
+
+            convalida_spedizioni(coda);
+
             break;
-            
+
         case 3:
         { // Funzione per modificare lo stato delle spedizioni
             // ricerca per id pacco
             char id[10];
             Spedizione trovata;
-            printf("Inserisci l'ID del pacco da modificare lo stato: ");
-            if (scanf("%s", id) != 1) {
-                puts("Errore nella lettura dell'ID.");
-                continue;
-            }
+
+            input_string("Inserisci l'ID del pacco da modificare lo stato: ", id, sizeof(id), 9);
+
             int pos = ricerca_spedizione_per_id(id, &trovata);
+
             if (pos != -1)
             {
                 modifica_stato_spedizione_in_file(pos, &trovata);
-                puts("Stato della spedizione modificato con successo!");
+                printf("%sStato della spedizione modificato con successo!%s\n", GREEN, RESET);
             }
             else
             {
-                puts("Spedizione non trovata.");
+                printf("%sSpedizione non trovata.%s\n", RED, RESET);
+
             }
         }
         break;
         case 4:
             // Funzione per modificare i dati delle spedizioni
-            
 
             break;
         case 5:
@@ -113,22 +118,18 @@ int main()
             // ricerca per id pacco
             char id[10];
             Spedizione trovata;
-            printf("Inserisci l'ID del pacco da cercare: ");
-            
-            if (scanf("%s", id) != 1 || strlen(id)!= 9) {
-                puts("Errore nella lettura dell'ID.");
-                continue;
-            }
+
+            input_string("Inserisci l'ID del pacco da cercare: ", id, sizeof(id), 9);
 
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
             {
-                printf("Spedizione trovata! ID: %s\n", trovata.p.n);
+                printf("%sSpedizione trovata!%s ID: %s\n",GREEN, RESET, trovata.p.n);
                 stampa_spedizione(trovata);
             }
             else
             {
-                puts("Spedizione non trovata.");
+                printf("%sSpedizione non trovata.%s\n", RED, RESET);
             }
         }
         break;
@@ -139,7 +140,7 @@ int main()
             puts("Uscita dal programma...");
             return 0; // Esce dal programma
         default:
-            puts("Scelta non valida, riprova.");
+            printf("%sScelta non valida, riprova.%s\n", YELLOW, RESET);
         }
     }
     return 0;

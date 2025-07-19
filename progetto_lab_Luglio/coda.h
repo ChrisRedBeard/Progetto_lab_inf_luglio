@@ -1,24 +1,33 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "spedizione.h"
 
- /* struttura autoreferenziale  */
- struct queueNode {
-  Spedizione sp_nodo;  /* il mio nodo contiene la struct spedizione  */
-  struct queueNode *nextPtr; /* puntatore al nodo della coda */
- };
+/* struttura autoreferenziale  */
+struct queueNode
+{
+    Spedizione sp_nodo;        /* il mio nodo contiene la struct spedizione  */
+    bool flag; //di accettazione
+    struct queueNode *nextPtr; /* puntatore al nodo della coda */
+};
 
- typedef struct queueNode QueueNode;
- typedef QueueNode *QueueNodePtr;
+typedef struct queueNode QueueNode;
+typedef QueueNode *QueueNodePtr;
 
- /* prototipi di funzione */
- void printQueue( QueueNodePtr currentPtr );
- 
- int isEmpty( QueueNodePtr headPtr );
+// Definizione della struttura della coda
+typedef struct
+{
+     QueueNode *headPtr; // Puntatore al primo nodo della coda
+     QueueNode *tailPtr; // Puntatore all'ultimo nodo della coda
+} Coda;
 
- void dequeue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr );
+/* prototipi di funzione */
 
- void enqueue( QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s ); 
+Coda *coda_init();
 
- //da implementare
- void convalida_spedizioni(QueueNodePtr headPtr,QueueNodePtr tailPtr);
+void printQueue(QueueNodePtr currentPtr);
+
+int isEmpty(QueueNodePtr headPtr);
+
+Spedizione* dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr);
+
+void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, Spedizione s);
+
+void convalida_spedizioni(Coda* c);

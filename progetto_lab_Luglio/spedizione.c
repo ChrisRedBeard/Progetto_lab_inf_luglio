@@ -1,30 +1,30 @@
 #include "spedizione.h"
 #include "coda.h"
-#include "destinatario.h"
-#include "mittente.h"
 #include "utils.h"
-#include "pacco.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-// inizializzo la coda vuota
-QueueNodePtr headPtr = NULL; /* initialize headPtr */
-QueueNodePtr tailPtr = NULL; /* initialize tailPtr */ 
- 
-bool verifica_data(struct tm data)
+void inserimento_data(const char *prompt, struct tm *data)
 {
-    // Verifica che la data sia valida
-    if (data.tm_year < 1900 || data.tm_mon < 1 || data.tm_mon > 12 || data.tm_mday < 1 || data.tm_mday > 31)
+    bool flag = false;
+    do
     {
-        return false;
-    }
-    // Aggiungere ulteriori controlli per i giorni del mese, considerando gli anni bisestili, ecc.
-    return true;
+        printf("%s (formato: gg mm aaaa): ", prompt);
+        if (scanf("%d %d %d", data->tm_mday, data->tm_mon, data->tm_year) != 3 ||
+            data->tm_mday < 1 || data->tm_mday > 31 ||
+            data->tm_mon < 1 || data->tm_mon > 12 ||
+            data->tm_year < 1900)
+        {
+            puts("Data non valida, riprova.");
+            while (getchar() != '\n')
+                ;
+            flag = true;
+        }
+    } while (!flag);
 }
 
-void inserimento_spedizione()
+void inserimento_spedizione(Coda *c)
 {
     Spedizione nuova_sped = {0};
 
@@ -43,25 +43,10 @@ void inserimento_spedizione()
 
     do
     {
+        inserimento_data("Data di invio", &nuova_sped.data_invio);
+        inserimento_data("Data di consegna prevista", &nuova_sped.data_consegna);
 
-        printf("Data di invio (formato: gg mm aaaa): ");
-        if (scanf("%d %d %d", &nuova_sped.data_invio.tm_mday, &nuova_sped.data_invio.tm_mon, &nuova_sped.data_invio.tm_year) != 3 || !verifica_data(nuova_sped.data_invio))
-        {
-            puts("Data di invio non valida.");
-            while (getchar() != '\n')
-                ;
-            return;
-        }
-
-        printf("Data di consegna prevista (formato: gg mm aaaa): ");
-        if (scanf("%d %d %d", &nuova_sped.data_consegna.tm_mday, &nuova_sped.data_consegna.tm_mon, &nuova_sped.data_consegna.tm_year) != 3 || !verifica_data(nuova_sped.data_consegna))
-        {
-            puts("Data di consegna non valida.");
-            while (getchar() != '\n');
-            return;
-        }
-
-    } while (controllo_date(nuova_sped.data_invio, nuova_sped.data_consegna) == false);
+    } while (!controllo_date(nuova_sped.data_invio, nuova_sped.data_consegna));
 
     while (getchar() != '\n')
         ; // Pulisci il buffer
@@ -72,14 +57,19 @@ void inserimento_spedizione()
     puts("Dati del destinatario:");
     inserimento_destinatario(&nuova_sped.destinatario);
 
-    puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
-    if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5)
+    
+    do
     {
-        puts("Stato non valido.");
-        while (getchar() != '\n')
-            ;
-        return;
-    }
+        puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
+        if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5)
+        {
+            puts("Stato non valido.");
+            while (getchar() != '\n')
+                ;
+            
+        }
+    } while (nuova_sped.stato < 1 || nuova_sped.stato > 5);
+
     while (getchar() != '\n')
         ; // Pulisci il buffer
 
@@ -87,9 +77,7 @@ void inserimento_spedizione()
     {
         // Se il pacco è "ordinato", viene inserito in una coda
         printf("Pacco con ID %s inserito in coda.\n", nuova_sped.p.n);
-        // Qui si dovrebbe chiamare la funzione enqueue per inserire il pacco nella coda
-        enqueue(&headPtr,&tailPtr, nuova_sped);
-
+        enqueue(&(c->headPtr), &(c->tailPtr), nuova_sped);
     }
     else
     {
@@ -97,10 +85,6 @@ void inserimento_spedizione()
         inserimento_file_spedizioni(nuova_sped);
     }
 }
-
-
-
-
 
 // verifica che la data di invio sia inferiore a quella di consegna
 bool controllo_date(struct tm d_invio, struct tm d_cons)
@@ -111,16 +95,19 @@ bool controllo_date(struct tm d_invio, struct tm d_cons)
     if (d_invio.tm_year > d_cons.tm_year)
     {
         corretto = false;
+        puts("Hai inserito una data superiore a quella di consegna");
         return corretto;
     }
     else if (d_invio.tm_mon > d_cons.tm_mon)
     {
         corretto = false;
+        puts("Hai inserito una data superiore a quella di consegna");
         return corretto;
     }
     else if (d_invio.tm_mday > d_cons.tm_mday)
     {
         corretto = false;
+        puts("Hai inserito una data superiore a quella di consegna");
         return corretto;
     }
 
@@ -148,7 +135,7 @@ void inserimento_file_spedizioni(Spedizione s)
         printf("Spedizione inserita correttamente nel file.\n");
     }
 
-    //TODO: Creare una funzione che riordini il file rispetto alla data di invio
+    // TODO: Creare una funzione che riordini il file rispetto alla data di invio
 
     fclose(fp);
 }
