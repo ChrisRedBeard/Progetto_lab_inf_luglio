@@ -39,9 +39,10 @@ void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod);
 void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod);
 void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod);
 int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result);
-int compare_spedizioni(const void *a, const void *b);
+int compare_spedizioni(struct tm a, struct tm b);
 void order_by_date();
 
-//TODO Elimina spedizione da file tramite id 
+//TODO Elimina spedizione da file tramite id
+void elimina_spedizione_in_file();
 
 #endif // SPEDIZIONE_H

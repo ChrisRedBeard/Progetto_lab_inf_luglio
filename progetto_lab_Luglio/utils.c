@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-void input_id(const char *prompt, char *dest,int_pos size, int_pos lunghezza)
+void input_id(const char *prompt, char *dest, int_pos size, int_pos lunghezza)
 {
 
     bool flag = false;
@@ -20,67 +20,62 @@ void input_id(const char *prompt, char *dest,int_pos size, int_pos lunghezza)
         }
         else
         {
-            printf("%s",RED);
+            printf("%s", RED);
             perror("Errore nella lettura della stringa");
-            printf("%s",RED); 
+            printf("%s", RESET);
             dest[0] = '\0';
         }
 
-        if (strlen(dest) !=lunghezza){
+        if (strlen(dest) != lunghezza)
+        {
             flag = true;
-            
-        printf("%s\nStringa non valida, riprova.\n%s",RED,RESET);
-        }else{
+            fflush(stdin);
+            printf("%sStringa non valida, riprova.\n%s", RED, RESET);
+        }
+        else
+        {
             flag = false;
-        } 
+        }
 
     } while (flag);
-    
- fflush(stdin);
 }
-
-
-
-
-
 
 void input_string(const char *prompt, char *dest, int_pos size, int_pos lunghezza)
 {
-
     bool flag = false;
+    char buffer[100] = {'\0'};
 
     do
     {
         fflush(stdin);
         printf("%s", prompt);
-
-        if (fgets(dest, size, stdin))
+        if (fgets(buffer, sizeof(buffer), stdin))
         {
-            dest[strcspn(dest, "\n")] = 0; // Rimuove il newline finale
+            buffer[strcspn(buffer, "\n")] = 0; // Rimuove il newline finale
+
+           if (strlen(buffer) == 0 || strlen(buffer) > lunghezza)
+            {
+                flag = true;
+                printf("%s\nStringa non valida, riprova.\n%s", RED, RESET);
+                fflush(stdin);
+            }
+            else
+            {
+                flag = false;
+                if (sscanf(buffer, "%[^\n]", dest) != 1)
+                    dest[0] = '\0';
+            }
         }
         else
         {
-            printf("%s",RED);
+            printf("%s", RED);
             perror("Errore nella lettura della stringa");
-            printf("%s",RED); 
+            printf("%s", RED);
             dest[0] = '\0';
-        }
-
-        if (strlen(dest) ==0 && strlen(dest)>lunghezza)
             flag = true;
-        else
-            flag = false;
-
-        if(flag)
-        {
-            flag=true;
-        }else{
-            printf("%s\nStringa non valida, riprova.\n%s",RED,RESET);
         }
-         
 
     } while (flag);
-    fflush(stdin);
 }
 
 void input_float(const char *prompt, float *dest, float min)
@@ -89,11 +84,14 @@ void input_float(const char *prompt, float *dest, float min)
 
     do
     {
+        fflush(stdin);
         printf("%s", prompt);
 
-        if (scanf("%f", dest) != 1 || *dest < min)
+        if (scanf("%f", dest) != 1 || *dest < min || *dest == 0)
         {
+            printf("%s", RED);
             puts("Valore non valido, riprova.");
+            printf("%s", RESET);
             flag = true;
             while (getchar() != '\n')
                 ; // Pulisce il buffer di input

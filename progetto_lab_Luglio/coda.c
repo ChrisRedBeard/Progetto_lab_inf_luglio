@@ -4,20 +4,10 @@
 
 #include <stdlib.h>
 
-Coda *coda_init()
+void coda_init(Coda *coda)
 {
-    Coda *coda = (Coda *)malloc(sizeof(Coda));
-    if (coda == NULL)
-    {
-        printf("%s",RED);
-        fprintf(stderr, "Errore di allocazione della memoria per la coda.\n");
-        printf("%s",RESET);
-
-        exit(EXIT_FAILURE); // Termina il programma in caso di errore
-    }
     coda->headPtr = NULL; // Inizializza il puntatore front a NULL
     coda->tailPtr = NULL; // Inizializza il puntatore rear a NULL
-    return coda;
 }
 
 // per noi stampa la coda significa stamparli nel file
@@ -42,14 +32,12 @@ void printQueue(Coda c)
 
 int isEmpty(Coda c)
 {
-
-    
     return (c.headPtr) == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
 }
 
 /* Rimuove un nodo(quindi una spedizione) dalla coda */
 /*modifica da fare, modificare lo stato della spedizione */
-Spedizione* dequeue(Coda* c)
+Spedizione* dequeue(Coda *c)
 {
 
     Spedizione *s=(Spedizione*)malloc(sizeof(Spedizione));
@@ -70,7 +58,7 @@ Spedizione* dequeue(Coda* c)
    return s;
 }
 
-void enqueue(Coda* c, Spedizione s)
+void enqueue(Coda *c, Spedizione s)
 {
 
     QueueNodePtr newPtr;                // puntatore al nuovo nodo

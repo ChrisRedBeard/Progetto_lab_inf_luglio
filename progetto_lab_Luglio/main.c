@@ -17,7 +17,8 @@
 int main()
 {
 
-    Coda *coda = coda_init();
+    Coda coda;
+    coda_init(&coda);
 
     int_pos scelta;
     // Stampa di benvenuto colorata
@@ -27,7 +28,8 @@ int main()
     {
         puts("<----Scelta delle operazioni---->");
         puts("1. Stampa del file con le spedizioni");
-        puts("2. Inserimento nuove spedizioni"); // una volta inserita la spedizione, se il pacco è "ordinato" l'oggetto verrà messo in una coda, successivamente all'inserimento verrà convalidato e "spedito"
+        puts("2. Inserimento nuove spedizioni");
+        puts("3. Elimina spedizione dal file");
         puts("4. Modifica dati spedizioni");
         puts("5. Ricerca spedizione per ID nel file");
         puts("7. Esci");
@@ -37,8 +39,9 @@ int main()
         switch (scelta)
         {
         case 1:
+            order_by_date();
             stampa_file_spedizioni(); // Funzione per stampare il file con le spedizioni
-
+   
             break;
         case 2:
         {
@@ -53,11 +56,32 @@ int main()
                 scanf("%hd", &scelta_ins);
             }
 
-            convalida_spedizioni(coda);
+            convalida_spedizioni(&coda);
 
             order_by_date(); //ordina il file in BASE ALLA DATA
         }
         break;
+
+        case 3:
+        {
+            // Funzione per eliminare una spedizione dal file
+            char id[10];
+            Spedizione trovata;
+
+            input_string("Inserisci l'ID del pacco da eliminare: ", id, sizeof(id), 9);
+
+            int pos = ricerca_spedizione_per_id(id, &trovata);
+            if (pos != -1)
+            {
+            
+                elimina_spedizione_in_file(pos); 
+                printf("%sSpedizione con ID %s eliminata con successo!%s\n", GREEN, id, RESET);
+            }
+            else
+            {
+                printf("%sSpedizione non trovata.%s\n", RED, RESET);
+            }
+        }
 
         case 4:
         {

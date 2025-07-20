@@ -16,15 +16,40 @@ void inserimento_data(const char *prompt, struct tm *data)
             data->tm_mon < 1 || data->tm_mon > 12 ||
             data->tm_year < 1900)
         {
-
             printf("%sData non valida, riprova.%s\n", RED, RESET);
-            while (getchar() != '\n')
-                ;
             flag = true;
-        }else{
-            flag = false;
         }
-        
+        else
+        {
+            flag = false;
+
+            if (data->tm_year % 4 == 0)
+            {
+                if (data->tm_mon == 2 && data->tm_mday > 29)
+                {
+                    printf("%sData non valida, riprova.%s\n", RED, RESET);
+                    flag = true;
+                }
+            }
+            else
+            {
+                if (data->tm_mon == 2 && data->tm_mday > 28)
+                {
+                    printf("%sData non valida, riprova.%s\n", RED, RESET);
+                    flag = true;
+                }
+            }
+
+            if (data->tm_mon == 4 || data->tm_mon == 6 || data->tm_mon == 9 || data->tm_mon == 11)
+            {
+                if (data->tm_mday > 30)
+                {
+                    printf("%sData non valida, riprova.%s\n", RED, RESET);
+                    flag = true;
+                }
+            }
+        }
+
     } while (flag);
 }
 
@@ -36,14 +61,14 @@ void inserimento_spedizione(Coda *c)
 
     inserimento_pacco(&nuova_sped.p);
 
-    printf("Priorità (1 per alta, 0 per normale): ");
-    if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1))
+    do
     {
-        printf("%sPriorità non valida.%s", RED, RESET);
-        while (getchar() != '\n')
-            ;
-        return;
-    }
+        printf("Priorità (1 per alta, 0 per normale): ");
+        if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1))
+        {
+            printf("%sPriorità non valida.%s\n", RED, RESET);
+        }
+    } while (nuova_sped.priorita != 0 && nuova_sped.priorita != 1);
 
     do
     {
@@ -52,13 +77,10 @@ void inserimento_spedizione(Coda *c)
 
     } while (!controllo_date(nuova_sped.data_invio, nuova_sped.data_consegna));
 
-    while (getchar() != '\n')
-        ; // Pulisci il buffer
-
-    puts("Dati del mittente:");
+    puts("<--Dati del mittente-->");
     inserimento_mittente(&nuova_sped.mittente);
 
-    puts("Dati del destinatario:");
+    puts("<--Dati del destinatario-->");
     inserimento_destinatario(&nuova_sped.destinatario);
 
     do
@@ -66,16 +88,13 @@ void inserimento_spedizione(Coda *c)
         puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
         if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5)
         {
-            printf("%s",RED);
+            printf("%s", RED);
             puts("Stato non valido.");
-            printf("%s",RESET);
+            printf("%s", RESET);
             while (getchar() != '\n')
                 ;
         }
     } while (nuova_sped.stato < 1 || nuova_sped.stato > 5);
-
-    while (getchar() != '\n')
-        ; // Pulisci il buffer
 
     if (nuova_sped.stato == 1)
     {
@@ -93,29 +112,25 @@ void inserimento_spedizione(Coda *c)
 // verifica che la data di invio sia inferiore a quella di consegna
 bool controllo_date(struct tm d_invio, struct tm d_cons)
 {
-
-    bool corretto = true;
-
     if (d_invio.tm_year > d_cons.tm_year)
     {
-        corretto = false;
-        printf("%sHai inserito una data superiore a quella di consegna%s",RED,RESET);
-        return corretto;
-    }
-    else if (d_invio.tm_mon > d_cons.tm_mon)
-    {
-        corretto = false;
-        printf("%sHai inserito una data superiore a quella di consegna%s",RED,RESET);
-        return corretto;
-    }
-    else if (d_invio.tm_mday > d_cons.tm_mday)
-    {
-        corretto = false;
-        printf("%sHai inserito una data superiore a quella di consegna%s",RED,RESET);
-        return corretto;
+        printf("%sHai inserito una data di invio con anno superiore a quello di consegna, riprova%s\n", RED, RESET);
+        return false;
     }
 
-    return corretto;
+    if (d_invio.tm_year == d_cons.tm_year && d_invio.tm_mon > d_cons.tm_mon)
+    {
+        printf("%sHai inserito una data di invio con mese superiore a quello di consegna, riprova%s\n", RED, RESET);
+        return false;
+    }
+
+    if (d_invio.tm_year == d_cons.tm_year && d_invio.tm_mon == d_cons.tm_mon && d_invio.tm_mday > d_cons.tm_mday)
+    {
+        printf("%sHai inserito una data di invio con giorno superiore a quello di consegna, riprova%s\n", RED, RESET);
+        return false;
+    }
+
+    return true;
 }
 
 void inserimento_file_spedizioni(Spedizione s)
@@ -143,7 +158,7 @@ void inserimento_file_spedizioni(Spedizione s)
         printf("%sSpedizione inserita correttamente nel file.%s\n", GREEN, RESET);
     }
 
-    // TODO: Creare una funzione che riordini il file rispetto alla data di invio////////////////
+    // funzione che riordina il file rispetto alla data di invio
     order_by_date();
     fclose(fp);
 }
@@ -158,25 +173,26 @@ void stampa_spedizione(Spedizione s)
 
     printf("Spedito in data: %d/%d/%d \n", s.data_invio.tm_mday, s.data_invio.tm_mon, s.data_invio.tm_year);
     stampa_mittente(s.mittente);
+
     printf("Consegna prevista in data: %d/%d/%d \n", s.data_consegna.tm_mday, s.data_consegna.tm_mon, s.data_consegna.tm_year);
     stampa_destinatario(s.destinatario);
 
     printf("Stato della spedizione: ");
     switch (s.stato)
     {
-    case ordinato:
+    case 1:
         puts("Ordinato");
         break;
-    case spedito:
+    case 2:
         puts("Spedito");
         break;
-    case in_consegna:
+    case 3:
         puts("In consegna");
         break;
-    case consegnato:
+    case 4:
         puts("Consegnato");
         break;
-    case annullato:
+    case 5:
         puts("Annullato");
         break;
     default:
@@ -257,7 +273,7 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
     {
         printf("%s", RED);
         puts("Errore apertura file!");
-        printf("%s",RESET);
+        printf("%s", RESET);
         return;
     }
 
@@ -339,57 +355,139 @@ int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
     return -1; // Non trovato
 }
 
-int compare_spedizioni(const void *a, const void *b)
+void elimina_spedizione_in_file(int pos)
 {
 
-    const Spedizione *spedizioneA = (const Spedizione *)a;
-    const Spedizione *spedizioneB = (const Spedizione *)b;
-    // Convertire struct tm in time_t per il confronto
-    time_t timeA = mktime((struct tm *)&spedizioneA->data_invio);
-    time_t timeB = mktime((struct tm *)&spedizioneB->data_invio);
-    return difftime(timeA, timeB);
+    FILE *fp = fopen("spedizioni.dat", "rb");
+    if (!fp)
+    {
+        printf("%s", RED);
+        puts("Errore apertura file!");
+        printf("%s", RESET);
+        return;
+    }
+
+    FILE *tmp = fopen("spedizioni_tmp.dat", "wb");
+    if (!tmp)
+    {
+        printf("%s", RED);
+        puts("Errore creazione file temporaneo!");
+        printf("%s", RESET);
+        fclose(fp);
+        return;
+    }
+
+    Spedizione s;
+    int index = 0;
+    while (fread(&s, sizeof(Spedizione), 1, fp) == 1)
+    {
+        if (index != pos)
+        {
+            fwrite(&s, sizeof(Spedizione), 1, tmp);
+        }
+        index++;
+    }
+
+    fclose(fp);
+    fclose(tmp);
+
+    remove("spedizioni.dat");
+    rename("spedizioni_tmp.dat", "spedizioni.dat");
 }
+
+Spedizione estrai_min_data(Coda *c)
+{
+    Coda temp;
+    coda_init(&temp);
+
+    Spedizione min, corrente;
+    bool primo = true;
+
+    while (!isEmpty(*c)) {
+        corrente = *(dequeue(c));
+        //se true, il primo è più piccolo del secondo
+        if (controllo_date(corrente.data_consegna, min.data_consegna)) {
+            if (!primo) enqueue(&temp, min);
+            min = corrente;
+            primo = false;
+        } else {
+            enqueue(&temp, corrente);
+        }
+    }
+
+    // Rimetto gli altri nella coda originale (senza il minimo)
+    while (!isEmpty(temp)) {
+        enqueue(c, *(dequeue(&temp)));
+    }
+
+    return min;
+}
+
 
 void order_by_date()
 {
-
+    Spedizione tmp;
+    Coda c;
+    coda_init(&c);
     FILE *fp = fopen("spedizioni.dat", "rb");
     if (!fp)
     {
         perror("Errore nell'aprire il file");
         return;
     }
-    // Contare il numero di spedizioni
-    fseek(fp, 0, SEEK_END);
-    long file_size = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-    size_t shipment_count = file_size / sizeof(Spedizione);
-    // Allocare memoria per le spedizioni
-    Spedizione *spedizioni = malloc(file_size);
-    if (!spedizioni)
-    {
-        printf("%s", RED);
-        perror("Errore nell'allocare memoria");
-        printf("%s", RESET);
-        fclose(fp);
-        return;
+
+    while (fread(&tmp, sizeof(Spedizione), 1, fp) == 1) {
+        enqueue(&c, tmp);
     }
-    // Leggere le spedizioni dal file
-    fread(spedizioni, sizeof(Spedizione), shipment_count, fp);
+
     fclose(fp);
     // Ordinare le spedizioni in base alla data di invio
-    qsort(spedizioni, shipment_count, sizeof(Spedizione), compare_spedizioni);
+   // qsort(spedizioni, shipment_count, sizeof(Spedizione), compare_spedizioni);
+
+    Coda ordinata;
+    coda_init(&ordinata);
+    while (!isEmpty(ordinata)) {
+        Spedizione min= estrai_min_data(&c);
+        enqueue(&ordinata, min);
+    }
+   
     // Scrivere le spedizioni ordinate in un nuovo file
     FILE *nuovo_file = fopen("sped_ord.dat", "wb");
-    if (!fp)
+
+    if (!nuovo_file)
     {
         perror("Errore nell'aprire il file di output");
-        free(spedizioni);
+      //  free(spedizioni);
         return;
     }
-    fwrite(spedizioni, sizeof(Spedizione), shipment_count, nuovo_file);
-    fclose(nuovo_file);
-    fp = nuovo_file;
 
-    free(spedizioni);
+    while (!isEmpty(ordinata)) {
+        Spedizione s = *(dequeue(&ordinata));
+        stampa_spedizione(s);
+        fwrite(&s, sizeof(Spedizione), 1, nuovo_file);
+    }
+
+    fclose(fp);
+   // fwrite(spedizioni, sizeof(Spedizione), shipment_count, nuovo_file);
+    fclose(nuovo_file);
+
+    //free(spedizioni);
+
+    // Sovrascrivi l'originale
+    if (remove("spedizioni.dat") != 0)
+    {
+        printf("%s", RED);
+        perror("Errore nell'eliminare spedizioni.dat");
+        printf("%s", RESET);
+        return;
+    }
+
+    if (rename("sped_ord.dat", "spedizioni.dat") != 0)
+    {
+        printf("%s", RED);
+        perror("Errore nel rinominare il file ordinato");
+        printf("%s", RESET);
+        return;
+    }
+    //
 }

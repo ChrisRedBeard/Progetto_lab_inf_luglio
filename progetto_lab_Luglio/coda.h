@@ -20,7 +20,7 @@ typedef struct
 
 /* prototipi di funzione */
 
-Coda *coda_init();
+void coda_init(Coda *coda);
 
 void printQueue(Coda c);
 
