@@ -158,8 +158,6 @@ void inserimento_file_spedizioni(Spedizione s)
         printf("%sSpedizione inserita correttamente nel file.%s\n", GREEN, RESET);
     }
 
-    // funzione che riordina il file rispetto alla data di invio
-    order_by_date();
     fclose(fp);
 }
 
@@ -395,99 +393,33 @@ void elimina_spedizione_in_file(int pos)
     rename("spedizioni_tmp.dat", "spedizioni.dat");
 }
 
-Spedizione estrai_min_data(Coda *c)
-{
-    Coda temp;
-    coda_init(&temp);
-
-    Spedizione min, corrente;
-    bool primo = true;
-
-    while (!isEmpty(*c)) {
-        corrente = *(dequeue(c));
-        //se true, il primo è più piccolo del secondo
-        if (controllo_date(corrente.data_consegna, min.data_consegna)) {
-            if (!primo) enqueue(&temp, min);
-            min = corrente;
-            primo = false;
-        } else {
-            enqueue(&temp, corrente);
-        }
-    }
-
-    // Rimetto gli altri nella coda originale (senza il minimo)
-    while (!isEmpty(temp)) {
-        enqueue(c, *(dequeue(&temp)));
-    }
-
-    return min;
+int confronta_id(const void* id1,const void* id2){
+    return strcmp(((Spedizione*)id1)->p.n, ((Spedizione*)id2)->p.n);
 }
 
-
-void order_by_date()
+void ordina_file_id()
 {
-    Spedizione tmp;
-    Coda c;
-    coda_init(&c);
+    Spedizione spedizioni[100]; 
+
     FILE *fp = fopen("spedizioni.dat", "rb");
-    if (!fp)
-    {
-        perror("Errore nell'aprire il file");
-        return;
-    }
 
-    while (fread(&tmp, sizeof(Spedizione), 1, fp) == 1) {
-        enqueue(&c, tmp);
+    int_pos n = 0;
+
+    while(fread(&spedizioni[n], sizeof(Spedizione), 1, fp) == 1 && n < 100) {
+        n++;
     }
 
     fclose(fp);
-    // Ordinare le spedizioni in base alla data di invio
-   // qsort(spedizioni, shipment_count, sizeof(Spedizione), compare_spedizioni);
 
-    Coda ordinata;
-    coda_init(&ordinata);
-    while (!isEmpty(ordinata)) {
-        Spedizione min= estrai_min_data(&c);
-        enqueue(&ordinata, min);
-    }
-   
-    // Scrivere le spedizioni ordinate in un nuovo file
-    FILE *nuovo_file = fopen("sped_ord.dat", "wb");
+    qsort(spedizioni, n, sizeof(Spedizione), confronta_id);
 
-    if (!nuovo_file)
+    fp = fopen("spedizioni.dat", "wb");
+
+    for (int_pos i = 0; i < n; i++)
     {
-        perror("Errore nell'aprire il file di output");
-      //  free(spedizioni);
-        return;
-    }
-
-    while (!isEmpty(ordinata)) {
-        Spedizione s = *(dequeue(&ordinata));
-        stampa_spedizione(s);
-        fwrite(&s, sizeof(Spedizione), 1, nuovo_file);
+        fwrite(&spedizioni[i], sizeof(Spedizione), 1, fp);
     }
 
     fclose(fp);
-   // fwrite(spedizioni, sizeof(Spedizione), shipment_count, nuovo_file);
-    fclose(nuovo_file);
 
-    //free(spedizioni);
-
-    // Sovrascrivi l'originale
-    if (remove("spedizioni.dat") != 0)
-    {
-        printf("%s", RED);
-        perror("Errore nell'eliminare spedizioni.dat");
-        printf("%s", RESET);
-        return;
-    }
-
-    if (rename("sped_ord.dat", "spedizioni.dat") != 0)
-    {
-        printf("%s", RED);
-        perror("Errore nel rinominare il file ordinato");
-        printf("%s", RESET);
-        return;
-    }
-    //
 }

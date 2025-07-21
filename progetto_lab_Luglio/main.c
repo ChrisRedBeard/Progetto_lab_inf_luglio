@@ -39,9 +39,12 @@ int main()
         switch (scelta)
         {
         case 1:
-            order_by_date();
-            stampa_file_spedizioni(); // Funzione per stampare il file con le spedizioni
-   
+           
+            stampa_file_spedizioni();
+             /*ordina_file_id();
+             printf("\nstampa ordinata:\n");
+            stampa_file_spedizioni();
+            */
             break;
         case 2:
         {
@@ -58,7 +61,7 @@ int main()
 
             convalida_spedizioni(&coda);
 
-            order_by_date(); //ordina il file in BASE ALLA DATA
+            //order_by_date(); //ordina il file in BASE ALLA DATA
         }
         break;
 
