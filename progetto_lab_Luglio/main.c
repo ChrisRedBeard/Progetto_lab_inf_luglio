@@ -23,7 +23,7 @@ int main()
 
     int_pos scelta;
     // Stampa di benvenuto colorata
-    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", BLUE, RESET);
+    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilita'!\n\n%s", BLUE, RESET);
 
     while (scelta != 7)
     {

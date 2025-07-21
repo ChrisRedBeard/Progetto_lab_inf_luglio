@@ -1,3 +1,12 @@
+
+/**
+ * @file coda.c
+ * @brief Gestione della coda delle spedizioni.
+ *
+ * Questo file contiene le implementazioni delle funzioni per gestire la coda delle spedizioni,
+ * inclusi enqueue, dequeue, stampa e convalida.
+ */
+
 #include "coda.h"
 #include "spedizione.h"
 #include "utils.h"
@@ -5,13 +14,22 @@
 
 #include <stdlib.h>
 
+/**
+ * @brief Inizializza la coda impostando i puntatori a NULL.
+ * 
+ * @param coda Puntatore alla coda da inizializzare.
+ */
 void coda_init(Coda *coda)
 {
     coda->headPtr = NULL; // Inizializza il puntatore front a NULL
     coda->tailPtr = NULL; // Inizializza il puntatore rear a NULL
 }
 
-// per noi stampa la coda significa stamparli nel file
+/**
+ * @brief Stampa la coda delle spedizioni su file.
+ * 
+ * @param c Coda da stampare.
+ */
 void printQueue(Coda c)
 {
 
@@ -31,13 +49,23 @@ void printQueue(Coda c)
     }
 }
 
+/**
+ * @brief Verifica se la coda è vuota.
+ * 
+ * @param c Coda da controllare.
+ * @return int Ritorna 1 se la coda è vuota, altrimenti 0.
+ */
 int isEmpty(Coda c)
 {
     return (c.headPtr) == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
 }
 
-/* Rimuove un nodo(quindi una spedizione) dalla coda */
-/*modifica da fare, modificare lo stato della spedizione */
+/**
+ * @brief Rimuove e restituisce la spedizione in testa alla coda.
+ * 
+ * @param c Puntatore alla coda.
+ * @return Spedizione* Puntatore alla spedizione rimossa.
+ */
 Spedizione* dequeue(Coda *c)
 {
 
@@ -59,6 +87,12 @@ Spedizione* dequeue(Coda *c)
    return s;
 }
 
+/**
+ * @brief Inserisce una spedizione alla fine della coda.
+ * 
+ * @param c Puntatore alla coda.
+ * @param s Spedizione da inserire.
+ */
 void enqueue(Coda *c, Spedizione s)
 {
 
@@ -84,18 +118,18 @@ void enqueue(Coda *c, Spedizione s)
     }
     else
     {
-       
+
         printf("\n%sLa spedizione con id: %s non è stata inserita nella coda, poiché non c'è memoria disponibile!!\n",RED,s.p.n,RESET);
 
     }
 }
 
-// metodo per la convalida
-/*
-viene visualizzato il primo elemento della coda e si chiede se si vuole convalidare
-se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato cambia in "spedito"
-se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
-*/
+
+/**
+ * @brief Inserisce una nuova spedizione, decidendo se inserirla nel file o nella coda.
+ * 
+ * @param c Puntatore alla coda.
+ */
 
 void inserimento_spedizione(Coda *c)
 {
@@ -153,7 +187,14 @@ void inserimento_spedizione(Coda *c)
     }
 }
 
-
+/**
+ * @brief Convalida le spedizioni nella coda chiedendo all’utente conferma.
+ * 
+ * Se l’utente conferma, la spedizione viene scritta su file e marcata come “spedita”.
+ * Altrimenti può essere reinserita in coda o eliminata.
+ * 
+ * @param c Puntatore alla coda da processare.
+ */
 void convalida_spedizioni(Coda *c)
 {
 
@@ -164,7 +205,7 @@ void convalida_spedizioni(Coda *c)
     while (!isEmpty(*c))
     {
         stampa_spedizione(c->headPtr->sp_nodo);
-        
+
        s = dequeue(c);
 
        stampa_spedizione(*s); //stampa sul terminale e poi chiede all'utente se vuole convalidarlo o meno
@@ -174,13 +215,13 @@ void convalida_spedizioni(Coda *c)
         if (convalida == 1)
         {
             // lo tolgo dalla coda e poi gli cambio lo stato per stamparlo nel file
-     
+
             s->stato= spedito;
             inserimento_file_spedizioni(*s);
 
         }
         else
-        {       
+        {
                 puts("Vuoi eliminare la spedizione? (1=>Si 0=>No)");
                 scanf("%hd",&scelta);
                 if(scelta==0){
@@ -189,7 +230,7 @@ void convalida_spedizioni(Coda *c)
                     printf("%sSpedizione eliminata dalla coda degli ordini%s",BLUE,RESET);
                 }
 
-            
+
         }
     }
 

@@ -1,6 +1,30 @@
+
+/**
+ * @file destinatario.c
+ * @brief Implementazione delle funzioni relative alla gestione del destinatario.
+ *
+ * Questo file contiene le funzioni per l'inserimento e la stampa delle informazioni
+ * del destinatario di una spedizione.
+ */
+
 #include "utils.h"
 #include "destinatario.h"
 
+/**
+ * @brief Inserisce i dati del destinatario tramite input da tastiera.
+ *
+ * I dati inseriti includono:
+ * - Nome
+ * - Cognome
+ * - Numero di telefono (formato: +00 123 456 7890)
+ * - Email
+ * - Indirizzo (via e numero civico)
+ * - Città
+ * - Provincia (sigla di 2 lettere)
+ * - CAP (Codice di Avviamento Postale)
+ *
+ * @param d Puntatore alla struttura Destinatario da compilare.
+ */
 void inserimento_destinatario(Destinatario *d)
 {
     input_string("Nome: ", d->nome, sizeof(d->nome), 29);
@@ -13,6 +37,16 @@ void inserimento_destinatario(Destinatario *d)
     input_string("CAP: ", d->cap, sizeof(d->cap), 5);
 }
 
+/**
+ * @brief Stampa le informazioni del destinatario sul terminale.
+ *
+ * Le informazioni stampate includono:
+ * - Nome e Cognome
+ * - Telefono ed Email
+ * - Indirizzo completo, città, provincia e CAP
+ *
+ * @param d Struttura Destinatario da stampare.
+ */
 void stampa_destinatario(Destinatario d)
 {
     printf("Destinatario: %s %s \n", d.nome, d.cognome);

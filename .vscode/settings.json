@@ -4,6 +4,11 @@
         "utils.h": "c",
         "stdlib.h": "c",
         "stdio.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "spedizione.h": "c",
+        "destinatario.h": "c",
+        "limits": "c",
+        "utility": "c",
+        "xutility": "c"
     }
 }

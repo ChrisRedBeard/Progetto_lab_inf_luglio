@@ -1,3 +1,10 @@
+/**
+ * @file spedizione.c
+ * @brief Implementazione delle funzioni per la gestione delle spedizioni.
+ *
+ * Questo file contiene le definizioni delle funzioni per l'inserimento e la stampa delle
+ * spedizioni, la verifica delle date e il confronto tra ID pacchi.
+ */
 #include "spedizione.h"
 #include "coda.h"
 #include "utils.h"
@@ -5,6 +12,16 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+/**
+ * @brief Richiede all'utente di inserire una data nel formato gg mm aaaa.
+ *
+ * La funzione controlla la validità della data inserita, considerando mesi con 30/31 giorni,
+ * febbraio e anni bisestili.
+ *
+ * @param prompt Messaggio da visualizzare all'utente.
+ * @param data Puntatore alla struttura `tm` da riempire con la data inserita.
+ */
 void inserimento_data(const char *prompt, struct tm *data)
 {
     bool flag = false;
@@ -54,7 +71,16 @@ void inserimento_data(const char *prompt, struct tm *data)
 }
 
 
-// verifica che la data di invio sia inferiore a quella di consegna
+/**
+ * @brief Verifica che la data di invio sia precedente o uguale alla data di consegna.
+ *
+ * Se l'anno, mese o giorno della data di invio è maggiore di quello della consegna,
+ * viene restituito `false` con messaggio di errore.
+ *
+ * @param d_invio Data di invio del pacco.
+ * @param d_cons Data di consegna prevista del pacco.
+ * @return true se la data di invio è antecedente o uguale a quella di consegna, false altrimenti.
+ */
 bool controllo_date(struct tm d_invio, struct tm d_cons)
 {
     if (d_invio.tm_year > d_cons.tm_year)
@@ -78,7 +104,14 @@ bool controllo_date(struct tm d_invio, struct tm d_cons)
     return true;
 }
 
-
+/**
+ * @brief Stampa a video i dettagli completi di una spedizione.
+ *
+ * La funzione stampa i dati del pacco, la priorità, le date di invio e consegna,
+ * il mittente, il destinatario e lo stato della spedizione.
+ *
+ * @param s Struttura `Spedizione` da stampare.
+ */
 void stampa_spedizione(Spedizione s)
 {
     puts("<-------------------------------->");
@@ -116,6 +149,16 @@ void stampa_spedizione(Spedizione s)
     }
 }
 
+/**
+ * @brief Confronta due spedizioni in base all'ID del pacco.
+ *
+ * Funzione utile per ordinamenti (ad esempio con `qsort`). Gli ID vengono confrontati
+ * come stringhe tramite `strcmp`.
+ *
+ * @param id1 Puntatore alla prima spedizione.
+ * @param id2 Puntatore alla seconda spedizione.
+ * @return < 0 se id1 < id2, 0 se uguali, > 0 se id1 > id2.
+ */
 int confronta_id(const void* id1,const void* id2){
     return strcmp(((Spedizione*)id1)->p.n, ((Spedizione*)id2)->p.n);
 }

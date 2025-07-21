@@ -1,8 +1,25 @@
+/**
+ * @file pacco.c
+ * @brief Implementazione delle funzioni di gestione della struttura Pacco.
+ *
+ * Questo file contiene l'implementazione delle funzioni per inserire e stampare
+ * le informazioni relative a un pacco.
+ */
 #include "pacco.h"
 #include "utils.h"
 #include "spedizione.h"
 #include <stdbool.h>
 #include "gestione_file.h"
+
+
+/**
+ * @brief Inserisce i dati relativi a un pacco, assicurandosi che l'ID non sia già presente.
+ *
+ * Viene richiesto all'utente di inserire un ID pacco univoco, il peso e il volume.
+ * Se l'ID è già presente nel file delle spedizioni, verrà richiesto di inserirne uno nuovo.
+ *
+ * @param[out] p Puntatore alla struttura Pacco da riempire.
+ */
 void inserimento_pacco(Pacco *p)
 {
     Spedizione s;
@@ -20,29 +37,17 @@ void inserimento_pacco(Pacco *p)
             }
             
 
-    }while (trovato==true);
-    
-    
-
-  /*
-  
-    int pos = ricerca_spedizione_per_id(p->n, &trovata);
-            if (pos != -1)
-            {
-                printf("%sSpedizione trovata!%s ID: %s\n", GREEN, RESET, trovata.p.n);
-                stampa_spedizione(trovata);
-            }
-            else
-            {
-                printf("%sSpedizione non trovata.%s\n", RED, RESET);
-            }*/
-     
-   
+    }while (trovato==true); 
     input_float("Peso del pacco (in grammi): ", &(p->peso), 0.0);
 
     input_float("Volume del pacco (in centimetri cubi): ", &(p->volume), 0.0);
 }
 
+/**
+ * @brief Stampa a video le informazioni di un pacco.
+ *
+ * @param[in] p Struttura Pacco da stampare.
+ */
 void stampa_pacco(Pacco p)
 {
     printf("ID Pacco: %s \n", p.n);

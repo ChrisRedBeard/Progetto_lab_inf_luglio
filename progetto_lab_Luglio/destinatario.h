@@ -1,6 +1,20 @@
+/**
+ * @file destinatario.h
+ * @brief Definizione della struttura e delle funzioni relative al destinatario.
+ *
+ * Questo header definisce la struttura `Destinatario` che rappresenta le informazioni
+ * anagrafiche e di contatto del destinatario di una spedizione, oltre alle funzioni
+ * per l'inserimento e la stampa dei dati.
+ */
+
+
 #ifndef DESTINATARIO_H
 #define DESTINATARIO_H
 
+/**
+ * @struct Destinatario
+ * @brief Contiene le informazioni relative al destinatario di una spedizione.
+ */
 typedef struct
 {
     char nome[30];
@@ -14,7 +28,16 @@ typedef struct
 
 } Destinatario;
 
+/**
+ * @brief Permette l'inserimento dei dati del destinatario tramite input da tastiera.
+ * @param d Puntatore alla struttura Destinatario da riempire.
+ */
 void inserimento_destinatario(Destinatario *d);
+
+/**
+ * @brief Stampa a video le informazioni del destinatario.
+ * @param d Struttura Destinatario da stampare.
+ */
 void stampa_destinatario(Destinatario d);
 
 #endif // DESTINATARIO_H

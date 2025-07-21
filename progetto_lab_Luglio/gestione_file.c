@@ -1,8 +1,18 @@
+
+/**
+ * @file gestione_file.c
+ * @brief Implementazione delle funzioni per la gestione delle spedizioni su file.
+ */
+
 #include "gestione_file.h"
 #include "utils.h"
 #include <string.h>
 #include <stdlib.h>
 
+/**
+ * @brief Inserisce una spedizione alla fine del file binario "spedizioni.dat".
+ * @param s Struttura di tipo Spedizione da inserire.
+ */
 void inserimento_file_spedizioni(Spedizione s)
 {
     FILE *fp;
@@ -32,12 +42,15 @@ void inserimento_file_spedizioni(Spedizione s)
 }
 
 
+/**
+ * @brief Stampa tutte le spedizioni salvate nel file "spedizioni.dat".
+ */
 void stampa_file_spedizioni()
 {
     FILE *fp;
     Spedizione s;
 
-    fp = fopen("spedizioni.dat", "rb");
+    fp = fopen("..\..\..\..\..\Documents\GitHub\Progetto_lab_inf_luglio\spedizioni.dat", "rb");
     if (fp == NULL)
     {
         printf("%s", RED);
@@ -56,6 +69,12 @@ void stampa_file_spedizioni()
     puts("\n<----Stampa completata---->\n");
 }
 
+
+/**
+ * @brief Modifica il destinatario di una spedizione già presente nel file.
+ * @param pos Posizione della spedizione nel file.
+ * @param s_mod Puntatore alla struttura Spedizione da modificare.
+ */
 void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod)
 {
     FILE *fp = fopen("spedizioni.dat", "rb+");
@@ -75,7 +94,11 @@ void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod)
     fclose(fp);
 }
 
-
+/**
+ * @brief Modifica la data di consegna di una spedizione nel file.
+ * @param pos Posizione della spedizione nel file.
+ * @param s_mod Puntatore alla struttura Spedizione da modificare.
+ */
 void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod)
 {
     FILE *fp = fopen("spedizioni.dat", "rb+");
@@ -99,6 +122,13 @@ void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod)
     fclose(fp);
 }
 
+
+/**
+ * @brief Ricerca una spedizione nel file tramite l'ID del pacco.
+ * @param id_pacco ID del pacco da cercare.
+ * @param result Puntatore a Spedizione dove salvare il risultato trovato.
+ * @return Posizione della spedizione nel file se trovata, -1 altrimenti.
+ */
 int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
 {
 
@@ -135,6 +165,11 @@ int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
     return -1; // Non trovato
 }
 
+
+/**
+ * @brief Elimina una spedizione dal file sulla base della sua posizione.
+ * @param pos Posizione della spedizione da eliminare.
+ */
 void elimina_spedizione_in_file(int pos)
 {
 
@@ -175,7 +210,11 @@ void elimina_spedizione_in_file(int pos)
     rename("spedizioni_tmp.dat", "spedizioni.dat");
 }
 
-
+/**
+ * @brief Modifica lo stato di una spedizione (es. ordinato, spedito, ecc.).
+ * @param pos Posizione della spedizione nel file.
+ * @param s_mod Puntatore alla struttura Spedizione da aggiornare.
+ */
 void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
 {
     FILE *fp = fopen("spedizioni.dat", "rb+");
@@ -229,10 +268,12 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
     fclose(fp);
 }
 
-
+/**
+ * @brief Ordina il contenuto del file "spedizioni.dat" in base all'ID del pacco.
+ */
 void ordina_file_id()
 {
-    Spedizione spedizioni[100]; 
+    Spedizione spedizioni[100];
 
     FILE *fp = fopen("spedizioni.dat", "rb");
 
