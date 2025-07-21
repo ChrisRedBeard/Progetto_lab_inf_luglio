@@ -1,11 +1,15 @@
-/*
-    Progetto di laboratorio di informatica
-    Autori: Barbarossa Christian Savino - 825007
-            Di Santo Gabriele - 825303
-
-    Descrizione: Progetto per la gestione di un sistema di spedizioni.
-
-*/
+/**
+ * @file main.c
+ * @brief Punto di ingresso del programma per la gestione di un sistema di spedizioni.
+ *
+ * Questo programma consente di gestire un magazzino di spedizioni,
+ * offrendo funzionalità quali stampa, inserimento, modifica, eliminazione e ricerca
+ * di spedizioni tramite interazione testuale con l'utente.
+ *
+ * @author Barbarossa Christian Savino
+ * @author Di Santo Gabriele
+ * @date 2025
+ */
 
 #include "coda.h"
 #include "spedizione.h"
@@ -14,7 +18,21 @@
 #include "pacco.h"
 #include "gestione_file.h"
 #include "utils.h"
-
+/**
+ * @brief Funzione principale che gestisce il menu e le operazioni di spedizione.
+ *
+ * All'avvio inizializza una coda di spedizioni e presenta un menu con le seguenti opzioni:
+ * - Stampa tutte le spedizioni presenti nel file
+ * - Inserimento di nuove spedizioni
+ * - Eliminazione di una spedizione tramite ID pacco
+ * - Modifica dei dati di una spedizione (stato, destinatario, data di consegna)
+ * - Ricerca di una spedizione tramite ID pacco
+ * - Uscita dal programma
+ *
+ * Le operazioni vengono gestite tramite funzioni definite negli altri moduli.
+ *
+ * @return int Restituisce 0 in caso di uscita corretta dal programma.
+ */
 int main()
 {
 
