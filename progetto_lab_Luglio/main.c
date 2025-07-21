@@ -12,6 +12,7 @@
 #include "mittente.h"
 #include "destinatario.h"
 #include "pacco.h"
+#include "gestione_file.h"
 #include "utils.h"
 
 int main()

@@ -1,6 +1,7 @@
 #include "coda.h"
 #include "spedizione.h"
 #include "utils.h"
+#include "gestione_file.h"
 
 #include <stdlib.h>
 
@@ -96,6 +97,63 @@ se risponde "si", il pacco viene convalidato (scritto nel file) e il suo stato c
 se risponde "no", il pacco resta nella coda con lo stato "ordinato", e viene spostato in ultima posizione
 */
 
+void inserimento_spedizione(Coda *c)
+{
+    Spedizione nuova_sped = {0};
+
+    puts("Inserisci i dati della spedizione:");
+
+    inserimento_pacco(&nuova_sped.p);
+
+    do
+    {
+        printf("Priorità (1 per alta, 0 per normale): ");
+        if (scanf("%d", &nuova_sped.priorita) != 1 || (nuova_sped.priorita != 0 && nuova_sped.priorita != 1))
+        {
+            printf("%sPriorità non valida.%s\n", RED, RESET);
+        }
+    } while (nuova_sped.priorita != 0 && nuova_sped.priorita != 1);
+
+    do
+    {
+        inserimento_data("Data di invio", &nuova_sped.data_invio);
+        inserimento_data("Data di consegna prevista", &nuova_sped.data_consegna);
+
+    } while (!controllo_date(nuova_sped.data_invio, nuova_sped.data_consegna));
+
+    puts("<--Dati del mittente-->");
+    inserimento_mittente(&nuova_sped.mittente);
+
+    puts("<--Dati del destinatario-->");
+    inserimento_destinatario(&nuova_sped.destinatario);
+
+    do
+    {
+        puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
+        if (scanf("%d", &nuova_sped.stato) != 1 || nuova_sped.stato < 1 || nuova_sped.stato > 5)
+        {
+            printf("%s", RED);
+            puts("Stato non valido.");
+            printf("%s", RESET);
+            while (getchar() != '\n')
+                ;
+        }
+    } while (nuova_sped.stato < 1 || nuova_sped.stato > 5);
+
+    if (nuova_sped.stato == 1)
+    {
+        // Se il pacco è "ordinato", viene inserito in una coda
+        printf("Pacco con ID %s inserito in coda.\n", nuova_sped.p.n);
+        enqueue(c, nuova_sped);
+    }
+    else
+    {
+        // Altrimenti, viene inserito nel file delle spedizioni
+        inserimento_file_spedizioni(nuova_sped);
+    }
+}
+
+
 void convalida_spedizioni(Coda *c)
 {
 
@@ -122,30 +180,15 @@ void convalida_spedizioni(Coda *c)
 
         }
         else
-        {
-     
-
-            //flag =true
-            c->tailPtr->flag=true;
-            //la coda e la spedizione
-            enqueue(c,*s);
-            
-
-            if (c->tailPtr->flag==true && convalida == 0)
-            {
+        {       
                 puts("Vuoi eliminare la spedizione? (1=>Si 0=>No)");
                 scanf("%hd",&scelta);
-                if(scelta==1){
-                      s = dequeue(c);
-                }else
-                {
-
-                //   enqueue(&(c->headPtr), &(c->tailPtr),*s);
-
+                if(scelta==0){
+                     enqueue(c, *s);
+                }else{
+                    printf("%sSpedizione eliminata dalla coda degli ordini%s",BLUE,RESET);
                 }
-                
 
-            }
             
         }
     }

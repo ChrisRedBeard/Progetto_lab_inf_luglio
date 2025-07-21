@@ -4,7 +4,6 @@
 struct queueNode
 {
     Spedizione sp_nodo;        /* il mio nodo contiene la struct spedizione  */
-    bool flag; //di accettazione
     struct queueNode *nextPtr; /* puntatore al nodo della coda */
 };
 
@@ -31,3 +30,5 @@ Spedizione* dequeue(Coda *c);
 void enqueue(Coda *c, Spedizione s);
 
 void convalida_spedizioni(Coda* c);
+
+void inserimento_spedizione(Coda *c);

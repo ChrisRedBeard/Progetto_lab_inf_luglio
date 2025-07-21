@@ -1,9 +1,29 @@
 #include "pacco.h"
 #include "utils.h"
-
+#include "spedizione.h"
+#include <stdbool.h>
+#include "gestione_file.h"
 void inserimento_pacco(Pacco *p)
 {
-    input_id("ID Pacco [IT1234567]: ", p->n, sizeof(p->n), 9);
+    Spedizione s;
+    bool trovato=false;
+    do{
+        input_id("ID Pacco [IT1234567]: ", p->n, sizeof(p->n), 9);
+
+          int pos = ricerca_spedizione_per_id(p->n,&s);
+            if (pos != -1)
+            {
+              trovato=true;
+              printf("%sL'id che stai cercando di inserire è già presente%s\n",YELLOW,RESET);
+            }else{
+                trovato=false;
+            }
+            
+
+    }while (trovato==true);
+    
+    
+
   /*
   
     int pos = ricerca_spedizione_per_id(p->n, &trovata);
