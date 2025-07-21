@@ -39,12 +39,7 @@ int main()
         switch (scelta)
         {
         case 1:
-           
             stampa_file_spedizioni();
-             /*ordina_file_id();
-             printf("\nstampa ordinata:\n");
-            stampa_file_spedizioni();
-            */
             break;
         case 2:
         {
@@ -54,14 +49,14 @@ int main()
 
             while (scelta_ins != 0)
             {
-                inserimento_spedizione();
+                inserimento_spedizione(&coda);
                 printf("Inserisci 1 per inserire una nuova spedizione, 0 per uscire: ");
                 scanf("%hd", &scelta_ins);
             }
 
             convalida_spedizioni(&coda);
 
-            //order_by_date(); //ordina il file in BASE ALLA DATA
+            ordina_file_id();
         }
         break;
 
@@ -76,8 +71,7 @@ int main()
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
             {
-            
-                elimina_spedizione_in_file(pos); 
+                elimina_spedizione_in_file(pos);
                 printf("%sSpedizione con ID %s eliminata con successo!%s\n", GREEN, id, RESET);
             }
             else
@@ -85,6 +79,7 @@ int main()
                 printf("%sSpedizione non trovata.%s\n", RED, RESET);
             }
         }
+        break;
 
         case 4:
         {
