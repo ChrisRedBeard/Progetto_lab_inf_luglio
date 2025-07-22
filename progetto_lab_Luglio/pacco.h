@@ -11,7 +11,7 @@
 
 /**
  * @struct Pacco
- * @brief Rappresenta un pacco spedito.
+ * @brief Definisce un pacco.
  *
  * Contiene informazioni identificative e fisiche del pacco:
  * - codice identificativo (`n`)

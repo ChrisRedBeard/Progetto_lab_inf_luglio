@@ -35,9 +35,9 @@ void inserimento_pacco(Pacco *p)
             }else{
                 trovato=false;
             }
-            
 
-    }while (trovato==true); 
+
+    }while (trovato==true);
     input_float("Peso del pacco (in grammi): ", &(p->peso), 0.0);
 
     input_float("Volume del pacco (in centimetri cubi): ", &(p->volume), 0.0);
@@ -50,6 +50,6 @@ void inserimento_pacco(Pacco *p)
  */
 void stampa_pacco(Pacco p)
 {
-    printf("ID Pacco: %s \n", p.n);
-    printf("Peso: %.2f grammi, Volume: %.2f cm^3 \n", p.peso, p.volume);
+    printf("%sID Pacco%s: %s \n",WHITE,RESET, p.n);
+    printf("%sPeso%s: %.2f grammi, Volume: %.2f cm^3 \n",WHITE,RESET,p.peso, p.volume);
 }

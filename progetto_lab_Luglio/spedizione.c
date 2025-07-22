@@ -118,15 +118,15 @@ void stampa_spedizione(Spedizione s)
 
     stampa_pacco(s.p);
 
-    printf("Priorità: %s\n", s.priorita ? "Alta" : "Normale");
+    printf("%sPriorità%s: %s\n",WHITE, RESET,s.priorita ? "Alta" : "Normale");
 
-    printf("Spedito in data: %d/%d/%d \n", s.data_invio.tm_mday, s.data_invio.tm_mon, s.data_invio.tm_year);
+    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE,RESET,s.data_invio.tm_mday, s.data_invio.tm_mon, s.data_invio.tm_year);
     stampa_mittente(s.mittente);
 
-    printf("Consegna prevista in data: %d/%d/%d \n", s.data_consegna.tm_mday, s.data_consegna.tm_mon, s.data_consegna.tm_year);
+    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE,RESET,s.data_consegna.tm_mday, s.data_consegna.tm_mon, s.data_consegna.tm_year);
     stampa_destinatario(s.destinatario);
 
-    printf("Stato della spedizione: ");
+    printf("%sStato della spedizione%s: ",WHITE,RESET);
     switch (s.stato)
     {
     case 1:

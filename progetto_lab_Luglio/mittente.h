@@ -13,7 +13,7 @@
 
 /**
  * @struct Mittente
- * @brief Struttura che rappresenta un mittente.
+ * @brief Definisce la struttura Mittente con  le relative informazioni per una spedizione.
  *
  * Contiene tutte le informazioni necessarie per identificare e contattare il mittente
  * di una spedizione, inclusi nome, cognome, contatti e indirizzo.
@@ -34,7 +34,7 @@ typedef struct
 /**
  * @brief Permette l'inserimento dei dati del mittente.
  *
- * Chiede all'utente di inserire i campi della struttura Mittente, 
+ * Chiede all'utente di inserire i campi della struttura Mittente,
  * uno alla volta, con controlli sulla lunghezza.
  *
  * @param[out] m Puntatore alla struttura Mittente da riempire.

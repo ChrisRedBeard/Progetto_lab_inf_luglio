@@ -44,6 +44,12 @@
  */
  #define RESET "\033[0m"
 
+ /**
+ * @def WHITE
+ * @brief Sequenza ANSI per il colore bianco.
+ */
+
+ #define WHITE "\033[97m"
 
 /**
  * @typedef int_pos

@@ -1,10 +1,10 @@
 
 /**
  * @file mittente.c
- * 
+ *
  * @brief Implementazione delle funzioni relative alla struttura Mittente.
  * Questo file contiene le definizioni delle funzioni per inserire e stampare le informazioni del mittente.
- * 
+ *
  */
 
 #include "mittente.h"
@@ -40,7 +40,11 @@ void inserimento_mittente(Mittente *m)
  */
 void stampa_mittente(Mittente m)
 {
-    printf("Mittente: %s %s \n", m.nome, m.cognome);
-    printf("Telefono: %16s, Email: %s \n", m.telefono, m.email);
-    printf("Indirizzo: %s, Città: %s, Provincia: %2s, CAP: %5s\n", m.via, m.citta, m.provincia, m.cap);
+    printf("%sMittente%s: %s %s \n", WHITE,RESET,m.nome, m.cognome);
+    printf("%sTelefono%s: %16s, ",WHITE ,RESET,m.telefono);
+    printf("%sEmail%s: %s\n",WHITE,RESET,m.email);
+    printf("%sIndirizzo%s: %s, ", WHITE,RESET,m.via);
+    printf("%sCittà%s: %s, ",WHITE,RESET, m.citta);
+    printf("%sProvincia%s: %2s, ",WHITE,RESET,m.provincia);
+    printf("%sCAP%s: %5s\n",WHITE,RESET,m.cap);
 }

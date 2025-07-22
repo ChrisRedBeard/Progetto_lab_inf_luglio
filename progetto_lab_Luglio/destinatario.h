@@ -13,7 +13,7 @@
 
 /**
  * @struct Destinatario
- * @brief Contiene le informazioni relative al destinatario di una spedizione.
+ * @brief Definisce la struttura Destinatario con  le relative informazioni per una spedizione.
  */
 typedef struct
 {

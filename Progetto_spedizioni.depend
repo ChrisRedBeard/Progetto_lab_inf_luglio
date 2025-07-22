@@ -1,0 +1,73 @@
+# depslib dependency file v1.0
+1753112474 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\coda.c
+	"coda.h"
+	"spedizione.h"
+	"utils.h"
+	"gestione_file.h"
+	<stdlib.h>
+
+1753112938 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\coda.h
+	"spedizione.h"
+
+1753114292 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\spedizione.h
+	"pacco.h"
+	"mittente.h"
+	"destinatario.h"
+	<time.h>
+	<stdbool.h>
+
+1753114115 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\pacco.h
+
+1753113829 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\mittente.h
+
+1753113034 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\destinatario.h
+
+1753114517 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\utils.h
+	<stdio.h>
+
+1753113477 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\gestione_file.h
+	<stdio.h>
+	"spedizione.h"
+
+1753113128 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\destinatario.c
+	"utils.h"
+	"destinatario.h"
+
+1753113672 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\gestione_file.c
+	"gestione_file.h"
+	"utils.h"
+	<string.h>
+	<stdlib.h>
+
+1753114855 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\main.c
+	"coda.h"
+	"spedizione.h"
+	"mittente.h"
+	"destinatario.h"
+	"pacco.h"
+	"gestione_file.h"
+	"utils.h"
+
+1753114033 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\mittente.c
+	"mittente.h"
+	"utils.h"
+
+1753114174 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\pacco.c
+	"pacco.h"
+	"utils.h"
+	"spedizione.h"
+	<stdbool.h>
+	"gestione_file.h"
+
+1753114378 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\spedizione.c
+	"spedizione.h"
+	"coda.h"
+	"utils.h"
+	<string.h>
+	<stdlib.h>
+
+1753114672 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_lab_luglio\utils.c
+	"utils.h"
+	<stdbool.h>
+	<string.h>
+

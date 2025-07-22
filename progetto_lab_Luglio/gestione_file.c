@@ -17,7 +17,7 @@ void inserimento_file_spedizioni(Spedizione s)
 {
     FILE *fp;
 
-    fp = fopen("spedizioni.dat", "ab");
+    fp = fopen("C:\\Users\\Christian\\Documents\\GitHub\\Progetto_lab_inf_luglio\\spedizioni.dat", "ab");
     if (!fp)
     {
         printf("%s", RED);
@@ -50,7 +50,7 @@ void stampa_file_spedizioni()
     FILE *fp;
     Spedizione s;
 
-    fp = fopen("..\..\..\..\..\Documents\GitHub\Progetto_lab_inf_luglio\spedizioni.dat", "rb");
+    fp = fopen("spedizioni.dat", "rb");
     if (fp == NULL)
     {
         printf("%s", RED);
@@ -62,7 +62,9 @@ void stampa_file_spedizioni()
     printf("Contenuto del file spedizioni.dat:\n");
     while (fread(&s, sizeof(Spedizione), 1, fp))
     {
+
         stampa_spedizione(s);
+
     }
 
     fclose(fp);
@@ -101,7 +103,7 @@ void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod)
  */
 void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod)
 {
-    FILE *fp = fopen("spedizioni.dat", "rb+");
+    FILE *fp = fopen("C:\\Users\\Christian\\Documents\\GitHub\\Progetto_lab_inf_luglio\\spedizioni.dat", "rb+");
     if (!fp)
     {
         printf("%s", RED);

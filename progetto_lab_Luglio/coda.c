@@ -16,7 +16,7 @@
 
 /**
  * @brief Inizializza la coda impostando i puntatori a NULL.
- * 
+ *
  * @param coda Puntatore alla coda da inizializzare.
  */
 void coda_init(Coda *coda)
@@ -27,7 +27,7 @@ void coda_init(Coda *coda)
 
 /**
  * @brief Stampa la coda delle spedizioni su file.
- * 
+ *
  * @param c Coda da stampare.
  */
 void printQueue(Coda c)
@@ -51,7 +51,7 @@ void printQueue(Coda c)
 
 /**
  * @brief Verifica se la coda è vuota.
- * 
+ *
  * @param c Coda da controllare.
  * @return int Ritorna 1 se la coda è vuota, altrimenti 0.
  */
@@ -62,7 +62,7 @@ int isEmpty(Coda c)
 
 /**
  * @brief Rimuove e restituisce la spedizione in testa alla coda.
- * 
+ *
  * @param c Puntatore alla coda.
  * @return Spedizione* Puntatore alla spedizione rimossa.
  */
@@ -89,7 +89,7 @@ Spedizione* dequeue(Coda *c)
 
 /**
  * @brief Inserisce una spedizione alla fine della coda.
- * 
+ *
  * @param c Puntatore alla coda.
  * @param s Spedizione da inserire.
  */
@@ -119,7 +119,7 @@ void enqueue(Coda *c, Spedizione s)
     else
     {
 
-        printf("\n%sLa spedizione con id: %s non è stata inserita nella coda, poiché non c'è memoria disponibile!!\n",RED,s.p.n,RESET);
+        printf("\n%sLa spedizione con id: %s non è stata inserita nella coda, poiché non c'è memoria disponibile!!%s\n",RED,s.p.n,RESET);
 
     }
 }
@@ -127,7 +127,7 @@ void enqueue(Coda *c, Spedizione s)
 
 /**
  * @brief Inserisce una nuova spedizione, decidendo se inserirla nel file o nella coda.
- * 
+ *
  * @param c Puntatore alla coda.
  */
 
@@ -189,10 +189,10 @@ void inserimento_spedizione(Coda *c)
 
 /**
  * @brief Convalida le spedizioni nella coda chiedendo all’utente conferma.
- * 
+ *
  * Se l’utente conferma, la spedizione viene scritta su file e marcata come “spedita”.
  * Altrimenti può essere reinserita in coda o eliminata.
- * 
+ *
  * @param c Puntatore alla coda da processare.
  */
 void convalida_spedizioni(Coda *c)

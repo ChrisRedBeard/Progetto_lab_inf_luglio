@@ -18,6 +18,7 @@
 #include "pacco.h"
 #include "gestione_file.h"
 #include "utils.h"
+#include <windows.h> //necessario per SetConsoleOutputCP
 /**
  * @brief Funzione principale che gestisce il menu e le operazioni di spedizione.
  *
@@ -35,13 +36,14 @@
  */
 int main()
 {
+   SetConsoleOutputCP(CP_UTF8); /*necessario per il terminale per stampare i caratteri accentati*/
 
     Coda coda;
     coda_init(&coda);
 
     int_pos scelta;
     // Stampa di benvenuto colorata
-    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilita'!\n\n%s", BLUE, RESET);
+    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", BLUE, RESET);
 
     while (scelta != 7)
     {

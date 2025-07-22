@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Progetto_spedizioni" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Progetto_spedizioni" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../Progetto_spedizioni" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Progetto_spedizioni" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/coda.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/coda.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/destinatario.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/destinatario.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/gestione_file.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/gestione_file.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/main.exe" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/mittente.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/mittente.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/pacco.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/pacco.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/spedizione.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/spedizione.exe" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/spedizione.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/progetto_lab_Luglio/utils.h" />
+		<Unit filename="../../../../../Documents/GitHub/Progetto_lab_inf_luglio/spedizioni.dat" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

@@ -49,7 +49,11 @@ void inserimento_destinatario(Destinatario *d)
  */
 void stampa_destinatario(Destinatario d)
 {
-    printf("Destinatario: %s %s \n", d.nome, d.cognome);
-    printf("Telefono: %16s, Email: %s \n", d.telefono, d.email);
-    printf("Indirizzo: %s, Città: %s, Provincia: %2s, CAP: %5s\n", d.via, d.citta, d.provincia, d.cap);
+    printf("%sMittente%s: %s %s \n", WHITE,RESET,d.nome, d.cognome);
+    printf("%sTelefono%s: %16s, ",WHITE ,RESET,d.telefono);
+    printf("%sEmail%s: %s\n",WHITE,RESET,d.email);
+    printf("%sIndirizzo%s: %s, ",WHITE,RESET,d.via);
+    printf("%sCittà%s: %s, ",WHITE,RESET, d.citta);
+    printf("%sProvincia%s: %2s, ",WHITE,RESET,d.provincia);
+    printf("%sCAP%s: %5s\n",WHITE,RESET,d.cap);
 }

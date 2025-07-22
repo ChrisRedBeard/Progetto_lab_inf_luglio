@@ -30,7 +30,7 @@ enum Stati
 
 /**
  * @struct Spedizione
- * @brief Rappresenta una spedizione completa, con mittente, destinatario, date e stato.
+ * @brief Rappresenta una spedizione completa, con mittente, destinatario, data spedizione ,data consegna e stato.
  */
 typedef struct
 {
@@ -67,7 +67,7 @@ bool controllo_date(struct tm data_invio, struct tm data_consegna);
  * @param s La spedizione da stampare.
  */
 void stampa_spedizione(Spedizione s);
- 
+
 
 /**
  * @brief Confronta due ID di pacchi (funzione di confronto per qsort).
