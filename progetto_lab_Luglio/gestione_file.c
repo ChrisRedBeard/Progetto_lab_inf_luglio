@@ -230,40 +230,35 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
 
     fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
 
-    int scelta;
-    while (scelta < 1 || scelta > 5)
+    int scelta=0;
+    
+    switch (s_mod->stato)
     {
-        puts("Modifica stato della spedizione:");
-        puts("1. Ordinato");
-        puts("2. Spedito");
-        puts("3. In consegna");
-        puts("4. Consegnato");
-        puts("5. Annullato");
-        printf("Inserisci la tua scelta (1-5): ");
-        scanf("%d", &scelta);
+    while (scelta<1 || scelta>2)
+    {
+       case ordinato:
+              printf("il pacco è ordinato:\nDigita 1 spedirlo\n2 per annullarlo\ninserisci: ");
+              scanf("%d",&scelta);
+               if(scelta==1){ s_mod->stato=spedito;}else{s_mod->stato=annullato;}
+               break;
+      case spedito:
+              printf("il pacco è spedito:\nDigita 1 mandarlo in consegna\n2 per annullarlo\ninserisci: ");
+              scanf("%d",&scelta);
+              if(scelta==1){ s_mod->stato=in_consegna;}else{s_mod->stato=annullato;}
+              break;
+    }
+    
 
-        switch (scelta)
-        {
-        case 1:
-            s_mod->stato = ordinato; // Modifica lo stato della spedizione a "ordinato"
-            break;
-        case 2:
-            s_mod->stato = spedito; // Modifica lo stato della spedizione a "spedito"
-            break;
-        case 3:
-            s_mod->stato = in_consegna; // Modifica lo stato della spedizione a "in_consegna"
-            break;
-        case 4:
-            s_mod->stato = consegnato; // Modifica lo stato della spedizione a "consegnato"
-            break;
-        case 5:
-            s_mod->stato = annullato; // Modifica lo stato della spedizione a "annullato"
-            break;
-        default:
-            printf("%s", RED);
-            puts("Scelta non valida.");
-            printf("%s", RESET);
-        }
+
+    case in_consegna:
+        printf("il pacco è passato da in_consegna a consegnato");
+              s_mod->stato=consegnato;
+    break;
+
+
+    default: 
+        printf("\n%sNon puoi cambiare lo stato%s\n",RED,RESET);
+        break;
     }
 
     fwrite(s_mod, sizeof(Spedizione), 1, fp);
