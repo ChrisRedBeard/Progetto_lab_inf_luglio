@@ -10,6 +10,13 @@
 #include "utils.h"
 #include "destinatario.h"
 
+Destinatario get_destinatario(){
+    return;
+}
+
+
+
+
 /**
  * @brief Inserisce i dati del destinatario tramite input da tastiera.
  *

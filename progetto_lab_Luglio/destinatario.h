@@ -28,6 +28,10 @@ typedef struct
 
 } Destinatario;
 
+
+void set_destinatario();
+
+Destinatario get_destinatario();
 /**
  * @brief Permette l'inserimento dei dati del destinatario tramite input da tastiera.
  * @param d Puntatore alla struttura Destinatario da riempire.
