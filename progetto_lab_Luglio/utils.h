@@ -10,46 +10,13 @@
 
 #include <stdio.h>
 
-/**
- * @def BLACK
- * @brief Sequenza ANSI per il colore nero del testo.
- */
 #define BLACK "\033[30m"
-
-/**
- * @def RED
- * @brief Sequenza ANSI per il colore rosso del testo.
- */
- #define RED "\033[31m"
-/**
- * @def GREEN
- * @brief Sequenza ANSI per il colore verde del testo.
- */
-
- #define GREEN "\033[32m"
-/**
- * @def YELLOW
- * @brief Sequenza ANSI per il colore giallo del testo.
- */
-  #define YELLOW "\033[33m"
-/**
- * @def BLUE
- * @brief Sequenza ANSI per il colore blu del testo.
- */
-
- #define BLUE "\033[34m"
-/**
- * @def RESET
- * @brief Sequenza ANSI per resettare il colore del testo.
- */
- #define RESET "\033[0m"
-
- /**
- * @def WHITE
- * @brief Sequenza ANSI per il colore bianco.
- */
-
- #define WHITE "\033[97m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define RESET "\033[0m"
+#define WHITE "\033[97m"
 
 /**
  * @typedef int_pos
@@ -70,7 +37,6 @@ typedef unsigned short int int_pos;
  */
 void input_string(const char *prompt, char *dest, int_pos size, int_pos lunghezza);
 
-
 /**
  * @brief Acquisisce un numero float dall'utente, con un valore minimo ammesso.
  *
@@ -79,7 +45,6 @@ void input_string(const char *prompt, char *dest, int_pos size, int_pos lunghezz
  * @param min Valore minimo accettabile (incluso).
  */
 void input_float(const char *prompt, float *dest, float min);
-
 
 /**
  * @brief Acquisisce un ID in formato stringa con lunghezza controllata.
