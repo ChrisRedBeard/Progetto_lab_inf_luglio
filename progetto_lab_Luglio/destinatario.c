@@ -33,8 +33,9 @@ Destinatario get_destinatario(){
  * @param d Puntatore alla struttura Destinatario da compilare.
  */
 void inserimento_destinatario(Destinatario *d)
-{
-    input_string("Nome: ", d->nome, sizeof(d->nome), 29);
+{  char* stringa;
+    input_string("Nome: ", stringa, 29);
+     
     input_string("Cognome: ", d->cognome, sizeof(d->cognome), 29);
     input_string("Numero di telefono [+00 123 456 7890]: ", d->telefono, sizeof(d->telefono), 16);
     input_string("Email: ", d->email, sizeof(d->email), 49);

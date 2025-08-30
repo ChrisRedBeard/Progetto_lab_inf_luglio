@@ -134,14 +134,14 @@ typedef struct
     enum Stati stato;
 } Spedizione;
 
-void setPriorita(bool);
+void setPriorita(bool,Spedizione*);
 bool getPriorita(Spedizione);
 
-void setStato(Stati);
+void setStato(int,Spedizione*);
 int getStato(Spedizione);
 
-void setData(struct tm);
-struct tm getData();
+void setData(const char *prompt, Spedizione*);
+struct tm getData(Spedizione,bool);
 
 /**
  * @brief Stampa i dati completi di una spedizione.
