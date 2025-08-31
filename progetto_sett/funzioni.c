@@ -1,7 +1,6 @@
-#include "utils.h"
+#include "funzioni.h"
 
 #include <stdbool.h>
-
 #include <string.h>
 
 /**
@@ -17,9 +16,9 @@
  * @param size Dimensione massima del buffer (incluso terminatore nullo).
  * @param lunghezza Lunghezza esatta richiesta per l'ID (escluso terminatore nullo).
  */
-void input_id(const char *prompt, char *dest, int_pos size, int_pos lunghezza)
+void input_id(const char *prompt, char *dest, int_pos lunghezza)
 {
-
+    int_pos size = sizeof(char)*10;
     bool flag = false;
 
     do

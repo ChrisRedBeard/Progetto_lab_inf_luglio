@@ -6,7 +6,6 @@
  * le informazioni relative a un pacco.
  */
 #include "pacco.h"
-#include "utils.h"
 #include "spedizione.h"
 #include <stdbool.h>
 #include "gestione_file.h"
@@ -25,7 +24,7 @@ void inserimento_pacco(Pacco *p)
     Spedizione s;
     bool trovato=false;
     do{
-        input_id("ID Pacco [IT1234567]: ", p->n, sizeof(p->n), 9);
+        input_id("ID Pacco [IT1234567]: ", p->n, 9);
 
           int pos = ricerca_spedizione_per_id(p->n,&s);
             if (pos != -1)

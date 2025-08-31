@@ -1,7 +1,8 @@
 #ifndef CONTROLLI_H
 #define CONTROLLI_H
 
-#include "dati.h"
+#include <stdbool.h>
+#include <time.h>
 
 /**
  * @brief Controlla che la data di invio sia precedente a quella di consegna.

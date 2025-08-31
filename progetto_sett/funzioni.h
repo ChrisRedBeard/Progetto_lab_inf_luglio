@@ -1,12 +1,5 @@
-/**
- * @file utils.h
- * @brief Definizione di funzioni di utilità generali per input e colori terminale.
- *
- * Questo file contiene definizioni di costanti per la colorazione del testo nel terminale
- * e dichiarazioni di funzioni per l'acquisizione sicura di input da tastiera.
- */
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef FUNZIONI_H
+#define FUNZIONI_H
 
 #include <stdio.h>
 
@@ -54,6 +47,6 @@ void input_float(const char *prompt, float *dest, float min);
  * @param size Dimensione massima del buffer.
  * @param lunghezza Lunghezza massima consentita dell'ID (escluso '\0').
  */
-void input_id(const char *prompt, char *dest, int_pos size, int_pos lunghezza);
+void input_id(const char *prompt, char *dest, int_pos lunghezza);
 
 #endif

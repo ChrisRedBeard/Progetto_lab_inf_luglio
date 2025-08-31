@@ -19,6 +19,7 @@
 #include "gestione_file.h"
 #include "utils.h"
 #include <windows.h> //necessario per SetConsoleOutputCP
+
 /**
  * @brief Funzione principale che gestisce il menu e le operazioni di spedizione.
  *
@@ -87,7 +88,7 @@ int main()
             char id[10];
             Spedizione trovata;
 
-            input_string("Inserisci l'ID del pacco da eliminare: ", id, sizeof(id), 9);
+            input_string("Inserisci l'ID del pacco da eliminare: ", id, 9);
 
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
@@ -110,7 +111,7 @@ int main()
             int_pos scelta_modifica;
             Spedizione trovata;
 
-            input_string("Inserisci l'ID del pacco da modificare: ", id, sizeof(id), 9);
+            input_string("Inserisci l'ID del pacco da modificare: ", id, 9);
 
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
@@ -155,7 +156,7 @@ int main()
             char id[10];
             Spedizione trovata;
 
-            input_string("Inserisci l'ID del pacco da cercare: ", id, sizeof(id), 9);
+            input_string("Inserisci l'ID del pacco da cercare: ", id, 9);
 
             int pos = ricerca_spedizione_per_id(id, &trovata);
             if (pos != -1)
