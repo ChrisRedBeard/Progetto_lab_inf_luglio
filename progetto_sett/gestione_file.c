@@ -5,7 +5,8 @@
  */
 
 #include "gestione_file.h"
-#include "utils.h"
+#include "funzioni.h"
+#include "controlli.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -41,7 +42,6 @@ void inserimento_file_spedizioni(Spedizione s)
     fclose(fp);
 }
 
-
 /**
  * @brief Stampa tutte le spedizioni salvate nel file "spedizioni.dat".
  */
@@ -64,13 +64,11 @@ void stampa_file_spedizioni()
     {
 
         stampa_spedizione(s);
-
     }
 
     fclose(fp);
     puts("\n<----Stampa completata---->\n");
 }
-
 
 /**
  * @brief Modifica il destinatario di una spedizione già presente nel file.
@@ -90,7 +88,7 @@ void modifica_destinatario_spedizione_in_file(int pos, Spedizione *s_mod)
 
     fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
 
-    inserimento_destinatario(&s_mod->destinatario);
+    inserimento_Persona(&s_mod->destinatario);
 
     fwrite(s_mod, sizeof(Spedizione), 1, fp);
     fclose(fp);
@@ -116,14 +114,13 @@ void modifica_data_consegna_spedizione_in_file(int pos, Spedizione *s_mod)
 
     do
     {
-        inserimento_data("Data di consegna ", &s_mod->data_consegna);
+        setData("Data di consegna ", s_mod, false);
 
     } while (!controllo_date(s_mod->data_invio, s_mod->data_consegna));
 
     fwrite(s_mod, sizeof(Spedizione), 1, fp);
     fclose(fp);
 }
-
 
 /**
  * @brief Ricerca una spedizione nel file tramite l'ID del pacco.
@@ -166,7 +163,6 @@ int ricerca_spedizione_per_id(const char *id_pacco, Spedizione *result)
     fclose(fp);
     return -1; // Non trovato
 }
-
 
 /**
  * @brief Elimina una spedizione dal file sulla base della sua posizione.
@@ -230,34 +226,45 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod)
 
     fseek(fp, pos * sizeof(Spedizione), SEEK_SET);
 
-    int scelta=0;
-    
+    int scelta = 0;
+
     switch (s_mod->stato)
     {
-    while (scelta<1 || scelta>2)
-    {
-       case ordinato:
-              printf("il pacco è ordinato:\nDigita 1 spedirlo\n2 per annullarlo\ninserisci: ");
-              scanf("%d",&scelta);
-               if(scelta==1){ s_mod->stato=spedito;}else{s_mod->stato=annullato;}
-               break;
-      case spedito:
-              printf("il pacco è spedito:\nDigita 1 mandarlo in consegna\n2 per annullarlo\ninserisci: ");
-              scanf("%d",&scelta);
-              if(scelta==1){ s_mod->stato=in_consegna;}else{s_mod->stato=annullato;}
-              break;
-    }
-    
-
+        while (scelta < 1 || scelta > 2)
+        {
+        case ordinato:
+            printf("il pacco è ordinato:\nDigita 1 spedirlo\n2 per annullarlo\ninserisci: ");
+            scanf("%d", &scelta);
+            if (scelta == 1)
+            {
+                s_mod->stato = spedito;
+            }
+            else
+            {
+                s_mod->stato = annullato;
+            }
+            break;
+        case spedito:
+            printf("il pacco è spedito:\nDigita 1 mandarlo in consegna\n2 per annullarlo\ninserisci: ");
+            scanf("%d", &scelta);
+            if (scelta == 1)
+            {
+                s_mod->stato = in_consegna;
+            }
+            else
+            {
+                s_mod->stato = annullato;
+            }
+            break;
+        }
 
     case in_consegna:
         printf("il pacco è passato da in_consegna a consegnato");
-              s_mod->stato=consegnato;
-    break;
+        s_mod->stato = consegnato;
+        break;
 
-
-    default: 
-        printf("\n%sNon puoi cambiare lo stato%s\n",RED,RESET);
+    default:
+        printf("\n%sNon puoi cambiare lo stato%s\n", RED, RESET);
         break;
     }
 
@@ -276,7 +283,8 @@ void ordina_file_id()
 
     int_pos n = 0;
 
-    while(fread(&spedizioni[n], sizeof(Spedizione), 1, fp) == 1 && n < 100) {
+    while (fread(&spedizioni[n], sizeof(Spedizione), 1, fp) == 1 && n < 100)
+    {
         n++;
     }
 
@@ -292,5 +300,4 @@ void ordina_file_id()
     }
 
     fclose(fp);
-
 }

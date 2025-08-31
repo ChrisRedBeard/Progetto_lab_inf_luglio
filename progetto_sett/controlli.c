@@ -1,9 +1,7 @@
-#ifndef CONTROLLI_H
-#define CONTROLLI_H
-
 #include <stdbool.h>
 #include <time.h>
 
+#include "controlli.h"
 #include "funzioni.h"
 
 /**
@@ -38,5 +36,3 @@ bool controllo_date(struct tm d_invio, struct tm d_cons)
 
     return true;
 }
-
-#endif // CONTROLLI_H

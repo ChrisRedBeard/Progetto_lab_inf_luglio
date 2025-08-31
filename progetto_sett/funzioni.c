@@ -1,5 +1,6 @@
 #include "funzioni.h"
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -18,7 +19,7 @@
  */
 void input_id(const char *prompt, char *dest, int_pos lunghezza)
 {
-    int_pos size = sizeof(char)*10;
+    int_pos size = sizeof(char) * 10;
     bool flag = false;
 
     do
@@ -72,17 +73,16 @@ void input_string(const char *prompt, char *dest, int_pos lunghezza)
 
     do
     {
-        fflush(stdin);
+        // fflush(stdin);
         printf("%s", prompt);
         if (fgets(buffer, sizeof(buffer), stdin))
         {
             buffer[strcspn(buffer, "\n")] = 0; // Rimuove il newline finale
 
-           if (strlen(buffer) == 0 || strlen(buffer) > lunghezza)
+            if (strlen(buffer) == 0 || strlen(buffer) > lunghezza)
             {
                 flag = true;
                 printf("%s\nStringa non valida, riprova.\n%s", RED, RESET);
-                fflush(stdin);
             }
             else
             {

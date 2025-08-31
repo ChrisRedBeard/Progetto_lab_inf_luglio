@@ -13,5 +13,4 @@
  */
 bool controllo_date(struct tm data_invio, struct tm data_consegna);
 
-
 #endif // CONTROLLI_H

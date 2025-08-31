@@ -10,7 +10,8 @@
 
 
 #include <stdio.h>
-#include "spedizione.h"
+#include "dati.h"
+#include "controlli.h"
 
 /**
  * @brief Inserisce una spedizione nel file delle spedizioni.
