@@ -121,7 +121,7 @@ void inserimento_Persona(Persona *p)
 
 void setPersona(Spedizione *s, Persona *p, bool tipo)
 {
-    if (tipo == true)
+    if (tipo)
     {
         s->mittente = *p;
     }
@@ -133,7 +133,7 @@ void setPersona(Spedizione *s, Persona *p, bool tipo)
 
 Persona getPersona(Spedizione *s, bool tipo)
 {
-    if (tipo == true)
+    if (tipo)
     {
         return s->mittente;
     }
@@ -191,12 +191,15 @@ void inserimento_pacco(Pacco *p)
     char stringa[100] = {'\0'};
     input_id("ID[012345678]: ", stringa, 9);
     set_numID(stringa, p);
-    float *f;
-    input_float("Peso: ", f, 0);
-    setPeso(*f, p);
-    *f = 0;
-    input_float("Volume: ", f, 0);
-    setVolume(*f, p);
+
+    float f = 0; // TODO: perchè avevi usato il puntatore?
+
+    input_float("Peso: ", &f, 0);
+    setPeso(f, p);
+
+    f = 0;
+    input_float("Volume: ", &f, 0);
+    setVolume(f, p);
 }
 
 void stampa_pacco(Pacco p)
@@ -342,8 +345,8 @@ void stampa_spedizione(Spedizione s)
 
 void inserimento_spedizione(Spedizione *s)
 {
-    puts("Inserisci i dati della spedizione:\n");
-    inserimento_pacco(&s->p);
+    puts("Inserisci i dati della spedizione:");
+    inserimento_pacco(&(s->p));
     // scelta priorità
     bool prior;
     do
@@ -356,6 +359,8 @@ void inserimento_spedizione(Spedizione *s)
         }
     } while (prior != 0 && prior != 1);
 
+    setPriorita(prior, s);
+
     do
     {
         setData("Data di invio", s, true);
@@ -364,20 +369,24 @@ void inserimento_spedizione(Spedizione *s)
     } while (!controllo_date(getData(*s, true), getData(*s, false)));
 
     puts("<--Dati del mittente-->");
-    Mittente *m;
+    Mittente *m = malloc(sizeof(Mittente));
     inserimento_Persona(m);
     setPersona(s, m, true);
 
-    puts("<--Dati del destinatario-->");
-    Destinatario *d;
+    free(m);
 
+    puts("<--Dati del destinatario-->");
+    Destinatario *d = malloc(sizeof(Destinatario));
     inserimento_Persona(d);
     setPersona(s, d, false);
 
+    free(d);
+
+    enum Stati stato;
     do
     {
         puts("Inserire lo stato della spedizione (1 per ordinato, 2 per spedito, 3 per in consegna, 4 per consegnato, 5 per annullato): ");
-        if (scanf("%d", getStato(*s)) != 1 || getStato(*s) < 1 || getStato(*s) > 5)
+        if (scanf("%d", &stato) != 1 || stato < 1 || stato > 5)
         {
             printf("%s", RED);
             puts("Stato non valido.");
@@ -385,9 +394,9 @@ void inserimento_spedizione(Spedizione *s)
             while (getchar() != '\n')
                 ;
         }
-    } while (getStato(*s) < 1 || getStato(*s) > 5);
+    } while (stato < 1 || stato > 5);
 
-    //
+    setStato(stato, s);
 }
 
 void initCoda(CodaSpedizione *coda)

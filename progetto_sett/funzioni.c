@@ -73,7 +73,7 @@ void input_string(const char *prompt, char *dest, int_pos lunghezza)
 
     do
     {
-        // fflush(stdin);
+        fflush(stdin);
         printf("%s", prompt);
         if (fgets(buffer, sizeof(buffer), stdin))
         {

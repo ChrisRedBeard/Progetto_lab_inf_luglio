@@ -8,7 +8,6 @@
 #ifndef GESTIONE_FILE_H
 #define GESTIONE_FILE_H
 
-
 #include <stdio.h>
 #include "dati.h"
 #include "controlli.h"
@@ -69,6 +68,5 @@ void modifica_stato_spedizione_in_file(int pos, Spedizione *s_mod);
  * @brief Ordina le spedizioni presenti nel file in base all'ID del pacco.
  */
 void ordina_file_id();
-
 
 #endif

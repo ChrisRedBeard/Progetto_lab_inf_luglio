@@ -16,7 +16,7 @@
  */
 void inserimento_file_spedizioni(Spedizione s)
 {
-    FILE *fp;
+    FILE *fp = NULL;
 
     fp = fopen("C:\\Users\\Christian\\Documents\\GitHub\\Progetto_lab_inf_luglio\\spedizioni.dat", "ab");
     if (!fp)
@@ -47,7 +47,7 @@ void inserimento_file_spedizioni(Spedizione s)
  */
 void stampa_file_spedizioni()
 {
-    FILE *fp;
+    FILE *fp = NULL;
     Spedizione s;
 
     fp = fopen("spedizioni.dat", "rb");

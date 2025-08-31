@@ -1,8 +1,6 @@
 #ifndef FUNZIONI_H
 #define FUNZIONI_H
 
-#include <stdio.h>
-
 #define BLACK "\033[30m"
 #define RED "\033[31m"
 #define GREEN "\033[32m"

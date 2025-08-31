@@ -12,8 +12,9 @@ int main()
     initCoda(&coda);
 
     Spedizione nuovaSped;
-    getchar();
+
     inserimento_spedizione(&nuovaSped);
+
     printf("\nStampa\n");
     stampa_spedizione(nuovaSped);
     getchar();

@@ -148,7 +148,7 @@ void enqueue(CodaSpedizione *coda, Spedizione sped);
 int dequeue(CodaSpedizione *coda, Spedizione *sped);
 
 void setPersona(Spedizione *s, Persona *p, bool tipo);
-Persona getPersona(Spedizione s, bool tipo);
+Persona getPersona(Spedizione *s, bool tipo);
 
 void setPriorita(bool, Spedizione *);
 bool getPriorita(Spedizione);

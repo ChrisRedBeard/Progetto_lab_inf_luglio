@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <time.h>
+#include <stdio.h>
 
 #include "controlli.h"
 #include "funzioni.h"
