@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+
+
 /**
  * @struct Destinatario
  * @brief Definisce la struttura Destinatario con  le relative informazioni per una spedizione.
@@ -144,8 +146,12 @@ typedef struct
 } CodaSpedizione;
 
 void initCoda(CodaSpedizione *coda);
+int isEmpty(CodaSpedizione c);
 void enqueue(CodaSpedizione *coda, Spedizione sped);
-int dequeue(CodaSpedizione *coda, Spedizione *sped);
+Spedizione* dequeue(CodaSpedizione *coda);
+void stampa_coda_spedizioni(CodaSpedizione *coda);
+void elimina_spedizione(CodaSpedizione *coda,char* id);
+void modifica_spedizione(CodaSpedizione *coda);
 
 void setPersona(Spedizione *s, Persona *p, bool tipo);
 Persona getPersona(Spedizione *s, bool tipo);

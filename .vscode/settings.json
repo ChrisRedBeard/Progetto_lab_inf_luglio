@@ -10,6 +10,7 @@
         "limits": "c",
         "utility": "c",
         "xutility": "c",
-        "format": "c"
+        "format": "c",
+        "dati.h": "c"
     }
 }

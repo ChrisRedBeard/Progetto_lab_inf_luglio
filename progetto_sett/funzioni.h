@@ -8,13 +8,11 @@
 #define BLUE "\033[34m"
 #define RESET "\033[0m"
 #define WHITE "\033[97m"
-
 /**
  * @typedef int_pos
  * @brief Tipo definito per rappresentare posizioni o dimensioni intere positive.
  */
 typedef unsigned short int int_pos;
-
 /**
  * @brief Acquisisce una stringa dall'utente con lunghezza controllata.
  *

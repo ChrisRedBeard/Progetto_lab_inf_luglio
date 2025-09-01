@@ -94,7 +94,7 @@ void inserimento_Persona(Persona *p)
     setCognome(stringa, p);
     stringa[0] = '\0';
 
-    input_string("Numero di telefono [+00 123 456 7890]: ", stringa, 16);
+    input_string("Numero di telefono [+00 123 456 7890]: ", stringa, 17);
     setTelefono(stringa, p);
     stringa[0] = '\0';
 
@@ -192,7 +192,7 @@ void inserimento_pacco(Pacco *p)
     input_id("ID[012345678]: ", stringa, 9);
     set_numID(stringa, p);
 
-    float f = 0; // TODO: perchè avevi usato il puntatore?
+    float f = 0;
 
     input_float("Peso: ", &f, 0);
     setPeso(f, p);
@@ -233,7 +233,7 @@ int getStato(Spedizione s)
 {
     return s.stato;
 }
-// capire cosa fare per impostare
+
 void setData(const char *prompt, Spedizione *s, bool scelta)
 {
     bool flag = false;
@@ -313,11 +313,12 @@ void stampa_spedizione(Spedizione s)
     printf("%sPriorità%s: %s\n", WHITE, RESET, getPriorita(s) ? "Alta" : "Normale");
 
     printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET, getData(s, true).tm_mday, getData(s, true).tm_mon, getData(s, true).tm_year);
-    printf("---Mittente---");
+    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getData(s, false).tm_mday, getData(s, false).tm_mon, getData(s, false).tm_year);
+
+    printf("%s---Mittente---%s\n", BLUE, RESET);
     stampa_Persona(getPersona(&s, true));
 
-    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getData(s, false).tm_mday, getData(s, false).tm_mon, getData(s, false).tm_year);
-    printf("---Destinatario---");
+    printf("%s---Destinatario---%s\n", BLUE, RESET);
     stampa_Persona(getPersona(&s, false));
 
     printf("%sStato della spedizione%s: ", WHITE, RESET);
@@ -341,6 +342,7 @@ void stampa_spedizione(Spedizione s)
     default:
         puts("Stato sconosciuto");
     }
+    puts("<-------------------------------->");
 }
 
 void inserimento_spedizione(Spedizione *s)
@@ -405,8 +407,14 @@ void initCoda(CodaSpedizione *coda)
     coda->codaPtr = NULL;
 }
 
+int isEmpty(CodaSpedizione c)
+{
+    return (c.testaPtr) == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
+}
+
 void enqueue(CodaSpedizione *coda, Spedizione sped)
 {
+    /*
     NodoSpedizione *nuovoNodo = malloc(sizeof(NodoSpedizione));
     nuovoNodo->sped = sped;
     nuovoNodo->nextPtr = NULL;
@@ -420,14 +428,40 @@ void enqueue(CodaSpedizione *coda, Spedizione sped)
         coda->testaPtr = nuovoNodo;
     }
 
-    coda->codaPtr = nuovoNodo;
+    coda->codaPtr = nuovoNodo;*/
+
+    NodoSpedizione *nuovoNodo = malloc(sizeof(NodoSpedizione)); // puntatore al nuovo nodo
+
+    // se c'è memoria disponibile
+    if (nuovoNodo != NULL)
+    {
+        nuovoNodo->sped = sped; // inserimento della spedizione nel nodo
+        nuovoNodo->nextPtr = NULL;
+
+        if (isEmpty(*coda))
+        {
+            coda->testaPtr = nuovoNodo; // se è vuota, il nuovo nodo diventa la testa della coda
+        }
+        else
+        {
+            (coda->codaPtr)->nextPtr = nuovoNodo; // altrimenti il nuovo nodo viene inserito alla fine della coda
+        }
+
+        coda->codaPtr = nuovoNodo; // il nuovo nodo diventa la coda della coda
+    }
+    else
+    {
+
+        printf("\n%sLa spedizione non è stata inserita nella coda, poiché non c'è memoria disponibile!!%s\n", RED, RESET);
+    }
 }
 
-int dequeue(CodaSpedizione *coda, Spedizione *sped)
+Spedizione *dequeue(CodaSpedizione *coda)
 {
+    Spedizione *sped = malloc(sizeof(Spedizione)); // devo fare un malloc?
     if (coda->testaPtr == NULL)
     {
-        return 0; // coda vuota
+        return NULL; // coda vuota
     }
 
     NodoSpedizione *nodoDaRimuovere = coda->testaPtr;
@@ -439,6 +473,56 @@ int dequeue(CodaSpedizione *coda, Spedizione *sped)
         coda->codaPtr = NULL; // coda vuota dopo la rimozione
     }
 
-    free(nodoDaRimuovere);
-    return 1; // successo
+    return sped; // successo
+}
+
+void stampa_coda_spedizioni(CodaSpedizione *coda)
+{
+
+    NodoSpedizione *corrente = coda->testaPtr;
+
+    while (corrente != NULL)
+    {
+        stampa_spedizione(corrente->sped);
+        corrente = corrente->nextPtr;
+    }
+    
+}
+
+// chiamare nel main prima input_id
+void elimina_spedizione(CodaSpedizione *coda, char *id)
+{
+    Spedizione *s = malloc(sizeof(Spedizione));
+    CodaSpedizione *appoggio = malloc(sizeof(CodaSpedizione));
+
+    bool trovato = false;
+
+    while (coda->testaPtr != NULL)
+    {
+        s = dequeue(coda);
+        if (confronta_id(get_numID(&(s->p)), id) == 0)
+        {
+            trovato = true;
+        }
+        else
+        {
+            enqueue(appoggio, *s);
+        }
+    }
+
+    coda = appoggio;
+
+    if (trovato == false)
+    {
+        printf("%s<--Spedizione non presente-->%s", YELLOW, RESET);
+    }
+    else
+    {
+        printf("%s<--Spedizione eliminata con  successo-->%s", GREEN, RESET);
+    }
+
+    free(s);
+    free(appoggio);
+
+    return;
 }
