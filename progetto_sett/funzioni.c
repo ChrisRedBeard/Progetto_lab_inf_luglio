@@ -19,7 +19,7 @@
  */
 void input_id(const char *prompt, char *dest, int_pos lunghezza)
 {
-    size_t size = sizeof(char) * 10;
+    size_t size = sizeof(char) * (lunghezza+1);
     bool flag = false;
 
     do

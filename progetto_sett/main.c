@@ -26,7 +26,7 @@ int main()
         enqueue(&coda, nuovaSped);
         */
 
-    int_pos scelta;
+    int_pos scelta=0;
 
     printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", BLUE, RESET);
 
@@ -42,18 +42,28 @@ int main()
         printf("6. Carica da file\n");
         printf("0. Esci\n");
         printf("Scelta: ");
-        scanf("%d", &scelta);
+        // Leggi input sicuro
+        char buffer[20];  // buffer sicuro
+        if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+            char *endptr;
+            scelta = strtol(buffer, &endptr, 10); // converte in int
 
-        char *id="\0";
+            if (endptr == buffer || *endptr != '\n' && *endptr != '\0') {
+                printf("Input non valido! Riprova.\n");
+                scelta = -1;
+                continue;
+            }
+        }
+        char id[10];
 
         switch (scelta)
         {
         case 1:
         {
-            Spedizione *nuovaSped=malloc(sizeof(Spedizione));
-            inserimento_spedizione(nuovaSped);
+            Spedizione nuovaSped;
+            inserimento_spedizione(&nuovaSped);
             
-            enqueue(&coda, *nuovaSped);
+            enqueue(&coda, nuovaSped);
           
             printf("Spedizione inserita!\nSTAMPA CODA DIOPORCO!");
            // stampa_spedizione(*nuovaSped);

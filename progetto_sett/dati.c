@@ -350,18 +350,16 @@ void inserimento_spedizione(Spedizione *s)
     puts("Inserisci i dati della spedizione:");
     inserimento_pacco(&(s->p));
     // scelta priorità
-    bool prior;
-    do
-    {
+     int priorInt=0;
+    do {
         printf("Priorità (1 per alta, 0 per normale): ");
-
-        if (scanf("%d", &prior) != 1 || (prior != 0 && prior != 1))
-        {
+        if (scanf("%d", &priorInt) != 1 || (priorInt != 0 && priorInt != 1)) {
             printf("%sPriorità non valida.%s\n", RED, RESET);
+            while (getchar() != '\n'); // pulizia buffer
         }
-    } while (prior != 0 && prior != 1);
+    } while (priorInt != 0 && priorInt != 1);
 
-    setPriorita(prior, s);
+    setPriorita(priorInt ? true : false, s);
 
     do
     {
@@ -371,18 +369,16 @@ void inserimento_spedizione(Spedizione *s)
     } while (!controllo_date(getData(*s, true), getData(*s, false)));
 
     puts("<--Dati del mittente-->");
-    Mittente *m = malloc(sizeof(Mittente));
-    inserimento_Persona(m);
-    setPersona(s, m, true);
+    Mittente m={0};
+    inserimento_Persona(&m);
+    setPersona(s, &m, true);
 
-    free(m);
+
 
     puts("<--Dati del destinatario-->");
-    Destinatario *d = malloc(sizeof(Destinatario));
-    inserimento_Persona(d);
-    setPersona(s, d, false);
-
-    free(d);
+    Destinatario d={0};
+    inserimento_Persona(&d);
+    setPersona(s, &d, false);
 
     enum Stati stato;
     do
@@ -393,8 +389,7 @@ void inserimento_spedizione(Spedizione *s)
             printf("%s", RED);
             puts("Stato non valido.");
             printf("%s", RESET);
-            while (getchar() != '\n')
-                ;
+            while (getchar() != '\n');
         }
     } while (stato < 1 || stato > 5);
 
@@ -428,7 +423,7 @@ void enqueue(CodaSpedizione *coda, Spedizione sped)
         coda->testaPtr = nuovoNodo;
     }
 
-    coda->codaPtr = nuovoNodo;*/
+    coda->codaPtr = nuovoNodo;*/ //FINE COMMENTO VERO
 
     NodoSpedizione *nuovoNodo = malloc(sizeof(NodoSpedizione)); // puntatore al nuovo nodo
 
@@ -456,6 +451,9 @@ void enqueue(CodaSpedizione *coda, Spedizione sped)
     }
 }
 
+
+
+
 Spedizione *dequeue(CodaSpedizione *coda)
 {
     Spedizione *sped = malloc(sizeof(Spedizione)); // devo fare un malloc?
@@ -478,15 +476,39 @@ Spedizione *dequeue(CodaSpedizione *coda)
 
 void stampa_coda_spedizioni(CodaSpedizione *coda)
 {
+   
 
     NodoSpedizione *corrente = coda->testaPtr;
-
+    if(corrente==NULL){
+       printf("\n%sLa coda è vuota!%s\n",YELLOW,RESET);
+        return;
+    }
     while (corrente != NULL)
     {
         stampa_spedizione(corrente->sped);
         corrente = corrente->nextPtr;
     }
-    
+
+   /*
+ CodaSpedizione appoggio = {NULL, NULL}; // inizializzazione sicura
+    Spedizione s;
+
+    while (!isEmpty(*coda))
+    {
+        s = *dequeue(coda);       // estraggo
+        stampa_spedizione(s);     // stampo
+        enqueue(&appoggio, s);    // metto in appoggio
+    }
+
+    // Ripristino gli elementi nella coda originale
+    while (!isEmpty(appoggio))
+    {
+        s = *dequeue(&appoggio);
+        enqueue(coda, s);
+    }
+    */
+
+   
 }
 
 // chiamare nel main prima input_id
