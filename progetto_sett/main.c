@@ -10,29 +10,16 @@ int main()
 {
     SetConsoleOutputCP(CP_UTF8);
 
+    char *nomeFile = "spedizioni.txt";
+    int_pos scelta = 0;
     CodaSpedizione coda;
+
     initCoda(&coda);
-    /*
-
-
-        Spedizione nuovaSped;
-
-        inserimento_spedizione(&nuovaSped);
-
-        printf("\nStampa\n");
-        stampa_spedizione(nuovaSped);
-        getchar();
-
-        enqueue(&coda, nuovaSped);
-        */
-
-    int_pos scelta=0;
-
-    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n\n%s", BLUE, RESET);
+    
+    printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n%s", BLUE, RESET);
 
     do
     {
-
         printf("\n--- MENU SPEDIZIONI ---\n");
         printf("1. Inserisci spedizione\n");
         printf("2. Stampa spedizioni\n");
@@ -42,18 +29,8 @@ int main()
         printf("6. Carica da file\n");
         printf("0. Esci\n");
         printf("Scelta: ");
-        // Leggi input sicuro
-        char buffer[20];  // buffer sicuro
-        if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-            char *endptr;
-            scelta = strtol(buffer, &endptr, 10); // converte in int
 
-            if (endptr == buffer || *endptr != '\n' && *endptr != '\0') {
-                printf("Input non valido! Riprova.\n");
-                scelta = -1;
-                continue;
-            }
-        }
+        scanf("%hu", &scelta);
 
         switch (scelta)
         {
@@ -61,13 +38,13 @@ int main()
         {
             Spedizione nuovaSped;
             inserimento_spedizione(&nuovaSped);
-            
-            enqueue(&coda, nuovaSped);
-          
-            printf("%sSpedizione inserita!%s\n",GREEN,RESET);
-           // stampa_spedizione(*nuovaSped);
 
-           stampa_coda_spedizioni(&coda);
+            enqueue(&coda, nuovaSped);
+
+            printf("%sSpedizione inserita!%s\n", GREEN, RESET);
+
+            // stampa_spedizione(*nuovaSped);
+            // stampa_coda_spedizioni(&coda);
             break;
         }
         case 2:
@@ -87,13 +64,20 @@ int main()
         }
         case 5:
         {
-            // salva_coda_su_file(&coda, "spedizioni.txt");
-            printf("Coda salvata su file!\n");
+            if (salva_coda_su_file(&coda, nomeFile))
+                printf("%sCoda salvata su file con successo!%s\n", GREEN, RESET);
+            else
+                printf("%sErrore nel salvataggio su file!%s\n", RED, RESET);
+
             break;
         }
-        case 6:{
-            //carica_coda_da_file(&coda, "spedizioni.txt");
-            puts("Coda caricata da file!");
+        case 6:
+        {
+            if (carica_coda_da_file(&coda, nomeFile))
+                printf("%sCoda caricata da file con successo!%s\n", GREEN, RESET);
+            else
+                printf("%sErrore nel caricamento da file!%s\n", RED, RESET);
+
             break;
         }
         case 0:

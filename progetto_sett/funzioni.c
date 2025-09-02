@@ -43,7 +43,7 @@ void input_id(const char *prompt, char *dest, int_pos lunghezza)
         {
             flag = true;
             fflush(stdin);
-            printf("%sStringa non valida, riprova.\n%s", RED, RESET);
+            printf("%sStringa non valida, riprova.\n%s", RED, RESET); //TODO non funziona?
         }
         else
         {

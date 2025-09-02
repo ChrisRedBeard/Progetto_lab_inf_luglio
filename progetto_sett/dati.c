@@ -189,7 +189,7 @@ float getVolume(Pacco p)
 void inserimento_pacco(Pacco *p)
 {
     char stringa[100] = {'\0'};
-    input_id("ID[012345678]: ", stringa, 9);
+    input_id("ID [IT123456]: ", stringa, 9);
     set_numID(stringa, p);
 
     float f = 0;
