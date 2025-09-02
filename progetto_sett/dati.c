@@ -512,29 +512,38 @@ void stampa_coda_spedizioni(CodaSpedizione *coda)
 }
 
 // chiamare nel main prima input_id
-void elimina_spedizione(CodaSpedizione *coda, char *id)
+void elimina_spedizione(CodaSpedizione *coda)
 {
-    Spedizione *s = malloc(sizeof(Spedizione));
-    CodaSpedizione *appoggio = malloc(sizeof(CodaSpedizione));
+    if (isEmpty(*coda)) {
+        printf("%s<--Coda vuota, nessuna spedizione da modificare-->%s\n", YELLOW, RESET);
+        return;
+    }
+    char id[10];
+    printf("Inserisci l'ID della spedizione da modificare: ");
+    input_id("ID[012345678]: ", id, 9);
+    
+    CodaSpedizione appoggio;
+    initCoda(&appoggio);
 
     bool trovato = false;
 
-    while (coda->testaPtr != NULL)
+    while (!isEmpty(*coda))
     {
-        s = dequeue(coda);
-        if (confronta_id(get_numID(&(s->p)), id) == 0)
+        Spedizione *estratta = dequeue(coda); 
+        if (confronta_id(get_numID(&(estratta->p)), id) == 0)
         {
             trovato = true;
         }
         else
         {
-            enqueue(appoggio, *s);
+            enqueue(&appoggio, *estratta);
         }
+        free(estratta);
     }
 
-    coda = appoggio;
+    *coda = appoggio;
 
-    if (trovato == false)
+    if (!trovato)
     {
         printf("%s<--Spedizione non presente-->%s", YELLOW, RESET);
     }
@@ -543,8 +552,47 @@ void elimina_spedizione(CodaSpedizione *coda, char *id)
         printf("%s<--Spedizione eliminata con  successo-->%s", GREEN, RESET);
     }
 
-    free(s);
-    free(appoggio);
 
     return;
+}
+
+void modifica_spedizione(CodaSpedizione *coda)
+{
+    if (isEmpty(*coda)) {
+        printf("%s<--Coda vuota, nessuna spedizione da modificare-->%s\n", YELLOW, RESET);
+        return;
+    }
+    char id[10];
+    printf("Inserisci l'ID della spedizione da modificare: ");
+    input_id("ID[012345678]: ", id, 9);
+
+    CodaSpedizione appoggio;
+    initCoda(&appoggio);
+
+    bool trovato = false;
+
+    while (!isEmpty(*coda)) {
+        Spedizione *estratta = dequeue(coda);
+
+        if (confronta_id(get_numID(&(estratta->p)), id) == 0) {
+            trovato = true;
+            printf("%s<--Spedizione trovata, inserisci i nuovi dati-->%s\n", BLUE, RESET);
+
+            inserimento_spedizione(estratta);
+
+            enqueue(&appoggio, *estratta);
+        } else {
+            enqueue(&appoggio, *estratta);
+        }
+
+        free(estratta);
+    }
+
+    *coda = appoggio;
+
+    if (!trovato) {
+        printf("%s<--Spedizione non trovata-->%s\n", YELLOW, RESET);
+    } else {
+        printf("%s<--Spedizione modificata con successo-->%s\n", GREEN, RESET);
+    }
 }

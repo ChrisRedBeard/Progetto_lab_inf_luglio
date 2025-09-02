@@ -54,7 +54,6 @@ int main()
                 continue;
             }
         }
-        char id[10];
 
         switch (scelta)
         {
@@ -65,7 +64,7 @@ int main()
             
             enqueue(&coda, nuovaSped);
           
-            printf("Spedizione inserita!\nSTAMPA CODA DIOPORCO!");
+            printf("%sSpedizione inserita!%s\n",GREEN,RESET);
            // stampa_spedizione(*nuovaSped);
 
            stampa_coda_spedizioni(&coda);
@@ -78,14 +77,12 @@ int main()
         }
         case 3:
         {
-            puts("Inserisci l'ID della spedizione da eliminare");
-            input_id("ID[012345678]: ", id, 9);
-            elimina_spedizione(&coda, id);
+            elimina_spedizione(&coda);
             break;
         }
         case 4:
         {
-            //modifica_spedizione(&coda);
+            modifica_spedizione(&coda);
             break;
         }
         case 5:

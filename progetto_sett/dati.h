@@ -150,7 +150,7 @@ int isEmpty(CodaSpedizione c);
 void enqueue(CodaSpedizione *coda, Spedizione sped);
 Spedizione* dequeue(CodaSpedizione *coda);
 void stampa_coda_spedizioni(CodaSpedizione *coda);
-void elimina_spedizione(CodaSpedizione *coda,char* id);
+void elimina_spedizione(CodaSpedizione *coda);
 void modifica_spedizione(CodaSpedizione *coda);
 
 void setPersona(Spedizione *s, Persona *p, bool tipo);
