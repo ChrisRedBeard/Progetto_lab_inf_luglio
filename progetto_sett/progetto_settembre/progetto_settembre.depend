@@ -1,0 +1,53 @@
+# depslib dependency file v1.0
+1756663415 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.c
+	<stdbool.h>
+	<time.h>
+	<stdio.h>
+	"controlli.h"
+	"funzioni.h"
+
+1756651622 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.h
+	<stdbool.h>
+	<time.h>
+
+1756892814 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.h
+
+1756893992 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.c
+	"dati.h"
+	"funzioni.h"
+	"controlli.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1756824519 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.h
+	<stdbool.h>
+	<time.h>
+
+1756893068 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.c
+	"funzioni.h"
+	<stdio.h>
+	<stdbool.h>
+	<string.h>
+	<windows.h>
+
+1756896369 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.c
+	<stdbool.h>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+	"dati.h"
+
+1756893148 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\main.c
+	<windows.h>
+	<stdio.h>
+	"dati.h"
+	"controlli.h"
+	"funzioni.h"
+	"gestione_file.h"
+
+1756731123 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.h
+	"gestione_file.h"
+	"dati.h"
+	<stdbool.h>
+

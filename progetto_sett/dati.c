@@ -189,7 +189,7 @@ float getVolume(Pacco p)
 void inserimento_pacco(Pacco *p)
 {
     char stringa[100] = {'\0'};
-    input_id("ID [IT123456]: ", stringa, 9);
+    input_id("ID [IT1234567]: ", stringa, 9);
     set_numID(stringa, p);
 
     float f = 0;
@@ -409,21 +409,6 @@ int isEmpty(CodaSpedizione c)
 
 void enqueue(CodaSpedizione *coda, Spedizione sped)
 {
-    /*
-    NodoSpedizione *nuovoNodo = malloc(sizeof(NodoSpedizione));
-    nuovoNodo->sped = sped;
-    nuovoNodo->nextPtr = NULL;
-
-    if (coda->codaPtr)
-    {
-        coda->codaPtr->nextPtr = nuovoNodo;
-    }
-    else
-    {
-        coda->testaPtr = nuovoNodo;
-    }
-
-    coda->codaPtr = nuovoNodo;*/ //FINE COMMENTO VERO
 
     NodoSpedizione *nuovoNodo = malloc(sizeof(NodoSpedizione)); // puntatore al nuovo nodo
 
@@ -476,7 +461,7 @@ Spedizione *dequeue(CodaSpedizione *coda)
 
 void stampa_coda_spedizioni(CodaSpedizione *coda)
 {
-   
+
 
     NodoSpedizione *corrente = coda->testaPtr;
     if(corrente==NULL){
@@ -489,39 +474,19 @@ void stampa_coda_spedizioni(CodaSpedizione *coda)
         corrente = corrente->nextPtr;
     }
 
-   /*
- CodaSpedizione appoggio = {NULL, NULL}; // inizializzazione sicura
-    Spedizione s;
-
-    while (!isEmpty(*coda))
-    {
-        s = *dequeue(coda);       // estraggo
-        stampa_spedizione(s);     // stampo
-        enqueue(&appoggio, s);    // metto in appoggio
-    }
-
-    // Ripristino gli elementi nella coda originale
-    while (!isEmpty(appoggio))
-    {
-        s = *dequeue(&appoggio);
-        enqueue(coda, s);
-    }
-    */
-
-   
 }
 
-// chiamare nel main prima input_id
+
 void elimina_spedizione(CodaSpedizione *coda)
 {
     if (isEmpty(*coda)) {
-        printf("%s<--Coda vuota, nessuna spedizione da modificare-->%s\n", YELLOW, RESET);
+        printf("%sCoda vuota, nessuna spedizione da modificare%s\n", YELLOW, RESET);
         return;
     }
     char id[10];
     printf("Inserisci l'ID della spedizione da modificare: ");
-    input_id("ID[012345678]: ", id, 9);
-    
+    input_id("ID[IT1234567]: ", id, 9);
+
     CodaSpedizione appoggio;
     initCoda(&appoggio);
 
@@ -529,7 +494,7 @@ void elimina_spedizione(CodaSpedizione *coda)
 
     while (!isEmpty(*coda))
     {
-        Spedizione *estratta = dequeue(coda); 
+        Spedizione *estratta = dequeue(coda);
         if (confronta_id(get_numID(&(estratta->p)), id) == 0)
         {
             trovato = true;
@@ -545,11 +510,11 @@ void elimina_spedizione(CodaSpedizione *coda)
 
     if (!trovato)
     {
-        printf("%s<--Spedizione non presente-->%s", YELLOW, RESET);
+        printf("%sSpedizione non presente%s", YELLOW, RESET);
     }
     else
     {
-        printf("%s<--Spedizione eliminata con  successo-->%s", GREEN, RESET);
+        printf("%sSpedizione eliminata con  successo%s", GREEN, RESET);
     }
 
 
@@ -559,12 +524,12 @@ void elimina_spedizione(CodaSpedizione *coda)
 void modifica_spedizione(CodaSpedizione *coda)
 {
     if (isEmpty(*coda)) {
-        printf("%s<--Coda vuota, nessuna spedizione da modificare-->%s\n", YELLOW, RESET);
+        printf("%sCoda vuota, nessuna spedizione da modificare%s\n", YELLOW, RESET);
         return;
     }
     char id[10];
     printf("Inserisci l'ID della spedizione da modificare: ");
-    input_id("ID[012345678]: ", id, 9);
+    input_id("ID[IT1234567]: ", id, 9);
 
     CodaSpedizione appoggio;
     initCoda(&appoggio);
@@ -576,7 +541,7 @@ void modifica_spedizione(CodaSpedizione *coda)
 
         if (confronta_id(get_numID(&(estratta->p)), id) == 0) {
             trovato = true;
-            printf("%s<--Spedizione trovata, inserisci i nuovi dati-->%s\n", BLUE, RESET);
+            printf("%sSpedizione trovata, inserisci i nuovi dati%s\n", BLUE, RESET);
 
             inserimento_spedizione(estratta);
 
@@ -591,8 +556,8 @@ void modifica_spedizione(CodaSpedizione *coda)
     *coda = appoggio;
 
     if (!trovato) {
-        printf("%s<--Spedizione non trovata-->%s\n", YELLOW, RESET);
+        printf("%sSpedizione non trovata%s\n", YELLOW, RESET);
     } else {
-        printf("%s<--Spedizione modificata con successo-->%s\n", GREEN, RESET);
+        printf("%sSpedizione modificata con successo%s\n", GREEN, RESET);
     }
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <windows.h>
 
 /**
  * @brief Legge da input uno specifico ID con lunghezza fissa.
@@ -136,4 +137,18 @@ void input_float(const char *prompt, float *dest, float min)
             flag = false;
 
     } while (flag);
+}
+
+void stampa_uscita(){
+
+     printf("%sUscita",BLUE);
+    fflush(stdout);  // Forza la stampa immediata
+
+    for (int i = 0; i < 3; i++) {
+        Sleep(500);  // 500 millisecondi = 0.5 secondi
+        printf(".");
+        fflush(stdout);  // Stampa subito il punto
+    }
+    printf("%s",RESET);
+
 }

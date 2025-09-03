@@ -43,8 +43,6 @@ int main()
 
             printf("%sSpedizione inserita!%s\n", GREEN, RESET);
 
-            // stampa_spedizione(*nuovaSped);
-            // stampa_coda_spedizioni(&coda);
             break;
         }
         case 2:
@@ -82,7 +80,7 @@ int main()
         }
         case 0:
         {
-            puts("Uscita...");
+            stampa_uscita();
             break;
         }
         default:

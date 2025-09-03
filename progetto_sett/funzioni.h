@@ -45,4 +45,6 @@ void input_float(const char *prompt, float *dest, float min);
  */
 void input_id(const char *prompt, char *dest, int_pos lunghezza);
 
+
+void stampa_uscita();
 #endif
