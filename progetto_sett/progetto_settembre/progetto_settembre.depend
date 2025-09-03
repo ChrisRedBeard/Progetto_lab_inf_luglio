@@ -6,11 +6,11 @@
 	"controlli.h"
 	"funzioni.h"
 
-1756651622 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.h
+1756912381 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.h
 	<stdbool.h>
 	<time.h>
 
-1756892814 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.h
+1756912472 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.h
 
 1756893992 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.c
 	"dati.h"
@@ -46,8 +46,7 @@
 	"funzioni.h"
 	"gestione_file.h"
 
-1756731123 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.h
-	"gestione_file.h"
+1756913144 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.h
 	"dati.h"
 	<stdbool.h>
 

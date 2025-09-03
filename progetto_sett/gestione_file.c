@@ -4,22 +4,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "dati.h"
+#include "gestione_file.h"
+
+ FILE *fp;
+ 
+
 
 // SALVATAGGIO IN TESTO, CON SEPARATORE ;
 bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
 {
-    FILE *file = fopen(nomeFile, "a");
-    if (file == NULL)
-    {
-        return false;
-    }
+   apri_file(nomeFile,"r");
 
+    
     NodoSpedizione *corrente = coda->testaPtr;
 
     while (corrente != NULL)
     {
         Spedizione *s = &corrente->sped;
-        fprintf(file,
+        fprintf(fp,
                 "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
@@ -32,10 +34,11 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
         corrente = corrente->nextPtr;
     }
 
-    fclose(file);
+    chiudi_file();
     return true;
 }
 
+//funzion per toglier gli spazi a sinistra in una stringa
 char *trim_left(char *str)
 {
     while (*str == ' ' || *str == '\t')
@@ -45,12 +48,11 @@ char *trim_left(char *str)
 
 bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
 {
-    FILE *file = fopen(nomeFile, "r");
-    if (file == NULL)
-        return false;
+     apri_file(nomeFile,"r");
+    
 
     char riga[1024]; // buffer più grande per righe lunghe
-    while (fgets(riga, sizeof(riga), file))
+    while (fgets(riga, sizeof(riga), fp))
     {
 
         Spedizione s = {0};
@@ -162,6 +164,25 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
             enqueue(coda, s);
     }
 
-    fclose(file);
+   chiudi_file();
     return true;
+}
+
+
+bool apri_file(char *nome_file, char* modo){
+
+   fp = fopen(nome_file, modo);
+    if(fp == NULL)
+    {
+        perror("Impossibile aprire il file\n");
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void chiudi_file(){
+    fclose(fp);
 }

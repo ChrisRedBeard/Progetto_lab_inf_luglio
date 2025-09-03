@@ -196,4 +196,8 @@ void convalida_spedizioni(CodaSpedizione *c);
 // void inserimento_spedizione(CodaSpedizione *c);
 void inserimento_spedizione(Spedizione *s);
 
+
+/**
+ * TODO costruttori per ogni struttura 
+ */
 #endif // DATI_H

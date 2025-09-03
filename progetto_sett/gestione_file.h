@@ -8,13 +8,19 @@
 #ifndef GESTIONE_FILE_H
 #define GESTIONE_FILE_H
 
-
-#include "gestione_file.h"
 #include "dati.h"
 
 #include <stdbool.h>
 
+bool apri_file(char *nome_file, char* modo);
+
+void chiudi_file();
+
 bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile);
 bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile);
+
+char *trim_left(char *str);
+
+
 
 #endif

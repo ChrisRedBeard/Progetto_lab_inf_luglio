@@ -85,6 +85,7 @@ char *getMail(Persona *p)
 void inserimento_Persona(Persona *p)
 {
     char stringa[100] = {'\0'};
+    bool corretto;
 
     input_string("Nome: ", stringa, 29);
     setNome(stringa, p);
@@ -92,13 +93,28 @@ void inserimento_Persona(Persona *p)
 
     input_string("Cognome: ", stringa, 29);
     setCognome(stringa, p);
-    stringa[0] = '\0';
 
-    input_string("Numero di telefono [+00 123 456 7890]: ", stringa, 17);
+    do{
+        stringa[0] = '\0';
+        input_string("Numero di telefono [+39 123 456 7890]: ", stringa, 17);
+        corretto = check_phone_format(stringa);
+        if (!corretto) {
+            printf("%sFormato errato, riprova%s\n",RED,RESET);
+        }
+    }while(!corretto);
+    
     setTelefono(stringa, p);
+      
+  do{
     stringa[0] = '\0';
-
     input_string("Email: ", stringa, 49);
+    corretto= check_email_format(stringa);
+    if (!corretto) {
+            printf("%sFormato errato, riprova%s\n",RED,RESET);
+        }
+  } while (!corretto);
+  
+ 
     setMail(stringa, p);
     stringa[0] = '\0';
 
@@ -110,7 +126,14 @@ void inserimento_Persona(Persona *p)
     setCitta(stringa, p);
     stringa[0] = '\0';
 
-    input_string("Provincia [CC]: ", stringa, 2);
+      do{
+         input_string("Provincia [CC]: ", stringa, 2);
+         corretto= check_provincia(stringa);
+         if (!corretto) {
+            printf("%sFormato errato, riprova%s\n",RED,RESET);
+         }
+    }while (!corretto);
+    
     setProv(stringa, p);
     stringa[0] = '\0';
 
@@ -189,7 +212,15 @@ float getVolume(Pacco p)
 void inserimento_pacco(Pacco *p)
 {
     char stringa[100] = {'\0'};
-    input_id("ID [IT1234567]: ", stringa, 9);
+    bool corretto;
+    do{
+     input_id("ID [IT1234567]: ", stringa, 9);
+     corretto = check_Id(stringa);
+        if (!corretto) {
+            printf("%sFormato errato, riprova%s\n",RED,RESET);
+        }
+    }while(!corretto);
+    
     set_numID(stringa, p);
 
     float f = 0;
@@ -344,6 +375,8 @@ void stampa_spedizione(Spedizione s)
     }
     puts("<-------------------------------->");
 }
+
+
 
 void inserimento_spedizione(Spedizione *s)
 {

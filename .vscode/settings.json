@@ -11,6 +11,12 @@
         "utility": "c",
         "xutility": "c",
         "format": "c",
-        "dati.h": "c"
+        "dati.h": "c",
+        "xlocale": "c",
+        "locale": "c",
+        "xlocmes": "c",
+        "xlocmon": "c",
+        "xlocnum": "c",
+        "xloctime": "c"
     }
 }
