@@ -39,10 +39,7 @@ static const char *province[] = {
 
 bool check_provincia(const char *email);
 
-//TODO
 bool check_Id(const char *email);
-
-
 
 static const size_t province_count = sizeof(province)/sizeof(province[0]);
 
