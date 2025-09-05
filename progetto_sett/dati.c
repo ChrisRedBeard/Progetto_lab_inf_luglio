@@ -220,7 +220,7 @@ void inserimento_pacco(Pacco *p)
     bool corretto;
     do
     {
-        input_id("ID [IT1234567]: ", stringa, 9);
+        input_id("ID [BA1234567]: ", stringa, 9);
         corretto = check_Id(stringa);
         if (!corretto)
         {
@@ -526,7 +526,7 @@ void elimina_spedizione(CodaSpedizione *coda)
     }
     char id[10];
     printf("Inserisci l'ID della spedizione da modificare: ");
-    input_id("ID[IT1234567]: ", id, 9);
+    input_id("ID[BA1234567]: ", id, 9);
 
     CodaSpedizione appoggio;
     initCoda(&appoggio);
@@ -570,7 +570,7 @@ void modifica_spedizione(CodaSpedizione *coda)
     }
     char id[10];
     printf("Inserisci l'ID della spedizione da modificare: ");
-    input_id("ID[IT1234567]: ", id, 9);
+    input_id("ID[BA1234567]: ", id, 9);
 
     CodaSpedizione appoggio;
     initCoda(&appoggio);
@@ -681,7 +681,7 @@ bool rimuovi_doppioni_coda(CodaSpedizione *coda) {
         while (interno != NULL) {
             if (strcmp(id_corrente, interno->sped.p.n) == 0) {
                 precedente->nextPtr = interno->nextPtr;
-                free(interno); 
+                free(interno);
                 interno = precedente->nextPtr;
             } else {
                 precedente = interno;

@@ -14,7 +14,7 @@
 
 1756984047 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.h
 
-1756893992 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.c
+1757081502 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.c
 	"dati.h"
 	"funzioni.h"
 	"controlli.h"
@@ -22,25 +22,26 @@
 	<stdlib.h>
 	<string.h>
 
-1756824519 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.h
+1757081430 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.h
 	<stdbool.h>
 	<time.h>
 
-1756984042 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.c
+1757064152 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.c
 	"funzioni.h"
 	<stdio.h>
 	<stdbool.h>
 	<string.h>
 	<windows.h>
 
-1756896369 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.c
+1757113142 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.c
 	<stdbool.h>
 	<string.h>
 	<stdlib.h>
 	<stdio.h>
 	"dati.h"
+	"gestione_file.h"
 
-1756893148 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\main.c
+1757083825 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\main.c
 	<windows.h>
 	<stdio.h>
 	"dati.h"
@@ -48,7 +49,7 @@
 	"funzioni.h"
 	"gestione_file.h"
 
-1756913144 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.h
+1757085050 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\gestione_file.h
 	"dati.h"
 	<stdbool.h>
 
