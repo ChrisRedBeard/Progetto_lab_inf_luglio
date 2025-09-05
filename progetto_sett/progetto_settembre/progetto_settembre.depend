@@ -1,16 +1,18 @@
 # depslib dependency file v1.0
-1756663415 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.c
+1756984173 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.c
 	<stdbool.h>
 	<time.h>
 	<stdio.h>
+	<string.h>
+	<ctype.h>
 	"controlli.h"
 	"funzioni.h"
 
-1756912381 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.h
+1756984176 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\controlli.h
 	<stdbool.h>
 	<time.h>
 
-1756912472 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.h
+1756984047 c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.h
 
 1756893992 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\dati.c
 	"dati.h"
@@ -24,7 +26,7 @@
 	<stdbool.h>
 	<time.h>
 
-1756893068 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.c
+1756984042 source:c:\users\christian\documents\github\progetto_lab_inf_luglio\progetto_sett\funzioni.c
 	"funzioni.h"
 	<stdio.h>
 	<stdbool.h>

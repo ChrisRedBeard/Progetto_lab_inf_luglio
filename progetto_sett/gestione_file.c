@@ -3,23 +3,42 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "dati.h"
 #include "gestione_file.h"
 
- FILE *fp;
- 
+FILE *fp;
 
 
-// SALVATAGGIO IN TESTO, CON SEPARATORE ;
 bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
-{
-   apri_file(nomeFile,"r");
+{  if(isEmpty(*coda)){
+      printf("\nLa coda è vuota\n");
+        return false;
+    }
+    int scelta=0;
 
+    do{
+      printf("\nOpzioni\n1)Per sovrascrivere il file\n2)Per scrivere in coda\nScegli: ");
+      scanf("%d",&scelta);
+    }while(scelta<1 || scelta>2);
     
+    if(scelta==1){
+        if(apri_file(nomeFile, "w")==false){
+            return false;
+        }
+    }else{
+        if(apri_file(nomeFile, "a")==false){
+            return false;
+        }
+        
+    }
+    
+
     NodoSpedizione *corrente = coda->testaPtr;
 
     while (corrente != NULL)
     {
+      
         Spedizione *s = &corrente->sped;
         fprintf(fp,
                 "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
@@ -35,10 +54,44 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
     }
 
     chiudi_file();
+/*
+    apri_file(nomeFile,"r");
+    apri_file("spedizioni_temp.txt","w");
+
+    char riga[1024]; // buffer più grande per righe lunghe
+    char *id;
+    char* token;
+    bool trovato=false;
+    fgets(riga, sizeof(riga), nomeFile);
+    
+    while (fgets(riga, sizeof(riga), nomeFile))
+    { 
+        id = strtok(riga, ";");
+        while (fgets(riga, sizeof(riga), nomeFile))
+        {  
+            token = strtok(riga, ";");
+            if(confronta_id(id,token)==0){
+                trovato=true;
+            }else{
+            //qui bisogna ritrasformare la riga letta in Spedizione e poi stampare
+                fprintf("spedizioni_temp.txt",
+                "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
+                "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
+                "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
+                s->p.n, s->p.peso, s->p.volume, s->priorita,
+                s->data_invio.tm_mday, s->data_invio.tm_mon, s->data_invio.tm_year,
+                s->data_consegna.tm_mday, s->data_consegna.tm_mon, s->data_consegna.tm_year,
+                s->mittente.nome, s->mittente.cognome, s->mittente.telefono, s->mittente.via, s->mittente.citta, s->mittente.provincia, s->mittente.cap, s->mittente.email,
+                s->destinatario.nome, s->destinatario.cognome, s->destinatario.telefono, s->destinatario.via, s->destinatario.citta, s->destinatario.provincia, s->destinatario.cap, s->destinatario.email,
+                s->stato);
+            }
+        }
+
+    }
+*/
     return true;
 }
 
-//funzion per toglier gli spazi a sinistra in una stringa
 char *trim_left(char *str)
 {
     while (*str == ' ' || *str == '\t')
@@ -48,20 +101,22 @@ char *trim_left(char *str)
 
 bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
 {
-     apri_file(nomeFile,"r");
-    
+
+    if (apri_file(nomeFile, "r") == false)
+    {
+        return false;
+    }
 
     char riga[1024]; // buffer più grande per righe lunghe
     while (fgets(riga, sizeof(riga), fp))
     {
-
-        Spedizione s = {0};
         char *token;
         int campo = 0;
 
+        Spedizione s;
+        initSpedizione(&s);
+
         token = strtok(riga, ";");
-
-
 
         while (token != NULL)
         {
@@ -164,15 +219,15 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
             enqueue(coda, s);
     }
 
-   chiudi_file();
+    chiudi_file();
     return true;
 }
 
+bool apri_file(char *nome_file, char *modo)
+{
 
-bool apri_file(char *nome_file, char* modo){
-
-   fp = fopen(nome_file, modo);
-    if(fp == NULL)
+    fp = fopen(nome_file, modo);
+    if (fp == NULL)
     {
         perror("Impossibile aprire il file\n");
         return false;
@@ -183,6 +238,10 @@ bool apri_file(char *nome_file, char* modo){
     }
 }
 
-void chiudi_file(){
+
+void chiudi_file()
+{
     fclose(fp);
 }
+
+    

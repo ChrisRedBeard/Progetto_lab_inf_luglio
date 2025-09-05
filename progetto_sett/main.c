@@ -15,7 +15,7 @@ int main()
     CodaSpedizione coda;
 
     initCoda(&coda);
-    
+
     printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n%s", BLUE, RESET);
 
     do
@@ -27,6 +27,7 @@ int main()
         printf("4. Modifica spedizione\n");
         printf("5. Salva su file\n");
         printf("6. Carica da file\n");
+        printf("7. Ordina coda spedizioni\n");
         printf("0. Esci\n");
         printf("Scelta: ");
 
@@ -37,10 +38,12 @@ int main()
         case 1:
         {
             Spedizione nuovaSped;
+            initSpedizione(&nuovaSped);
             inserimento_spedizione(&nuovaSped);
 
             enqueue(&coda, nuovaSped);
-
+            rimuovi_doppioni_coda(&coda);
+            
             printf("%sSpedizione inserita!%s\n", GREEN, RESET);
 
             break;
@@ -76,6 +79,11 @@ int main()
             else
                 printf("%sErrore nel caricamento da file!%s\n", RED, RESET);
 
+            break;
+        }
+        case 7:
+        {
+            ordinaCodaSpedizioni(&coda);
             break;
         }
         case 0:

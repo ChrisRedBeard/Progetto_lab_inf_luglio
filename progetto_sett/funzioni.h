@@ -8,45 +8,59 @@
 #define BLUE "\033[34m"
 #define RESET "\033[0m"
 #define WHITE "\033[97m"
+
 /**
  * @typedef int_pos
  * @brief Tipo definito per rappresentare posizioni o dimensioni intere positive.
  */
 typedef unsigned short int int_pos;
+
 /**
- * @brief Acquisisce una stringa dall'utente con lunghezza controllata.
+ * @brief Legge da input una stringa con lunghezza massima specificata.
  *
- * La funzione stampa il prompt, legge l'input da tastiera e lo memorizza
- * nella variabile `dest`, limitando la lunghezza.
+ * La funzione richiede all'utente di inserire una stringa tramite stdin.
+ * L'input viene accettato solo se la stringa è non vuota e non supera la lunghezza massima.
+ * Rimuove il carattere di newline se presente.
+ * In caso di errore nella lettura o di input non valido, viene richiesto di riprovare.
  *
- * @param prompt Testo da mostrare all'utente.
- * @param dest Puntatore al buffer di destinazione.
- * @param size Dimensione massima del buffer (compreso '\0').
- * @param lunghezza Lunghezza massima consentita (escluso '\0').
+ * @param prompt Messaggio mostrato all'utente per richiedere l'input.
+ * @param dest Buffer dove salvare la stringa inserita.
+ * @param size Dimensione massima del buffer (incluso terminatore nullo).
+ * @param lunghezza Lunghezza massima accettabile per la stringa (escluso terminatore nullo).
  */
 void input_string(const char *prompt, char *dest, int_pos lunghezza);
 
 /**
- * @brief Acquisisce un numero float dall'utente, con un valore minimo ammesso.
+ * @brief Legge da input un numero in virgola mobile (float) con valore minimo.
  *
- * @param prompt Testo da mostrare all'utente.
- * @param dest Puntatore alla variabile dove salvare il numero.
+ * La funzione richiede all'utente di inserire un valore float tramite stdin.
+ * Viene controllato che il valore inserito sia valido e maggiore o uguale al minimo indicato.
+ * Se l'input è non valido o minore del minimo, viene chiesto di riprovare.
+ *
+ * @param prompt Messaggio mostrato all'utente per richiedere l'input.
+ * @param dest Puntatore alla variabile float dove salvare il valore inserito.
  * @param min Valore minimo accettabile (incluso).
  */
 void input_float(const char *prompt, float *dest, float min);
 
 /**
- * @brief Acquisisce un ID in formato stringa con lunghezza controllata.
+ * @brief Legge da input uno specifico ID con lunghezza fissa.
  *
- * @param prompt Testo da mostrare all'utente.
- * @param dest Puntatore al buffer in cui salvare l'ID.
- * @param size Dimensione massima del buffer.
- * @param lunghezza Lunghezza massima consentita dell'ID (escluso '\0').
+ * Questa funzione richiede all'utente di inserire una stringa tramite stdin.
+ * L'input viene accettato solo se la stringa ha esattamente la lunghezza richiesta,
+ * altrimenti viene chiesta nuovamente.
+ * Rimuove il carattere di newline se presente.
+ *
+ * @param prompt Messaggio mostrato all'utente per richiedere l'input.
+ * @param dest Buffer dove salvare la stringa inserita dall'utente.
+ * @param size Dimensione massima del buffer (incluso terminatore nullo).
+ * @param lunghezza Lunghezza esatta richiesta per l'ID (escluso terminatore nullo).
  */
 void input_id(const char *prompt, char *dest, int_pos lunghezza);
 
-
-
-
+/**
+ * @brief Stampa un messaggio di uscita con animazione.
+ */
 void stampa_uscita();
+
 #endif

@@ -5,19 +5,6 @@
 #include <string.h>
 #include <windows.h>
 
-/**
- * @brief Legge da input uno specifico ID con lunghezza fissa.
- *
- * Questa funzione richiede all'utente di inserire una stringa tramite stdin.
- * L'input viene accettato solo se la stringa ha esattamente la lunghezza richiesta,
- * altrimenti viene chiesta nuovamente.
- * Rimuove il carattere di newline se presente.
- *
- * @param prompt Messaggio mostrato all'utente per richiedere l'input.
- * @param dest Buffer dove salvare la stringa inserita dall'utente.
- * @param size Dimensione massima del buffer (incluso terminatore nullo).
- * @param lunghezza Lunghezza esatta richiesta per l'ID (escluso terminatore nullo).
- */
 void input_id(const char *prompt, char *dest, int_pos lunghezza)
 {
     size_t size = sizeof(char) * (lunghezza+1);
@@ -54,19 +41,6 @@ void input_id(const char *prompt, char *dest, int_pos lunghezza)
     } while (flag);
 }
 
-/**
- * @brief Legge da input una stringa con lunghezza massima specificata.
- *
- * La funzione richiede all'utente di inserire una stringa tramite stdin.
- * L'input viene accettato solo se la stringa è non vuota e non supera la lunghezza massima.
- * Rimuove il carattere di newline se presente.
- * In caso di errore nella lettura o di input non valido, viene richiesto di riprovare.
- *
- * @param prompt Messaggio mostrato all'utente per richiedere l'input.
- * @param dest Buffer dove salvare la stringa inserita.
- * @param size Dimensione massima del buffer (incluso terminatore nullo).
- * @param lunghezza Lunghezza massima accettabile per la stringa (escluso terminatore nullo).
- */
 void input_string(const char *prompt, char *dest, int_pos lunghezza)
 {
     bool flag = false;
@@ -104,17 +78,6 @@ void input_string(const char *prompt, char *dest, int_pos lunghezza)
     } while (flag);
 }
 
-/**
- * @brief Legge da input un numero in virgola mobile (float) con valore minimo.
- *
- * La funzione richiede all'utente di inserire un valore float tramite stdin.
- * Viene controllato che il valore inserito sia valido e maggiore o uguale al minimo indicato.
- * Se l'input è non valido o minore del minimo, viene chiesto di riprovare.
- *
- * @param prompt Messaggio mostrato all'utente per richiedere l'input.
- * @param dest Puntatore alla variabile float dove salvare il valore inserito.
- * @param min Valore minimo accettabile (incluso).
- */
 void input_float(const char *prompt, float *dest, float min)
 {
     bool flag = false;

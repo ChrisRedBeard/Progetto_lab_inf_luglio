@@ -1,6 +1,7 @@
 #include "dati.h"
 #include "funzioni.h"
 #include "controlli.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,7 +82,6 @@ char *getMail(Persona *p)
     return p->email;
 }
 
-// da vedere
 void inserimento_Persona(Persona *p)
 {
     char stringa[100] = {'\0'};
@@ -94,27 +94,30 @@ void inserimento_Persona(Persona *p)
     input_string("Cognome: ", stringa, 29);
     setCognome(stringa, p);
 
-    do{
+    do
+    {
         stringa[0] = '\0';
         input_string("Numero di telefono [+39 123 456 7890]: ", stringa, 17);
         corretto = check_phone_format(stringa);
-        if (!corretto) {
-            printf("%sFormato errato, riprova%s\n",RED,RESET);
+        if (!corretto)
+        {
+            printf("%sFormato errato, riprova%s\n", RED, RESET);
         }
-    }while(!corretto);
-    
+    } while (!corretto);
+
     setTelefono(stringa, p);
-      
-  do{
-    stringa[0] = '\0';
-    input_string("Email: ", stringa, 49);
-    corretto= check_email_format(stringa);
-    if (!corretto) {
-            printf("%sFormato errato, riprova%s\n",RED,RESET);
+
+    do
+    {
+        stringa[0] = '\0';
+        input_string("Email: ", stringa, 49);
+        corretto = check_email_format(stringa);
+        if (!corretto)
+        {
+            printf("%sFormato errato, riprova%s\n", RED, RESET);
         }
-  } while (!corretto);
-  
- 
+    } while (!corretto);
+
     setMail(stringa, p);
     stringa[0] = '\0';
 
@@ -126,14 +129,16 @@ void inserimento_Persona(Persona *p)
     setCitta(stringa, p);
     stringa[0] = '\0';
 
-      do{
-         input_string("Provincia [CC]: ", stringa, 2);
-         corretto= check_provincia(stringa);
-         if (!corretto) {
-            printf("%sFormato errato, riprova%s\n",RED,RESET);
-         }
-    }while (!corretto);
-    
+    do
+    {
+        input_string("Provincia [CC]: ", stringa, 2);
+        corretto = check_provincia(stringa);
+        if (!corretto)
+        {
+            printf("%sFormato errato, riprova%s\n", RED, RESET);
+        }
+    } while (!corretto);
+
     setProv(stringa, p);
     stringa[0] = '\0';
 
@@ -213,14 +218,16 @@ void inserimento_pacco(Pacco *p)
 {
     char stringa[100] = {'\0'};
     bool corretto;
-    do{
-     input_id("ID [IT1234567]: ", stringa, 9);
-     corretto = check_Id(stringa);
-        if (!corretto) {
-            printf("%sFormato errato, riprova%s\n",RED,RESET);
+    do
+    {
+        input_id("ID [IT1234567]: ", stringa, 9);
+        corretto = check_Id(stringa);
+        if (!corretto)
+        {
+            printf("%sFormato errato, riprova%s\n", RED, RESET);
         }
-    }while(!corretto);
-    
+    } while (!corretto);
+
     set_numID(stringa, p);
 
     float f = 0;
@@ -339,6 +346,8 @@ void stampa_spedizione(Spedizione s)
 {
     puts("<-------------------------------->");
 
+    printf("%s---Pacco---%s\n", BLUE, RESET);
+
     stampa_pacco(s.p);
 
     printf("%sPriorità%s: %s\n", WHITE, RESET, getPriorita(s) ? "Alta" : "Normale");
@@ -376,19 +385,20 @@ void stampa_spedizione(Spedizione s)
     puts("<-------------------------------->");
 }
 
-
-
 void inserimento_spedizione(Spedizione *s)
 {
     puts("Inserisci i dati della spedizione:");
     inserimento_pacco(&(s->p));
     // scelta priorità
-     int priorInt=0;
-    do {
+    int priorInt = 0;
+    do
+    {
         printf("Priorità (1 per alta, 0 per normale): ");
-        if (scanf("%d", &priorInt) != 1 || (priorInt != 0 && priorInt != 1)) {
+        if (scanf("%d", &priorInt) != 1 || (priorInt != 0 && priorInt != 1))
+        {
             printf("%sPriorità non valida.%s\n", RED, RESET);
-            while (getchar() != '\n'); // pulizia buffer
+            while (getchar() != '\n')
+                ; // pulizia buffer
         }
     } while (priorInt != 0 && priorInt != 1);
 
@@ -402,14 +412,12 @@ void inserimento_spedizione(Spedizione *s)
     } while (!controllo_date(getData(*s, true), getData(*s, false)));
 
     puts("<--Dati del mittente-->");
-    Mittente m={0};
+    Mittente m = {0};
     inserimento_Persona(&m);
     setPersona(s, &m, true);
 
-
-
     puts("<--Dati del destinatario-->");
-    Destinatario d={0};
+    Destinatario d = {0};
     inserimento_Persona(&d);
     setPersona(s, &d, false);
 
@@ -422,7 +430,8 @@ void inserimento_spedizione(Spedizione *s)
             printf("%s", RED);
             puts("Stato non valido.");
             printf("%s", RESET);
-            while (getchar() != '\n');
+            while (getchar() != '\n')
+                ;
         }
     } while (stato < 1 || stato > 5);
 
@@ -444,6 +453,7 @@ void enqueue(CodaSpedizione *coda, Spedizione sped)
 {
 
     NodoSpedizione *nuovoNodo = malloc(sizeof(NodoSpedizione)); // puntatore al nuovo nodo
+    initNodoSpedizione(nuovoNodo);
 
     // se c'è memoria disponibile
     if (nuovoNodo != NULL)
@@ -469,12 +479,11 @@ void enqueue(CodaSpedizione *coda, Spedizione sped)
     }
 }
 
-
-
-
 Spedizione *dequeue(CodaSpedizione *coda)
 {
     Spedizione *sped = malloc(sizeof(Spedizione)); // devo fare un malloc?
+    initSpedizione(sped);
+
     if (coda->testaPtr == NULL)
     {
         return NULL; // coda vuota
@@ -495,10 +504,10 @@ Spedizione *dequeue(CodaSpedizione *coda)
 void stampa_coda_spedizioni(CodaSpedizione *coda)
 {
 
-
     NodoSpedizione *corrente = coda->testaPtr;
-    if(corrente==NULL){
-       printf("\n%sLa coda è vuota!%s\n",YELLOW,RESET);
+    if (corrente == NULL)
+    {
+        printf("\n%sLa coda è vuota!%s\n", YELLOW, RESET);
         return;
     }
     while (corrente != NULL)
@@ -506,13 +515,12 @@ void stampa_coda_spedizioni(CodaSpedizione *coda)
         stampa_spedizione(corrente->sped);
         corrente = corrente->nextPtr;
     }
-
 }
-
 
 void elimina_spedizione(CodaSpedizione *coda)
 {
-    if (isEmpty(*coda)) {
+    if (isEmpty(*coda))
+    {
         printf("%sCoda vuota, nessuna spedizione da modificare%s\n", YELLOW, RESET);
         return;
     }
@@ -550,13 +558,13 @@ void elimina_spedizione(CodaSpedizione *coda)
         printf("%sSpedizione eliminata con  successo%s", GREEN, RESET);
     }
 
-
     return;
 }
 
 void modifica_spedizione(CodaSpedizione *coda)
 {
-    if (isEmpty(*coda)) {
+    if (isEmpty(*coda))
+    {
         printf("%sCoda vuota, nessuna spedizione da modificare%s\n", YELLOW, RESET);
         return;
     }
@@ -569,17 +577,21 @@ void modifica_spedizione(CodaSpedizione *coda)
 
     bool trovato = false;
 
-    while (!isEmpty(*coda)) {
+    while (!isEmpty(*coda))
+    {
         Spedizione *estratta = dequeue(coda);
 
-        if (confronta_id(get_numID(&(estratta->p)), id) == 0) {
+        if (confronta_id(get_numID(&(estratta->p)), id) == 0)
+        {
             trovato = true;
             printf("%sSpedizione trovata, inserisci i nuovi dati%s\n", BLUE, RESET);
 
             inserimento_spedizione(estratta);
 
             enqueue(&appoggio, *estratta);
-        } else {
+        }
+        else
+        {
             enqueue(&appoggio, *estratta);
         }
 
@@ -588,9 +600,143 @@ void modifica_spedizione(CodaSpedizione *coda)
 
     *coda = appoggio;
 
-    if (!trovato) {
+    if (!trovato)
+    {
         printf("%sSpedizione non trovata%s\n", YELLOW, RESET);
-    } else {
+    }
+    else
+    {
         printf("%sSpedizione modificata con successo%s\n", GREEN, RESET);
     }
+}
+
+int confronta_spedizioni(const void *a, const void *b)
+{
+    Spedizione *s1 = (Spedizione *)a;
+    Spedizione *s2 = (Spedizione *)b;
+
+    // Priorità: true prima di false
+    if (getPriorita(*s1) != getPriorita(*s2))
+        return getPriorita(*s2) - getPriorita(*s1);
+
+    // Data invio
+    struct tm d1 = getData(*s1, true);
+    struct tm d2 = getData(*s2, true);
+    time_t t1 = mktime(&d1);
+    time_t t2 = mktime(&d2);
+    if (t1 != t2)
+        return (int)(t1 - t2);
+
+    // Peso: più leggero prima
+    if (getPeso((s1->p)) != getPeso((s2->p)))
+        return (s1->p.peso < s2->p.peso) ? -1 : 1;
+
+    return 0;
+}
+
+void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova)
+{
+    CodaSpedizione temp;
+    initCoda(&temp); // inizializza coda temporanea
+
+    bool inserito = false;
+
+    while (!isEmpty(*ordinata))
+    {
+        Spedizione *corrente = dequeue(ordinata);
+
+        if (!inserito && confronta_spedizioni(&nuova, &corrente) < 0)
+        {
+            enqueue(&temp, nuova);
+            inserito = true;
+        }
+
+        enqueue(&temp, *corrente);
+    }
+
+    if (!inserito)
+    {
+        enqueue(&temp, nuova);
+    }
+
+    // Copia la coda temporanea nella coda ordinata
+    while (!isEmpty(temp))
+    {
+        enqueue(ordinata, *(dequeue(&temp)));
+    }
+}
+
+
+bool rimuovi_doppioni_coda(CodaSpedizione *coda) {
+    if (!coda || !coda->testaPtr)
+        return false;
+
+    NodoSpedizione *esterno = coda->testaPtr;
+
+    while (esterno != NULL) {
+        char *id_corrente = esterno->sped.p.n;
+        NodoSpedizione *precedente = esterno;
+        NodoSpedizione *interno = esterno->nextPtr;
+
+        while (interno != NULL) {
+            if (strcmp(id_corrente, interno->sped.p.n) == 0) {
+                precedente->nextPtr = interno->nextPtr;
+                free(interno); 
+                interno = precedente->nextPtr;
+            } else {
+                precedente = interno;
+                interno = interno->nextPtr;
+            }
+        }
+
+        esterno = esterno->nextPtr;
+    }
+
+    return true;
+}
+
+
+void ordinaCodaSpedizioni(CodaSpedizione *originale)
+{
+
+    if (isEmpty(*originale))
+    {
+        printf("%sNiente da ordinare, coda vuota%s\n", YELLOW, RESET);
+        return;
+    }
+    CodaSpedizione ordinata;
+    initCoda(&ordinata);
+
+    while (!isEmpty(*originale))
+    {
+        Spedizione *s = dequeue(originale);
+        inserisciOrdinato(&ordinata, *s);
+    }
+
+    // Copia la coda ordinata nella coda originale
+    while (!isEmpty(ordinata))
+    {
+        enqueue(originale, *(dequeue(&ordinata)));
+    }
+    printf("\n%sCoda ordinata correttamente%s\n", GREEN, RESET);
+}
+
+void initPersona(Persona *p)
+{
+    memset(p, 0, sizeof(Persona));
+}
+
+void initPacco(Pacco *p)
+{
+    memset(p, 0, sizeof(Pacco));
+}
+
+void initSpedizione(Spedizione *s)
+{
+    memset(s, 0, sizeof(Spedizione));
+}
+
+void initNodoSpedizione(NodoSpedizione *n)
+{
+    memset(n, 0, sizeof(NodoSpedizione));
 }
