@@ -89,17 +89,20 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
             switch (campo)
             {
             case 0:
-                strncpy(s.p.n, token, sizeof(s.p.n) - 1);
+                strncpy(get_numID(getPacco(&s)), token, sizeof(get_numID(getPacco(&s))) - 1);
 
                 break;
             case 1:
-                s.p.peso = (float)atof(token);
+               // s.p.peso = (float)atof(token);
+                setPeso((float)atof(token),getPacco(&s));
                 break;
             case 2:
-                s.p.volume = (float)atof(token);
+              //  s.p.volume = (float)atof(token);
+                 setVolume((float)atof(token),getPacco(&s));
                 break;
             case 3:
-                s.priorita = atoi(token);
+                //s.priorita = atoi(token);
+                setPriorita(atoi(token),&s);
                 break;
             case 4:
                 sscanf(token, "%d/%d/%d", &s.data_invio.tm_mday, &s.data_invio.tm_mon, &s.data_invio.tm_year);
@@ -108,6 +111,7 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
                 sscanf(token, "%d/%d/%d", &s.data_consegna.tm_mday, &s.data_consegna.tm_mon, &s.data_consegna.tm_year);
                 break;
             case 6:
+            //finire qua
                 strncpy(getNome(getPersona(&s,true)), token, sizeof(s.mittente.nome) - 1);
 
                 break;
