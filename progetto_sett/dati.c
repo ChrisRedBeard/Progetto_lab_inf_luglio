@@ -159,14 +159,14 @@ void setPersona(Spedizione *s, Persona *p, bool tipo)
     }
 }
 
-Persona getPersona(Spedizione *s, bool tipo)
+Persona* getPersona(Spedizione *s, bool tipo)
 {
     if (tipo)
     {
-        return s->mittente;
+        return &(s->mittente);
     }
     else
-        return s->destinatario;
+        return &(s->destinatario);
 }
 
 // stampare le mittente/destinatario fuori
@@ -238,6 +238,11 @@ void inserimento_pacco(Pacco *p)
     f = 0;
     input_float("Volume: ", &f, 0);
     setVolume(f, p);
+}
+
+
+Pacco* getPacco(Spedizione* s){
+    return &(s->p) ;
 }
 
 void stampa_pacco(Pacco p)
@@ -356,10 +361,10 @@ void stampa_spedizione(Spedizione s)
     printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getData(s, false).tm_mday, getData(s, false).tm_mon, getData(s, false).tm_year);
 
     printf("%s---Mittente---%s\n", BLUE, RESET);
-    stampa_Persona(getPersona(&s, true));
+    stampa_Persona(*getPersona(&s, true));
 
     printf("%s---Destinatario---%s\n", BLUE, RESET);
-    stampa_Persona(getPersona(&s, false));
+    stampa_Persona(*getPersona(&s, false));
 
     printf("%sStato della spedizione%s: ", WHITE, RESET);
     switch (s.stato)

@@ -239,6 +239,7 @@ float getVolume(Pacco p);
 void inserimento_pacco(Pacco *p);
 
 
+
 /**
  * @brief Stampa le informazioni del pacco.
  * @param p Pacco da stampare.
@@ -291,7 +292,7 @@ void setPersona(Spedizione *s, Persona *p, bool tipo);
  * @param tipo true per mittente, false per destinatario.
  * @return Struttura Persona corrispondente.
  */
-Persona getPersona(Spedizione *s, bool tipo);
+Persona* getPersona(Spedizione *s, bool tipo);
 /**
  * @struct NodoSpedizione
  * @brief Nodo di una lista collegata contenente una spedizione.
@@ -439,7 +440,12 @@ int confronta_id(const void *id1, const void *id2);
  */
 void inserimento_spedizione(Spedizione *s);
 
-
+/**
+ * @brief Restituisce il pacco di una spedizione.
+ * @param s La spedizione da cui estrarre il pacco.
+ *
+ */
+Pacco* getPacco(Spedizione *s);
 
 /**
  * @brief Inizializza una struttura Persona impostando i campi a valori predefiniti.

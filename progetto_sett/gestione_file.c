@@ -44,12 +44,12 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
                 "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
-                s->p.n, s->p.peso, s->p.volume, s->priorita,
+                get_numID(getPacco(s)), getPeso(*getPacco(s)), getVolume(*getPacco(s)), getPriorita(*s),
                 s->data_invio.tm_mday, s->data_invio.tm_mon, s->data_invio.tm_year,
                 s->data_consegna.tm_mday, s->data_consegna.tm_mon, s->data_consegna.tm_year,
-                s->mittente.nome, s->mittente.cognome, s->mittente.telefono, s->mittente.via, s->mittente.citta, s->mittente.provincia, s->mittente.cap, s->mittente.email,
-                s->destinatario.nome, s->destinatario.cognome, s->destinatario.telefono, s->destinatario.via, s->destinatario.citta, s->destinatario.provincia, s->destinatario.cap, s->destinatario.email,
-                s->stato);
+                getNome(getPersona(s,true)), getCognome(getPersona(s,true)), getTelefono(getPersona(s,true)), getVia(getPersona(s,true)), getCitta(getPersona(s,true)), getProv(getPersona(s,true)), getCAP(getPersona(s,true)),getMail(getPersona(s,true)),
+               getNome(getPersona(s,false)), getCognome(getPersona(s,false)), getTelefono(getPersona(s,false)),getVia(getPersona(s,false)), getCitta(getPersona(s,false)), getProv(getPersona(s,false)), getCAP(getPersona(s,false)), getMail(getPersona(s,false)),
+                getStato(*s));
         corrente = corrente->nextPtr;
     }
 
@@ -60,7 +60,7 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
 char *trim_left(char *str)
 {
     while (*str == ' ' || *str == '\t')
-        str++;
+        str++; //sposta il puntatore della stringa al carattere successi
     return str;
 }
 
@@ -108,15 +108,15 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
                 sscanf(token, "%d/%d/%d", &s.data_consegna.tm_mday, &s.data_consegna.tm_mon, &s.data_consegna.tm_year);
                 break;
             case 6:
-                strncpy(s.mittente.nome, token, sizeof(s.mittente.nome) - 1);
+                strncpy(getNome(getPersona(&s,true)), token, sizeof(s.mittente.nome) - 1);
 
                 break;
             case 7:
-                strncpy(s.mittente.cognome, token, sizeof(s.mittente.cognome) - 1);
+                strncpy(getCognome(getPersona(&s,true)), token, sizeof(s.mittente.cognome) - 1);
 
                 break;
             case 8:
-                strncpy(s.mittente.telefono, token, sizeof(s.mittente.telefono) - 1);
+                strncpy(getTelefono(getPersona(&s,true)), token, sizeof(s.mittente.telefono) - 1);
 
                 break;
             case 9:
