@@ -200,18 +200,18 @@ void setPeso(float f, Pacco *p)
 {
     p->peso = f;
 }
-float getPeso(Pacco p)
+float getPeso(Pacco *p)
 {
-    return p.peso;
+    return p->peso;
 }
 
 void setVolume(float f, Pacco *p)
 {
     p->volume = f;
 }
-float getVolume(Pacco p)
+float getVolume(Pacco *p)
 {
-    return p.volume;
+    return p->volume;
 }
 
 void inserimento_pacco(Pacco *p)
@@ -335,15 +335,15 @@ void setData(const char *prompt, Spedizione *s, bool scelta)
     } while (flag);
 }
 
-struct tm getData(Spedizione s, bool scelta)
+struct tm getData(Spedizione* s, bool scelta)
 {
     if (scelta == true)
     {
-        return s.data_invio;
+        return s->data_invio;
     }
     else
     {
-        return s.data_consegna;
+        return s->data_consegna;
     }
 }
 
@@ -353,10 +353,10 @@ int getGiorno(struct tm data){
     return data.tm_mday;
 }
 int getMese(struct tm data){
-    return (data.tm_mon)+1; // da rivedere
+    return (data.tm_mon);
 }
 int getAnno(struct tm data){
-    return (data.tm_year)+1900; // da rivedere
+    return (data.tm_year);
 }
 
 
@@ -371,8 +371,8 @@ void stampa_spedizione(Spedizione s)
 
     printf("%sPriorità%s: %s\n", WHITE, RESET, getPriorita(s) ? "Alta" : "Normale");
 
-    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET, getData(s, true).tm_mday, getData(s, true).tm_mon, getData(s, true).tm_year);
-    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getData(s, false).tm_mday, getData(s, false).tm_mon, getData(s, false).tm_year);
+    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET,getGiorno(getData(&s, true)), getMese(getData(&s, true)), getAnno(getData(&s, true)));
+    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(&s, false)), getMese(getData(&s, false)), getAnno(getData(&s, false)));
 
     printf("%s---Mittente---%s\n", BLUE, RESET);
     stampa_Persona(*getPersona(&s, true));
@@ -428,7 +428,7 @@ void inserimento_spedizione(Spedizione *s)
         setData("Data di invio", s, true);
         setData("Data di consegna", s, false);
 
-    } while (!controllo_date(getData(*s, true), getData(*s, false)));
+    } while (!controllo_date(getData(s, true), getData(s, false)));
 
     puts("<--Dati del mittente-->");
     Mittente m = {0};
@@ -466,6 +466,23 @@ void initCoda(CodaSpedizione *coda)
 int isEmpty(CodaSpedizione c)
 {
     return (c.testaPtr) == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
+}
+
+NodoSpedizione* getTestaNodo(CodaSpedizione *c){
+    return c->testaPtr;
+}
+
+NodoSpedizione* getCodaNodo(CodaSpedizione *c){
+    return c->codaPtr;
+}
+
+
+Spedizione* getSpedDaNodo(NodoSpedizione* n){
+    return &(n->sped);
+}
+
+NodoSpedizione* getProssimoNodo(NodoSpedizione* n){
+    return &(n->nextPtr);
 }
 
 void enqueue(CodaSpedizione *coda, Spedizione sped)

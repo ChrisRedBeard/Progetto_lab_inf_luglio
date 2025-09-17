@@ -212,10 +212,10 @@ void setPeso(float peso, Pacco *p);
 
 /**
  * @brief Funzione per ottenere il peso di un pacco.
- * @param p Struttura Pacco.
+ * @param p puntatore Struttura Pacco.
  * @return Peso in grammi.
  */
-float getPeso(Pacco p);
+float getPeso(Pacco *p);
 
 /**
  * @brief Funzione per settare il volume di un pacco.
@@ -226,10 +226,10 @@ void setVolume(float volume, Pacco *p);
 
 /**
  * @brief Funzione per ottenere il volume di un pacco.
- * @param p Struttura Pacco.
+ * @param p puntatore Struttura Pacco.
  * @return Volume in centimetri cubi.
  */
-float getVolume(Pacco p);
+float getVolume(Pacco *p);
 
 
 /**
@@ -330,6 +330,15 @@ void initCoda(CodaSpedizione *coda);
  */
 int isEmpty(CodaSpedizione c);
 
+//inserire documentazione
+
+NodoSpedizione* getNodoTesta(CodaSpedizione *c);
+NodoSpedizione* getCodaNodo(CodaSpedizione *c);
+void setNodoCorrente();
+Spedizione* getSpedDaNodo(NodoSpedizione* n);
+NodoSpedizione* getProssimoNodo(NodoSpedizione* n);
+
+
 /**
  * @brief Inserisce una spedizione nella coda (enqueue).
  * @param coda Puntatore alla coda in cui inserire la spedizione.
@@ -410,7 +419,9 @@ int getStato(Spedizione s);
  */
 void setData(const char *prompt, Spedizione *s, bool tipo);
 
-int getGiorno(struct tm);
+
+//da vedere
+int getGiorno(struct  tm);
 int getMese(struct tm);
 int getAnno(struct tm);
 
@@ -422,7 +433,7 @@ int getAnno(struct tm);
  * @param tipo true per data di invio, false per data di consegna.
  * @return struct tm La data selezionata.
  */
-struct tm getData(Spedizione s, bool tipo);
+struct tm getData(Spedizione *s, bool tipo);
 
 /**
  * @brief Stampa i dati completi di una spedizione.

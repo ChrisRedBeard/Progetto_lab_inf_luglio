@@ -11,6 +11,7 @@ FILE *fp;
 
 
 bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
+
 {  if(isEmpty(*coda)){
       printf("\nLa coda è vuota\n");
         return false;
@@ -34,23 +35,25 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
     }
 
 
-    NodoSpedizione *corrente = coda->testaPtr;
+    NodoSpedizione *corrente = getTestaNodo(*coda);
+
 
     while (corrente != NULL)
     {
 
-        Spedizione *s = &corrente->sped;
+        Spedizione *s = getSpedDaNodo(corrente);
+ 
         fprintf(fp,
                 "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
-                get_numID(getPacco(s)), getPeso(*getPacco(s)), getVolume(*getPacco(s)), getPriorita(*s),
-                s->data_invio.tm_mday, s->data_invio.tm_mon, s->data_invio.tm_year,
-                s->data_consegna.tm_mday, s->data_consegna.tm_mon, s->data_consegna.tm_year,
+                get_numID(getPacco(s)), getPeso(getPacco(s)), getVolume(getPacco(s)), getPriorita(*s),
+                getGiorno(getData(&s, true)), getMese(getData(&s, true)), getAnno(getData(&s, true)),
+                getGiorno(getData(&s, false)), getMese(getData(&s, false)), getAnno(getData(&s, false)),
                 getNome(getPersona(s,true)), getCognome(getPersona(s,true)), getTelefono(getPersona(s,true)), getVia(getPersona(s,true)), getCitta(getPersona(s,true)), getProv(getPersona(s,true)), getCAP(getPersona(s,true)),getMail(getPersona(s,true)),
                getNome(getPersona(s,false)), getCognome(getPersona(s,false)), getTelefono(getPersona(s,false)),getVia(getPersona(s,false)), getCitta(getPersona(s,false)), getProv(getPersona(s,false)), getCAP(getPersona(s,false)), getMail(getPersona(s,false)),
                 getStato(*s));
-        corrente = corrente->nextPtr;
+        corrente = getProssimoNodo(corrente);
     }
 
     chiudi_file();
