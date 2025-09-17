@@ -347,6 +347,20 @@ struct tm getData(Spedizione s, bool scelta)
     }
 }
 
+
+
+int getGiorno(struct tm data){
+    return data.tm_mday;
+}
+int getMese(struct tm data){
+    return (data.tm_mon)+1; // da rivedere
+}
+int getAnno(struct tm data){
+    return (data.tm_year)+1900; // da rivedere
+}
+
+
+
 void stampa_spedizione(Spedizione s)
 {
     puts("<-------------------------------->");

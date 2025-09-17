@@ -111,72 +111,73 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
                 sscanf(token, "%d/%d/%d", &s.data_consegna.tm_mday, &s.data_consegna.tm_mon, &s.data_consegna.tm_year);
                 break;
             case 6:
-            //finire qua
-                strncpy(getNome(getPersona(&s,true)), token, sizeof(s.mittente.nome) - 1);
+            // mittente 
+                strncpy(getNome(getPersona(&s,true)), token, sizeof(getNome(getPersona(&s,true))) - 1);
 
                 break;
             case 7:
-                strncpy(getCognome(getPersona(&s,true)), token, sizeof(s.mittente.cognome) - 1);
+                strncpy(getCognome(getPersona(&s,true)), token, sizeof(getCognome(getPersona(&s,true))) - 1);
 
                 break;
             case 8:
-                strncpy(getTelefono(getPersona(&s,true)), token, sizeof(s.mittente.telefono) - 1);
+                strncpy(getTelefono(getPersona(&s,true)), token, sizeof(getTelefono(getPersona(&s,true))) - 1);
 
                 break;
             case 9:
-                strncpy(s.mittente.via, token, sizeof(s.mittente.via) - 1);
+                strncpy(getVia(getPersona(&s,true)), token, sizeof(getVia(getPersona(&s,true))) - 1);
 
                 break;
             case 10:
-                strncpy(s.mittente.citta, token, sizeof(s.mittente.citta) - 1);
+                strncpy(getCitta(getPersona(&s,true)), token, sizeof(getCitta(getPersona(&s,true))) - 1);
 
                 break;
             case 11:
-                strncpy(s.mittente.provincia, token, sizeof(s.mittente.provincia) - 1);
+                strncpy(getProv(getPersona(&s,true)), token, sizeof(getProv(getPersona(&s,true))) - 1);
 
                 break;
             case 12:
-                strncpy(s.mittente.cap, token, sizeof(s.mittente.cap) - 1);
+                strncpy(getCAP(getPersona(&s,true)), token, sizeof(getCAP(getPersona(&s,true))) - 1);
 
-                break;
+                break; 
             case 13:
-                strncpy(s.mittente.email, token, sizeof(s.mittente.email) - 1);
+                strncpy(getMail(getPersona(&s,true)), token, sizeof(getMail(getPersona(&s,true))) - 1);
 
                 break;
-            case 14:
-                strncpy(s.destinatario.nome, token, sizeof(s.destinatario.nome) - 1);
+            case 14:  //detinatario
+                strncpy(getNome(getPersona(&s,false)), token, sizeof(getNome(getPersona(&s,false))) - 1);
 
                 break;
             case 15:
-                strncpy(s.destinatario.cognome, token, sizeof(s.destinatario.cognome) - 1);
+                strncpy(getCognome(getPersona(&s,false)), token, sizeof(getCognome(getPersona(&s,false))) - 1);
 
                 break;
             case 16:
-                strncpy(s.destinatario.telefono, token, sizeof(s.destinatario.telefono) - 1);
+                strncpy(getTelefono(getPersona(&s,false)), token, sizeof(getTelefono(getPersona(&s,false))) - 1);
 
                 break;
             case 17:
-                strncpy(s.destinatario.via, token, sizeof(s.destinatario.via) - 1);
+                strncpy(getVia(getPersona(&s,false)), token, sizeof(getVia(getPersona(&s,false))) - 1);
 
                 break;
             case 18:
-                strncpy(s.destinatario.citta, token, sizeof(s.destinatario.citta) - 1);
+                strncpy(getCitta(getPersona(&s,false)), token, sizeof(getCitta(getPersona(&s,false))) - 1);
 
                 break;
             case 19:
-                strncpy(s.destinatario.provincia, token, sizeof(s.destinatario.provincia) - 1);
+                strncpy(getProv(getPersona(&s,false)), token, sizeof(getProv(getPersona(&s,false))) - 1);
 
                 break;
             case 20:
-                strncpy(s.destinatario.cap, token, sizeof(s.destinatario.cap) - 1);
+                strncpy(getCAP(getPersona(&s,false)), token, sizeof(getCAP(getPersona(&s,false))) - 1);
 
                 break;
             case 21:
-                strncpy(s.destinatario.email, token, sizeof(s.destinatario.email) - 1);
+                strncpy(getMail(getPersona(&s,false)), token, sizeof(getMail(getPersona(&s,false))) - 1);
 
                 break;
             case 22:
-                s.stato = atoi(token);
+                //s.stato = atoi(token);
+                setStato(atoi(token),&s);
                 break;
             default:
                 break;

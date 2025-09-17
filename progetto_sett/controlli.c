@@ -7,6 +7,9 @@
 #include "controlli.h"
 #include "funzioni.h"
 
+
+//da rivedere 
+
 bool controllo_date(struct tm d_invio, struct tm d_cons)
 {
     // Se l'anno è maggiore

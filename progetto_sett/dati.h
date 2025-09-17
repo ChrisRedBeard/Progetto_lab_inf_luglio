@@ -410,6 +410,12 @@ int getStato(Spedizione s);
  */
 void setData(const char *prompt, Spedizione *s, bool tipo);
 
+int getGiorno(struct tm);
+int getMese(struct tm);
+int getAnno(struct tm);
+
+
+
 /**
  * @brief Restituisce la data di invio o di consegna di una spedizione.
  * @param s La spedizione da cui estrarre la data.
