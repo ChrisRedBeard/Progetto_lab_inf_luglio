@@ -186,7 +186,7 @@ bool rimuovi_doppioni_coda(CodaSpedizione coda)
 
         while (interno != NULL)
         {
-            if (strcmp(id_corrente, *get_numID((getPacco(getSpedDaNodo(interno))))) == 0)
+            if (confronta_id(id_corrente, get_numID((getPacco(getSpedDaNodo(interno))))) == 0)
             {
                 setProssimoNodo(esterno, getProssimoNodo(interno));
                 free(interno);
@@ -230,9 +230,9 @@ void ordinaCodaSpedizioni(CodaSpedizione originale)
     printf("\n%sCoda ordinata correttamente%s\n", GREEN, RESET);
 }
 
-int confronta_id(Spedizione s1, Spedizione s2)
+int confronta_id(char* stringa1, char* stringa2)
 {
-    return strcmp(get_numID((getPacco(s1))), get_numID((getPacco(s2))));
+    return strcmp(stringa1, stringa2);
 }
 
 void stampa_spedizione(Spedizione s)
@@ -245,8 +245,8 @@ void stampa_spedizione(Spedizione s)
 
     printf("%sPriorità%s: %s\n", WHITE, RESET, getPriorita(s) ? "Alta" : "Normale");
 
-    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(&s, true)), getMese(getData(&s, true)), getAnno(getData(&s, true)));
-    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(&s, false)), getMese(getData(&s, false)), getAnno(getData(&s, false)));
+    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(s, true)), getMese(getData(s, true)), getAnno(getData(s, true)));
+    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(s, false)), getMese(getData(s, false)), getAnno(getData(s, false)));
 
     printf("%s---Mittente---%s\n", BLUE, RESET);
     stampa_Persona(getPersona(s, true));
@@ -278,10 +278,23 @@ void stampa_spedizione(Spedizione s)
     puts("<-------------------------------->");
 }
 
+// stampare le mittente/destinatario fuori
+void stampa_Persona(Persona d)
+{
+    printf("%sNome e cognome%s: %s %s \n", WHITE, RESET, getNome(d), getCognome(d));
+    printf("%sTelefono%s: %16s, ", WHITE, RESET, getTelefono(d));
+    printf("%sEmail%s: %s\n", WHITE, RESET, getMail(d));
+    printf("%sIndirizzo%s: %s, ", WHITE, RESET, getVia(d));
+    printf("%sCittà%s: %s, ", WHITE, RESET, getCitta(d));
+    printf("%sProvincia%s: %2s, ", WHITE, RESET, getProv(d));
+    printf("%sCAP%s: %5s\n", WHITE, RESET, getCAP(d));
+}
+
+
 void stampa_coda_spedizioni(CodaSpedizione coda)
 {
     // #TODO modificare
-    NodoSpedizione *corrente = getNodoTesta(coda);
+    NodoSpedizione corrente = getNodoTesta(coda);
     if (corrente == NULL)
     {
         printf("\n%sLa coda è vuota!%s\n", YELLOW, RESET);

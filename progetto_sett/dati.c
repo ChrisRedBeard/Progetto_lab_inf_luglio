@@ -224,17 +224,6 @@ Persona getPersona(Spedizione s, bool tipo)
         return &(s->destinatario);
 }
 
-// stampare le mittente/destinatario fuori
-void stampa_Persona(Persona d)
-{
-    printf("%sNome e cognome%s: %s %s \n", WHITE, RESET, getNome(d), getCognome(d));
-    printf("%sTelefono%s: %16s, ", WHITE, RESET, getTelefono(d));
-    printf("%sEmail%s: %s\n", WHITE, RESET, getMail(d));
-    printf("%sIndirizzo%s: %s, ", WHITE, RESET, getVia(d));
-    printf("%sCittà%s: %s, ", WHITE, RESET, getCitta(d));
-    printf("%sProvincia%s: %2s, ", WHITE, RESET, getProv(d));
-    printf("%sCAP%s: %5s\n", WHITE, RESET, getCAP(d));
-}
 
 void set_numID(char *str, Pacco p)
 {
@@ -523,7 +512,7 @@ void enqueue(CodaSpedizione coda, Spedizione sped)
 
         if (isEmpty(coda))
         {
-            setNodoTesta(getNodoTesta(coda),nuovoNodo);
+            setNodoTesta(coda,nuovoNodo);
             //coda->testaPtr = nuovoNodo; // se è vuota, il nuovo nodo diventa la testa della coda
         }
         else
@@ -532,7 +521,7 @@ void enqueue(CodaSpedizione coda, Spedizione sped)
            // (coda->codaPtr)->nextPtr = nuovoNodo; // altrimenti il nuovo nodo viene inserito alla fine della coda
         }
 
-        setCodaNodo(getCodaNodo(coda), nuovoNodo); // il nuovo nodo diventa la coda della coda
+        setCodaNodo(coda, nuovoNodo); // il nuovo nodo diventa la coda della coda
     }
     else
     {
@@ -547,7 +536,7 @@ void enqueue(CodaSpedizione coda, Spedizione sped)
 
 Spedizione dequeue(CodaSpedizione coda)
 {
-    Spedizione *sped = malloc(sizeof(Spedizione)); // devo fare un malloc?
+    Spedizione sped = malloc(sizeof(Spedizione)); // devo fare un malloc?
     initSpedizione(sped);
 
     if (getNodoTesta(coda) == NULL)
@@ -557,11 +546,11 @@ Spedizione dequeue(CodaSpedizione coda)
 
     NodoSpedizione nodoDaRimuovere = getNodoTesta(coda);
     sped = getSpedDaNodo(nodoDaRimuovere);
-    setNodoTesta(getNodoTesta(coda), getProssimoNodo(nodoDaRimuovere));
+    setNodoTesta(coda, getProssimoNodo(nodoDaRimuovere));
 
     if (getNodoTesta(coda) == NULL)
     {
-        setCodaNodo(getCodaNodo(coda), NULL); // coda vuota dopo la rimozione
+        setCodaNodo(coda, NULL); // coda vuota dopo la rimozione
     }
 
     return sped; // successo
@@ -576,25 +565,25 @@ void elimina_spedizione(CodaSpedizione coda)
         printf("%sCoda vuota, nessuna spedizione da modificare%s\n", YELLOW, RESET);
         return;
     }
-    char id[10];
+    char *id={"\0"};
     printf("Inserisci l'ID della spedizione da modificare: ");
     input_id("ID[BA1234567]: ", id, 9);
 
     CodaSpedizione appoggio;
-    initCoda(&appoggio);
+    initCoda(appoggio);
 
     bool trovato = false;
 
     while (!isEmpty(coda))
     {
-        Spedizione *estratta = dequeue(coda);
-        if (confronta_id(get_numID(getPacco(estratta)), id) == 0)
+        Spedizione estratta = dequeue(coda);
+        if (confronta_id(   get_numID(getPacco(estratta)), id) == 0)
         {
             trovato = true;
         }
         else
         {
-            enqueue(&appoggio, *estratta);
+            enqueue(appoggio, estratta);
         }
         free(estratta);
     }
@@ -625,7 +614,7 @@ void modifica_spedizione(CodaSpedizione coda)
     input_id("ID[BA1234567]: ", id, 9);
 
     CodaSpedizione appoggio;
-    initCoda(&appoggio);
+    initCoda(appoggio);
 
     bool trovato = false;
 
@@ -640,11 +629,11 @@ void modifica_spedizione(CodaSpedizione coda)
 
             inserimento_spedizione(estratta);
 
-            enqueue(&appoggio, estratta);
+            enqueue(appoggio, estratta);
         }
         else
         {
-            enqueue(&appoggio, estratta);
+            enqueue(appoggio, estratta);
         }
 
         free(estratta);
@@ -674,7 +663,7 @@ void initPacco(Pacco p)
 
 void initSpedizione(Spedizione s)
 {
-    memset(s, 0, sizeof(Spedizione));
+    memset(&s, 0, sizeof(Spedizione));
 }
 
 void initNodoSpedizione(NodoSpedizione n)

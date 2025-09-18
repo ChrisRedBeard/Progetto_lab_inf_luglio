@@ -50,22 +50,22 @@ int main()
         }
         case 2:
         {
-            stampa_coda_spedizioni(&coda);
+            stampa_coda_spedizioni(coda);
             break;
         }
         case 3:
         {
-            elimina_spedizione(&coda);
+            elimina_spedizione(coda);
             break;
         }
         case 4:
         {
-            modifica_spedizione(&coda);
+            modifica_spedizione(coda);
             break;
         }
         case 5:
         {
-            if (salva_coda_su_file(&coda, nomeFile))
+            if (salva_coda_su_file(coda, nomeFile))
                 printf("%sCoda salvata su file con successo!%s\n", GREEN, RESET);
             else
                 printf("%sErrore nel salvataggio su file!%s\n", RED, RESET);
@@ -74,7 +74,7 @@ int main()
         }
         case 6:
         {
-            if (carica_coda_da_file(&coda, nomeFile))
+            if (carica_coda_da_file(coda, nomeFile))
                 printf("%sCoda caricata da file con successo!%s\n", GREEN, RESET);
             else
                 printf("%sErrore nel caricamento da file!%s\n", RED, RESET);
@@ -83,7 +83,7 @@ int main()
         }
         case 7:
         {
-            ordinaCodaSpedizioni(&coda);
+            ordinaCodaSpedizioni(coda);
             break;
         }
         case 0:

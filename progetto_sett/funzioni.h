@@ -118,7 +118,7 @@ void ordinaCodaSpedizioni(CodaSpedizione originale);
  * @param id2 Puntatore al secondo elemento (stringa).
  * @return Valore negativo, zero o positivo se id1 è minore, uguale o maggiore di id2.
  */
-int confronta_id(Spedizione s1, Spedizione s2);
+int confronta_id(char* stringa1, char* stringa2);
 
 /**
  * @brief Stampa i dati completi di una spedizione.
@@ -126,6 +126,9 @@ int confronta_id(Spedizione s1, Spedizione s2);
  * @param s La spedizione da stampare.
  */
 void stampa_spedizione(Spedizione s);
+
+
+void stampa_Persona(Persona d);
 
 /**
  * @brief Stampa tutte le spedizioni presenti nella coda.
