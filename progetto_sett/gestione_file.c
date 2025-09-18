@@ -35,7 +35,7 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
     }
 
 
-    NodoSpedizione *corrente = getTestaNodo(*coda);
+    NodoSpedizione *corrente = getNodoTesta(coda);
 
 
     while (corrente != NULL)
@@ -48,8 +48,8 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
                 get_numID(getPacco(s)), getPeso(getPacco(s)), getVolume(getPacco(s)), getPriorita(*s),
-                getGiorno(getData(&s, true)), getMese(getData(&s, true)), getAnno(getData(&s, true)),
-                getGiorno(getData(&s, false)), getMese(getData(&s, false)), getAnno(getData(&s, false)),
+                getGiorno(getData(s, true)), getMese(getData(s, true)), getAnno(getData(s, true)),
+                getGiorno(getData(s, false)), getMese(getData(s, false)), getAnno(getData(s, false)),
                 getNome(getPersona(s,true)), getCognome(getPersona(s,true)), getTelefono(getPersona(s,true)), getVia(getPersona(s,true)), getCitta(getPersona(s,true)), getProv(getPersona(s,true)), getCAP(getPersona(s,true)),getMail(getPersona(s,true)),
                getNome(getPersona(s,false)), getCognome(getPersona(s,false)), getTelefono(getPersona(s,false)),getVia(getPersona(s,false)), getCitta(getPersona(s,false)), getProv(getPersona(s,false)), getCAP(getPersona(s,false)), getMail(getPersona(s,false)),
                 getStato(*s));

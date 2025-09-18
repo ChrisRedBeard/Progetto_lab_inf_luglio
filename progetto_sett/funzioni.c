@@ -7,7 +7,7 @@
 
 void input_id(const char *prompt, char *dest, int_pos lunghezza)
 {
-    size_t size = sizeof(char) * (lunghezza+1);
+    size_t size = sizeof(char) * (lunghezza + 1);
     bool flag = false;
 
     do
@@ -31,7 +31,7 @@ void input_id(const char *prompt, char *dest, int_pos lunghezza)
         {
             flag = true;
             fflush(stdin);
-            printf("%sStringa non valida, riprova.\n%s", RED, RESET); //TODO non funziona?
+            printf("%sStringa non valida, riprova.\n%s", RED, RESET); // TODO non funziona?
         }
         else
         {
@@ -102,39 +102,37 @@ void input_float(const char *prompt, float *dest, float min)
     } while (flag);
 }
 
-void stampa_uscita(){
+void stampa_uscita()
+{
 
-     printf("%sUscita",BLUE);
-    fflush(stdout);  // Forza la stampa immediata
+    printf("%sUscita", BLUE);
+    fflush(stdout); // Forza la stampa immediata
 
-    for (int i = 0; i < 3; i++) {
-        Sleep(500);  // 500 millisecondi = 0.5 secondi
+    for (int i = 0; i < 3; i++)
+    {
+        Sleep(500); // 500 millisecondi = 0.5 secondi
         printf(".");
-        fflush(stdout);  // Stampa subito il punto
+        fflush(stdout); // Stampa subito il punto
     }
-    printf("%s",RESET);
-
+    printf("%s", RESET);
 }
 
-int confronta_spedizioni(const void *a, const void *b)
+int confronta_spedizioni(Spedizione *s1,Spedizione *s2)
 {
-    Spedizione *s1 = (Spedizione *)a;
-    Spedizione *s2 = (Spedizione *)b;
-
     // Priorità: true prima di false
     if (getPriorita(*s1) != getPriorita(*s2))
         return getPriorita(*s2) - getPriorita(*s1);
 
     // Data invio
-    struct tm d1 = getData(*s1, true);
-    struct tm d2 = getData(*s2, true);
+    struct tm d1 = getData(s1, true);
+    struct tm d2 = getData(s2, true);
     time_t t1 = mktime(&d1);
     time_t t2 = mktime(&d2);
     if (t1 != t2)
         return (int)(t1 - t2);
 
     // Peso: più leggero prima
-    if (getPeso((s1->p)) != getPeso((s2->p)))
+    if (getPeso(getPacco(s1)) != getPeso(getPacco(s2)))
         return (s1->p.peso < s2->p.peso) ? -1 : 1;
 
     return 0;
@@ -151,7 +149,7 @@ void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova)
     {
         Spedizione *corrente = dequeue(ordinata);
 
-        if (!inserito && confronta_spedizioni(&nuova, &corrente) < 0)
+        if (!inserito && confronta_spedizioni(&nuova, corrente) < 0)
         {
             enqueue(&temp, nuova);
             inserito = true;
@@ -172,24 +170,29 @@ void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova)
     }
 }
 
-
-bool rimuovi_doppioni_coda(CodaSpedizione *coda) {
+bool rimuovi_doppioni_coda(CodaSpedizione *coda)
+{
     if (!coda || !coda->testaPtr)
         return false;
 
     NodoSpedizione *esterno = coda->testaPtr;
 
-    while (esterno != NULL) {
+    while (esterno != NULL)
+    {
         char *id_corrente = esterno->sped.p.n;
         NodoSpedizione *precedente = esterno;
         NodoSpedizione *interno = esterno->nextPtr;
 
-        while (interno != NULL) {
-            if (strcmp(id_corrente, interno->sped.p.n) == 0) {
+        while (interno != NULL)
+        {
+            if (strcmp(id_corrente, interno->sped.p.n) == 0)
+            {
                 precedente->nextPtr = interno->nextPtr;
                 free(interno);
                 interno = precedente->nextPtr;
-            } else {
+            }
+            else
+            {
                 precedente = interno;
                 interno = interno->nextPtr;
             }
@@ -200,7 +203,6 @@ bool rimuovi_doppioni_coda(CodaSpedizione *coda) {
 
     return true;
 }
-
 
 void ordinaCodaSpedizioni(CodaSpedizione *originale)
 {

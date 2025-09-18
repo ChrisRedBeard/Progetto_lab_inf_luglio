@@ -93,7 +93,7 @@ bool rimuovi_doppioni_coda(CodaSpedizione *coda);
  * @param b Puntatore al secondo elemento (Spedizione).
  * @return Valore negativo se a < b, positivo se a > b, 0 se uguali.
  */
-int confronta_spedizioni(const void *a, const void *b);
+int confronta_spedizioni( Spedizione *s1, Spedizione *s2);
 
 /**
  * @brief Inserisce una spedizione in una coda mantenendo l'ordine.

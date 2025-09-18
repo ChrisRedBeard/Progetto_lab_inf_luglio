@@ -468,7 +468,7 @@ int isEmpty(CodaSpedizione c)
     return (c.testaPtr) == NULL; // ritorna 1 se la coda è vuota, altrimenti ritorna 0
 }
 
-NodoSpedizione* getTestaNodo(CodaSpedizione *c){
+NodoSpedizione* getNodoTesta(CodaSpedizione *c){
     return c->testaPtr;
 }
 
@@ -482,7 +482,7 @@ Spedizione* getSpedDaNodo(NodoSpedizione* n){
 }
 
 NodoSpedizione* getProssimoNodo(NodoSpedizione* n){
-    return &(n->nextPtr);
+    return (n->nextPtr);
 }
 
 void enqueue(CodaSpedizione *coda, Spedizione sped)
