@@ -65,10 +65,6 @@ void input_id(const char *prompt, char *dest, int_pos lunghezza);
  */
 void stampa_uscita();
 
-
-
-
-
 /**
  * @brief Rimuove i nodi duplicati dalla coda in base al campo numID.
  *
@@ -77,9 +73,8 @@ void stampa_uscita();
  *
  * @param[in,out] coda Puntatore alla coda di spedizioni da elaborare.
  * @return void
-*/
-bool rimuovi_doppioni_coda(CodaSpedizione *coda);
-
+ */
+bool rimuovi_doppioni_coda(CodaSpedizione coda);
 
 /**
  * @brief Funzione di confronto tra due spedizioni.
@@ -93,7 +88,7 @@ bool rimuovi_doppioni_coda(CodaSpedizione *coda);
  * @param b Puntatore al secondo elemento (Spedizione).
  * @return Valore negativo se a < b, positivo se a > b, 0 se uguali.
  */
-int confronta_spedizioni( Spedizione *s1, Spedizione *s2);
+int confronta_spedizioni(Spedizione s1, Spedizione s2);
 
 /**
  * @brief Inserisce una spedizione in una coda mantenendo l'ordine.
@@ -104,7 +99,7 @@ int confronta_spedizioni( Spedizione *s1, Spedizione *s2);
  * @param ordinata Puntatore alla coda ordinata.
  * @param nuova La spedizione da inserire.
  */
-void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova);
+void inserisciOrdinato(CodaSpedizione ordinata, Spedizione nuova);
 
 /**
  * @brief Ordina una coda di spedizioni secondo la priorità e la data di invio.
@@ -114,6 +109,32 @@ void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova);
  *
  * @param originale Puntatore alla coda da ordinare.
  */
-void ordinaCodaSpedizioni(CodaSpedizione *originale);
+void ordinaCodaSpedizioni(CodaSpedizione originale);
+
+/**
+ * @brief Confronta ID di due spedizioni (funzione di confronto per qsort).
+ *
+ * @param id1 Puntatore al primo elemento (stringa).
+ * @param id2 Puntatore al secondo elemento (stringa).
+ * @return Valore negativo, zero o positivo se id1 è minore, uguale o maggiore di id2.
+ */
+int confronta_id(Spedizione s1, Spedizione s2);
+
+/**
+ * @brief Stampa i dati completi di una spedizione.
+ *
+ * @param s La spedizione da stampare.
+ */
+void stampa_spedizione(Spedizione s);
+
+/**
+ * @brief Stampa tutte le spedizioni presenti nella coda.
+ *
+ * Visualizza su stdout le informazioni di ogni spedizione contenuta nella coda,
+ * in ordine FIFO (First-In, First-Out).
+ *
+ * @param coda Puntatore alla coda da stampare.
+ */
+void stampa_coda_spedizioni(CodaSpedizione coda);
 
 #endif

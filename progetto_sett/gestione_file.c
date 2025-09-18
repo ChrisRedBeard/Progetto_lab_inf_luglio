@@ -10,9 +10,9 @@
 FILE *fp;
 
 
-bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
+bool salva_coda_su_file(CodaSpedizione coda, char *nomeFile)
 
-{  if(isEmpty(*coda)){
+{  if(isEmpty(coda)){
       printf("\nLa coda è vuota\n");
         return false;
     }
@@ -35,24 +35,24 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
     }
 
 
-    NodoSpedizione *corrente = getNodoTesta(coda);
+    NodoSpedizione corrente = getNodoTesta(coda);
 
 
     while (corrente != NULL)
     {
 
-        Spedizione *s = getSpedDaNodo(corrente);
+        Spedizione s = getSpedDaNodo(corrente);
  
         fprintf(fp,
                 "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
-                get_numID(getPacco(s)), getPeso(getPacco(s)), getVolume(getPacco(s)), getPriorita(*s),
+                get_numID(getPacco(s)), getPeso(getPacco(s)), getVolume(getPacco(s)), getPriorita(s),
                 getGiorno(getData(s, true)), getMese(getData(s, true)), getAnno(getData(s, true)),
                 getGiorno(getData(s, false)), getMese(getData(s, false)), getAnno(getData(s, false)),
                 getNome(getPersona(s,true)), getCognome(getPersona(s,true)), getTelefono(getPersona(s,true)), getVia(getPersona(s,true)), getCitta(getPersona(s,true)), getProv(getPersona(s,true)), getCAP(getPersona(s,true)),getMail(getPersona(s,true)),
                getNome(getPersona(s,false)), getCognome(getPersona(s,false)), getTelefono(getPersona(s,false)),getVia(getPersona(s,false)), getCitta(getPersona(s,false)), getProv(getPersona(s,false)), getCAP(getPersona(s,false)), getMail(getPersona(s,false)),
-                getStato(*s));
+                getStato(s));
         corrente = getProssimoNodo(corrente);
     }
 
@@ -67,7 +67,7 @@ char *trim_left(char *str)
     return str;
 }
 
-bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
+bool carica_coda_da_file(CodaSpedizione coda, char *nomeFile)
 {
 
     if (apri_file(nomeFile, "r") == false)
@@ -82,7 +82,7 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
         int campo = 0;
 
         Spedizione s;
-        initSpedizione(&s);
+        initSpedizione(s);
 
         token = strtok(riga, ";");
 
@@ -92,26 +92,26 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
             switch (campo)
             {
             case 0:
-                strncpy(get_numID(getPacco(&s)), token, sizeof(get_numID(getPacco(&s))) - 1);
+                strncpy(get_numID(getPacco(s)), token, sizeof(get_numID(getPacco(s))) - 1);
 
                 break;
             case 1:
                // s.p.peso = (float)atof(token);
-                setPeso((float)atof(token),getPacco(&s));
+                setPeso((float)atof(token),getPacco(s));
                 break;
             case 2:
               //  s.p.volume = (float)atof(token);
-                 setVolume((float)atof(token),getPacco(&s));
+                 setVolume((float)atof(token),getPacco(s));
                 break;
             case 3:
                 //s.priorita = atoi(token);
-                setPriorita(atoi(token),&s);
+                setPriorita(atoi(token),s);
                 break;
             case 4:
-                sscanf(token, "%d/%d/%d", &s.data_invio.tm_mday, &s.data_invio.tm_mon, &s.data_invio.tm_year);
+                sscanf(token, "%d/%d/%d", ((getData(s,true)).tm_mday), ((getData(s,true)).tm_mon), ((getData(s,true)).tm_year));
                 break;
             case 5:
-                sscanf(token, "%d/%d/%d", &s.data_consegna.tm_mday, &s.data_consegna.tm_mon, &s.data_consegna.tm_year);
+                sscanf(token, "%d/%d/%d", ((getData(s,false)).tm_mday), ((getData(s,false)).tm_mon), ((getData(s,false)).tm_year));
                 break;
             case 6:
             // mittente 

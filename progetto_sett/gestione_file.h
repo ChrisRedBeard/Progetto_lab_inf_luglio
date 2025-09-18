@@ -34,7 +34,7 @@ void chiudi_file();
  * @param nomeFile Nome del file su cui salvare.
  * @return true se il salvataggio è avvenuto con successo, false altrimenti.
  */
-bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile);
+bool salva_coda_su_file(CodaSpedizione coda, char *nomeFile);
 
 /**
  * @brief Carica la coda delle spedizioni da file.
@@ -43,7 +43,7 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile);
  * @param nomeFile Nome del file da cui caricare.
  * @return true se il caricamento è avvenuto con successo, false altrimenti.
  */
-bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile);
+bool carica_coda_da_file(CodaSpedizione coda, char *nomeFile);
 
 /**
  * @brief Rimuove gli spazi e tabulazioni a sinistra da una stringa.

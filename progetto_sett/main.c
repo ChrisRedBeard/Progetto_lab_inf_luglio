@@ -14,7 +14,7 @@ int main()
     int_pos scelta = 0;
     CodaSpedizione coda;
 
-    initCoda(&coda);
+    initCoda(coda);
 
     printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n%s", BLUE, RESET);
 
@@ -38,11 +38,11 @@ int main()
         case 1:
         {
             Spedizione nuovaSped;
-            initSpedizione(&nuovaSped);
-            inserimento_spedizione(&nuovaSped);
+            initSpedizione(nuovaSped);
+            inserimento_spedizione(nuovaSped);
 
-            enqueue(&coda, nuovaSped);
-            rimuovi_doppioni_coda(&coda);
+            enqueue(coda, nuovaSped);
+            rimuovi_doppioni_coda(coda);
             
             printf("%sSpedizione inserita!%s\n", GREEN, RESET);
 

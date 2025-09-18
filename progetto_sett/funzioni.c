@@ -1,4 +1,5 @@
 #include "funzioni.h"
+#include "dati.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -117,11 +118,11 @@ void stampa_uscita()
     printf("%s", RESET);
 }
 
-int confronta_spedizioni(Spedizione *s1,Spedizione *s2)
+int confronta_spedizioni(Spedizione s1, Spedizione s2)
 {
     // Priorità: true prima di false
-    if (getPriorita(*s1) != getPriorita(*s2))
-        return getPriorita(*s2) - getPriorita(*s1);
+    if (getPriorita(s1) != getPriorita(s2))
+        return getPriorita(s2) - getPriorita(s1);
 
     // Data invio
     struct tm d1 = getData(s1, true);
@@ -133,98 +134,162 @@ int confronta_spedizioni(Spedizione *s1,Spedizione *s2)
 
     // Peso: più leggero prima
     if (getPeso(getPacco(s1)) != getPeso(getPacco(s2)))
-        return (s1->p.peso < s2->p.peso) ? -1 : 1;
+        return (getPeso(getPacco(s1)) < getPeso(getPacco(s1))) ? -1 : 1;
 
     return 0;
 }
 
-void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova)
+void inserisciOrdinato(CodaSpedizione ordinata, Spedizione nuova)
 {
     CodaSpedizione temp;
-    initCoda(&temp); // inizializza coda temporanea
+    initCoda(temp); // inizializza coda temporanea
 
     bool inserito = false;
 
-    while (!isEmpty(*ordinata))
+    while (!isEmpty(ordinata))
     {
-        Spedizione *corrente = dequeue(ordinata);
+        Spedizione corrente = dequeue(ordinata);
 
-        if (!inserito && confronta_spedizioni(&nuova, corrente) < 0)
+        if (!inserito && confronta_spedizioni(nuova, corrente) < 0)
         {
-            enqueue(&temp, nuova);
+            enqueue(temp, nuova);
             inserito = true;
         }
 
-        enqueue(&temp, *corrente);
+        enqueue(temp, corrente);
     }
 
     if (!inserito)
     {
-        enqueue(&temp, nuova);
+        enqueue(temp, nuova);
     }
 
     // Copia la coda temporanea nella coda ordinata
     while (!isEmpty(temp))
     {
-        enqueue(ordinata, *(dequeue(&temp)));
+        enqueue(ordinata, (dequeue(temp)));
     }
 }
 
-bool rimuovi_doppioni_coda(CodaSpedizione *coda)
+bool rimuovi_doppioni_coda(CodaSpedizione coda)
 {
-    if (!coda || !coda->testaPtr)
+    if (!coda || !getNodoTesta(coda))
         return false;
 
-    NodoSpedizione *esterno = coda->testaPtr;
+    NodoSpedizione esterno = getNodoTesta(coda);
 
     while (esterno != NULL)
     {
-        char *id_corrente = esterno->sped.p.n;
-        NodoSpedizione *precedente = esterno;
-        NodoSpedizione *interno = esterno->nextPtr;
+        char *id_corrente = get_numID((getPacco(getSpedDaNodo(esterno))));
+        NodoSpedizione precedente = esterno;
+        NodoSpedizione interno = getProssimoNodo(esterno);
 
         while (interno != NULL)
         {
-            if (strcmp(id_corrente, interno->sped.p.n) == 0)
+            if (strcmp(id_corrente, *get_numID((getPacco(getSpedDaNodo(interno))))) == 0)
             {
-                precedente->nextPtr = interno->nextPtr;
+                setProssimoNodo(esterno, getProssimoNodo(interno));
                 free(interno);
-                interno = precedente->nextPtr;
+                interno = getProssimoNodo(precedente);
             }
             else
             {
                 precedente = interno;
-                interno = interno->nextPtr;
+                interno = getProssimoNodo(interno);
             }
         }
 
-        esterno = esterno->nextPtr;
+        esterno = getProssimoNodo(esterno);
     }
 
     return true;
 }
 
-void ordinaCodaSpedizioni(CodaSpedizione *originale)
+void ordinaCodaSpedizioni(CodaSpedizione originale)
 {
 
-    if (isEmpty(*originale))
+    if (isEmpty(originale))
     {
         printf("%sNiente da ordinare, coda vuota%s\n", YELLOW, RESET);
         return;
     }
     CodaSpedizione ordinata;
-    initCoda(&ordinata);
+    initCoda(ordinata);
 
-    while (!isEmpty(*originale))
+    while (!isEmpty(originale))
     {
-        Spedizione *s = dequeue(originale);
-        inserisciOrdinato(&ordinata, *s);
+        Spedizione s = dequeue(originale);
+        inserisciOrdinato(ordinata, s);
     }
 
     // Copia la coda ordinata nella coda originale
     while (!isEmpty(ordinata))
     {
-        enqueue(originale, *(dequeue(&ordinata)));
+        enqueue(originale, dequeue(ordinata));
     }
     printf("\n%sCoda ordinata correttamente%s\n", GREEN, RESET);
+}
+
+int confronta_id(Spedizione s1, Spedizione s2)
+{
+    return strcmp(get_numID((getPacco(s1))), get_numID((getPacco(s2))));
+}
+
+void stampa_spedizione(Spedizione s)
+{
+    puts("<-------------------------------->");
+
+    printf("%s---Pacco---%s\n", BLUE, RESET);
+
+    stampa_pacco(getPacco(s));
+
+    printf("%sPriorità%s: %s\n", WHITE, RESET, getPriorita(s) ? "Alta" : "Normale");
+
+    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(&s, true)), getMese(getData(&s, true)), getAnno(getData(&s, true)));
+    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(getData(&s, false)), getMese(getData(&s, false)), getAnno(getData(&s, false)));
+
+    printf("%s---Mittente---%s\n", BLUE, RESET);
+    stampa_Persona(getPersona(s, true));
+
+    printf("%s---Destinatario---%s\n", BLUE, RESET);
+    stampa_Persona(getPersona(s, false));
+
+    printf("%sStato della spedizione%s: ", WHITE, RESET);
+    switch (getStato(s))
+    {
+    case 1:
+        puts("Ordinato");
+        break;
+    case 2:
+        puts("Spedito");
+        break;
+    case 3:
+        puts("In consegna");
+        break;
+    case 4:
+        puts("Consegnato");
+        break;
+    case 5:
+        puts("Annullato");
+        break;
+    default:
+        puts("Stato sconosciuto");
+    }
+    puts("<-------------------------------->");
+}
+
+void stampa_coda_spedizioni(CodaSpedizione coda)
+{
+    // #TODO modificare
+    NodoSpedizione *corrente = getNodoTesta(coda);
+    if (corrente == NULL)
+    {
+        printf("\n%sLa coda è vuota!%s\n", YELLOW, RESET);
+        return;
+    }
+    while (corrente != NULL)
+    {
+        stampa_spedizione(getSpedDaNodo(corrente));
+        corrente = getProssimoNodo(corrente);
+    }
 }
