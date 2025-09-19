@@ -5,6 +5,7 @@
 #include <string.h>
 #include <windows.h>
 
+// --- Funzioni input ---
 void input_id(const char *prompt, char *dest, int_pos lunghezza)
 {
     size_t size = sizeof(char) * (lunghezza + 1);
@@ -102,6 +103,7 @@ void input_float(const char *prompt, float *dest, float min)
     } while (flag);
 }
 
+// --- Funzioni stampa ---
 void stampa_uscita()
 {
 
@@ -117,15 +119,92 @@ void stampa_uscita()
     printf("%s", RESET);
 }
 
-int confronta_spedizioni(Spedizione *s1,Spedizione *s2)
+void stampa_Persona(Persona* d)
+{
+    printf("%sNome e cognome%s: %s %s \n", WHITE, RESET, getNome(d), getCognome(d));
+    printf("%sTelefono%s: %16s, ", WHITE, RESET, getTelefono(d));
+    printf("%sEmail%s: %s\n", WHITE, RESET, getMail(d));
+    printf("%sIndirizzo%s: %s, ", WHITE, RESET, getVia(d));
+    printf("%sCittà%s: %s, ", WHITE, RESET, getCitta(d));
+    printf("%sProvincia%s: %2s, ", WHITE, RESET, getProv(d));
+    printf("%sCAP%s: %5s\n", WHITE, RESET, getCAP(d));
+}
+
+void stampa_pacco(Pacco* p)
+{
+    printf("%sID Pacco%s: %s \n", WHITE, RESET, get_numID(p));
+    printf("%sPeso%s: %.2f grammi, Volume: %.2f cm^3 \n", WHITE, RESET,getPeso(p), getVolume(p));
+}
+
+void stampa_spedizione(Spedizione *s)
+{
+    puts("<-------------------------------->");
+
+    printf("%s---Pacco---%s\n", BLUE, RESET);
+
+    stampa_pacco((getPacco(s)));
+
+    printf("%sPriorità%s: %s\n", WHITE, RESET, getPriorita(s) ? "Alta" : "Normale");
+
+    printf("%sSpedito in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(*getData(s, true)), getMese(*getData(s, true)), getAnno(*getData(s, true)));
+    printf("%sConsegna prevista in data%s: %d/%d/%d \n", WHITE, RESET, getGiorno(*getData(s, false)), getMese(*getData(s, false)), getAnno(*getData(s, false)));
+
+    printf("%s---Mittente---%s\n", BLUE, RESET);
+    stampa_Persona(getPersona(s, true));
+
+    printf("%s---Destinatario---%s\n", BLUE, RESET);
+    stampa_Persona(getPersona(s, false));
+
+    printf("%sStato della spedizione%s: ", WHITE, RESET);
+    switch (getStato(s))
+    {
+    case 1:
+        puts("Ordinato");
+        break;
+    case 2:
+        puts("Spedito");
+        break;
+    case 3:
+        puts("In consegna");
+        break;
+    case 4:
+        puts("Consegnato");
+        break;
+    case 5:
+        puts("Annullato");
+        break;
+    default:
+        puts("Stato sconosciuto");
+    }
+    puts("<-------------------------------->");
+}
+
+void stampa_coda_spedizioni(CodaSpedizione *coda)
+{
+
+    NodoSpedizione *corrente = getNodoTesta(coda);
+    if (corrente == NULL)
+    {
+        printf("\n%sLa coda è vuota!%s\n", YELLOW, RESET);
+        return;
+    }
+    while (corrente != NULL)
+    {
+        stampa_spedizione(getSpedDaNodo(corrente));
+        corrente=getProssimoNodo(corrente);
+    }
+}
+
+// --- Funzioni confronto ---
+int confronta_spedizioni(Spedizione *s1, Spedizione *s2)
 {
     // Priorità: true prima di false
-    if (getPriorita(*s1) != getPriorita(*s2))
-        return getPriorita(*s2) - getPriorita(*s1);
+    if (getPriorita(s1) != getPriorita(s2))
+        return getPriorita(s2) - getPriorita(s1);
 
     // Data invio
-    struct tm d1 = getData(s1, true);
-    struct tm d2 = getData(s2, true);
+    struct tm d1 = *getData(s1, true);
+    struct tm d2 = *getData(s2, true);
     time_t t1 = mktime(&d1);
     time_t t2 = mktime(&d2);
     if (t1 != t2)
@@ -133,72 +212,79 @@ int confronta_spedizioni(Spedizione *s1,Spedizione *s2)
 
     // Peso: più leggero prima
     if (getPeso(getPacco(s1)) != getPeso(getPacco(s2)))
-        return (s1->p.peso < s2->p.peso) ? -1 : 1;
+        return (getPeso(getPacco(s1)) < getPeso(getPacco(s2))) ? -1 : 1;
 
     return 0;
 }
 
-void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione nuova)
+int confronta_id(char * id1,char * id2)
 {
-    CodaSpedizione temp;
-    initCoda(&temp); // inizializza coda temporanea
+    return strcmp(id1, id2);
+}
+
+
+
+void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione *nuova)
+{
+    CodaSpedizione *temp = creaCoda();
 
     bool inserito = false;
 
-    while (!isEmpty(*ordinata))
+    while (!isEmpty(ordinata))
     {
         Spedizione *corrente = dequeue(ordinata);
 
-        if (!inserito && confronta_spedizioni(&nuova, corrente) < 0)
+        if (!inserito && confronta_spedizioni(nuova, corrente) < 0)
         {
-            enqueue(&temp, nuova);
+            enqueue(temp, nuova);
             inserito = true;
         }
 
-        enqueue(&temp, *corrente);
+        enqueue(temp, corrente);
     }
 
     if (!inserito)
     {
-        enqueue(&temp, nuova);
+        enqueue(temp, nuova);
     }
 
     // Copia la coda temporanea nella coda ordinata
     while (!isEmpty(temp))
     {
-        enqueue(ordinata, *(dequeue(&temp)));
+        enqueue(ordinata, dequeue(temp));
     }
 }
 
 bool rimuovi_doppioni_coda(CodaSpedizione *coda)
 {
-    if (!coda || !coda->testaPtr)
+    if (!coda || !getNodoTesta(coda))
         return false;
 
-    NodoSpedizione *esterno = coda->testaPtr;
+    NodoSpedizione *esterno = getNodoTesta(coda);
 
     while (esterno != NULL)
     {
-        char *id_corrente = esterno->sped.p.n;
+        char *id_corrente = get_numID(getPacco((getSpedDaNodo(esterno))));
+                
         NodoSpedizione *precedente = esterno;
-        NodoSpedizione *interno = esterno->nextPtr;
+        NodoSpedizione *interno = getProssimoNodo(esterno);
 
         while (interno != NULL)
         {
-            if (strcmp(id_corrente, interno->sped.p.n) == 0)
+            if (strcmp(id_corrente, get_numID(getPacco((getSpedDaNodo(interno))))) == 0)
             {
-                precedente->nextPtr = interno->nextPtr;
+                setProssimoNodo(precedente, getProssimoNodo(interno));
                 free(interno);
-                interno = precedente->nextPtr;
+                interno = getProssimoNodo(precedente);
             }
             else
             {
                 precedente = interno;
-                interno = interno->nextPtr;
+                interno = getProssimoNodo(interno);
             }
         }
 
-        esterno = esterno->nextPtr;
+        esterno = getProssimoNodo(esterno);
     }
 
     return true;
@@ -207,24 +293,23 @@ bool rimuovi_doppioni_coda(CodaSpedizione *coda)
 void ordinaCodaSpedizioni(CodaSpedizione *originale)
 {
 
-    if (isEmpty(*originale))
+    if (isEmpty(originale))
     {
         printf("%sNiente da ordinare, coda vuota%s\n", YELLOW, RESET);
         return;
     }
-    CodaSpedizione ordinata;
-    initCoda(&ordinata);
+    CodaSpedizione *ordinata=creaCoda();
 
-    while (!isEmpty(*originale))
+    while (!isEmpty(originale))
     {
         Spedizione *s = dequeue(originale);
-        inserisciOrdinato(&ordinata, *s);
+        inserisciOrdinato(ordinata, s);
     }
 
     // Copia la coda ordinata nella coda originale
     while (!isEmpty(ordinata))
     {
-        enqueue(originale, *(dequeue(&ordinata)));
+        enqueue(originale, (dequeue(ordinata)));
     }
     printf("\n%sCoda ordinata correttamente%s\n", GREEN, RESET);
 }

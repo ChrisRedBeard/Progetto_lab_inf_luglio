@@ -1,0 +1,26 @@
+{
+    // Configurazione per il debug di programmi C con GCC
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Compila e Debugga C (GCC)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/a.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "preLaunchTask": "Compila C",
+            "setupCommands": [
+                {
+                    "description": "Abilita la formattazione automatica per gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

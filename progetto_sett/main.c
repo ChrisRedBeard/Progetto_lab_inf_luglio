@@ -12,9 +12,8 @@ int main()
 
     char *nomeFile = "spedizioni.txt";
     int_pos scelta = 0;
-    CodaSpedizione coda;
+    CodaSpedizione *coda = creaCoda();
 
-    initCoda(&coda);
 
     printf("\n%sBenvenuto nel Gestore di Magazzino!\nSiamo lieti di avere il tuo supporto. Gestisci le tue spedizioni e il tuo inventario con facilità!\n%s", BLUE, RESET);
 
@@ -37,12 +36,12 @@ int main()
         {
         case 1:
         {
-            Spedizione nuovaSped;
-            initSpedizione(&nuovaSped);
-            inserimento_spedizione(&nuovaSped);
+            Spedizione *nuovaSped = creaSpedizione();
+            
+            inserimento_spedizione(nuovaSped);
 
-            enqueue(&coda, nuovaSped);
-            rimuovi_doppioni_coda(&coda);
+            enqueue(coda, nuovaSped);
+            rimuovi_doppioni_coda(coda);
             
             printf("%sSpedizione inserita!%s\n", GREEN, RESET);
 
@@ -50,7 +49,7 @@ int main()
         }
         case 2:
         {
-            stampa_coda_spedizioni(&coda);
+            stampa_coda_spedizioni(coda);
             break;
         }
         case 3:
@@ -65,7 +64,7 @@ int main()
         }
         case 5:
         {
-            if (salva_coda_su_file(&coda, nomeFile))
+            if (salva_coda_su_file(coda, nomeFile))
                 printf("%sCoda salvata su file con successo!%s\n", GREEN, RESET);
             else
                 printf("%sErrore nel salvataggio su file!%s\n", RED, RESET);
@@ -74,7 +73,7 @@ int main()
         }
         case 6:
         {
-            if (carica_coda_da_file(&coda, nomeFile))
+            if (carica_coda_da_file(coda, nomeFile))
                 printf("%sCoda caricata da file con successo!%s\n", GREEN, RESET);
             else
                 printf("%sErrore nel caricamento da file!%s\n", RED, RESET);
@@ -83,7 +82,7 @@ int main()
         }
         case 7:
         {
-            ordinaCodaSpedizioni(&coda);
+            ordinaCodaSpedizioni(coda);
             break;
         }
         case 0:

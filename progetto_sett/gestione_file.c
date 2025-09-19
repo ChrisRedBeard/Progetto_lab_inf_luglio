@@ -1,4 +1,3 @@
-
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
@@ -9,50 +8,54 @@
 
 FILE *fp;
 
-
 bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
 
-{  if(isEmpty(*coda)){
-      printf("\nLa coda è vuota\n");
+{
+    if (isEmpty(coda))
+    {
+        printf("\nLa coda è vuota\n");
         return false;
     }
-    int scelta=0;
+    int scelta = 0;
 
-    do{
-      printf("\nOpzioni\n1)Per sovrascrivere il file\n2)Per scrivere in coda\nScegli: ");
-      scanf("%d",&scelta);
-    }while(scelta<1 || scelta>2);
+    do
+    {
+        printf("\nOpzioni\n1)Per sovrascrivere il file\n2)Per scrivere in coda\nScegli: ");
+        scanf("%d", &scelta);
+    } while (scelta < 1 || scelta > 2);
 
-    if(scelta==1){
-        if(apri_file(nomeFile, "w")==false){
+    if (scelta == 1)
+    {
+        if (apri_file(nomeFile, "w") == false)
+        {
             return false;
         }
-    }else{
-        if(apri_file(nomeFile, "a")==false){
+    }
+    else
+    {
+        if (apri_file(nomeFile, "a") == false)
+        {
             return false;
         }
-
     }
 
-
     NodoSpedizione *corrente = getNodoTesta(coda);
-
 
     while (corrente != NULL)
     {
 
         Spedizione *s = getSpedDaNodo(corrente);
- 
+
         fprintf(fp,
                 "%9s;%.2f;%.2f;%d;%02d/%02d/%04d;%02d/%02d/%04d;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;"
                 "%29s;%29s;%16s;%99s;%49s;%2s;%5s;%49s;%d\n",
-                get_numID(getPacco(s)), getPeso(getPacco(s)), getVolume(getPacco(s)), getPriorita(*s),
-                getGiorno(getData(s, true)), getMese(getData(s, true)), getAnno(getData(s, true)),
-                getGiorno(getData(s, false)), getMese(getData(s, false)), getAnno(getData(s, false)),
-                getNome(getPersona(s,true)), getCognome(getPersona(s,true)), getTelefono(getPersona(s,true)), getVia(getPersona(s,true)), getCitta(getPersona(s,true)), getProv(getPersona(s,true)), getCAP(getPersona(s,true)),getMail(getPersona(s,true)),
-               getNome(getPersona(s,false)), getCognome(getPersona(s,false)), getTelefono(getPersona(s,false)),getVia(getPersona(s,false)), getCitta(getPersona(s,false)), getProv(getPersona(s,false)), getCAP(getPersona(s,false)), getMail(getPersona(s,false)),
-                getStato(*s));
+                get_numID(getPacco(s)), getPeso(getPacco(s)), getVolume(getPacco(s)), getPriorita(s),
+                getGiorno(*getData(s, true)), getMese(*getData(s, true)), getAnno(*getData(s, true)),
+                getGiorno(*getData(s, false)), getMese(*getData(s, false)), getAnno(*getData(s, false)),
+                getNome(getPersona(s, true)), getCognome(getPersona(s, true)), getTelefono(getPersona(s, true)), getVia(getPersona(s, true)), getCitta(getPersona(s, true)), getProv(getPersona(s, true)), getCAP(getPersona(s, true)), getMail(getPersona(s, true)),
+                getNome(getPersona(s, false)), getCognome(getPersona(s, false)), getTelefono(getPersona(s, false)), getVia(getPersona(s, false)), getCitta(getPersona(s, false)), getProv(getPersona(s, false)), getCAP(getPersona(s, false)), getMail(getPersona(s, false)),
+                getStato(s));
         corrente = getProssimoNodo(corrente);
     }
 
@@ -63,7 +66,7 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile)
 char *trim_left(char *str)
 {
     while (*str == ' ' || *str == '\t')
-        str++; //sposta il puntatore della stringa al carattere successi
+        str++; // sposta il puntatore della stringa al carattere successi
     return str;
 }
 
@@ -81,8 +84,7 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
         char *token;
         int campo = 0;
 
-        Spedizione s;
-        initSpedizione(&s);
+        Spedizione *s = creaSpedizione();
 
         token = strtok(riga, ";");
 
@@ -92,95 +94,136 @@ bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile)
             switch (campo)
             {
             case 0:
-                strncpy(get_numID(getPacco(&s)), token, sizeof(get_numID(getPacco(&s))) - 1);
-
+            {
+                char *id = get_numID(getPacco(s));
+                size_t size = sizeof(char) * 9;
+                strncpy(id, token, size);
                 break;
+            }
+
             case 1:
-               // s.p.peso = (float)atof(token);
-                setPeso((float)atof(token),getPacco(&s));
+                // s.p.peso = (float)atof(token);
+                setPeso((float)atof(token), getPacco(s));
                 break;
             case 2:
-              //  s.p.volume = (float)atof(token);
-                 setVolume((float)atof(token),getPacco(&s));
+                //  s.p.volume = (float)atof(token);
+                setVolume((float)atof(token), getPacco(s));
                 break;
             case 3:
-                //s.priorita = atoi(token);
-                setPriorita(atoi(token),&s);
+                // s.priorita = atoi(token);
+                setPriorita(atoi(token), s);
                 break;
             case 4:
-                sscanf(token, "%d/%d/%d", &s.data_invio.tm_mday, &s.data_invio.tm_mon, &s.data_invio.tm_year);
+                sscanf(token, "%d/%d/%d", &getData(s, true)->tm_mday, &getData(s, true)->tm_mon, &getData(s, true)->tm_year);
+
                 break;
             case 5:
-                sscanf(token, "%d/%d/%d", &s.data_consegna.tm_mday, &s.data_consegna.tm_mon, &s.data_consegna.tm_year);
+                sscanf(token, "%d/%d/%d", &getData(s, false)->tm_mday, &getData(s, false)->tm_mon, &getData(s, false)->tm_year);
                 break;
             case 6:
-            // mittente 
-                strncpy(getNome(getPersona(&s,true)), token, sizeof(getNome(getPersona(&s,true))) - 1);
+            {
+                // mittente
+                size_t size = sizeof(char) * 29;
+                strncpy(getNome(getPersona(s, true)), token, size);
 
                 break;
+            }
             case 7:
-                strncpy(getCognome(getPersona(&s,true)), token, sizeof(getCognome(getPersona(&s,true))) - 1);
+            {
+                size_t size = sizeof(char) * 29;
+
+                strncpy(getCognome(getPersona(s, true)), token, size);
 
                 break;
+            }
             case 8:
-                strncpy(getTelefono(getPersona(&s,true)), token, sizeof(getTelefono(getPersona(&s,true))) - 1);
+            {
+                size_t size = sizeof(char) * 16;
+                strncpy(getTelefono(getPersona(s, true)), token, size);
 
                 break;
+            }
             case 9:
-                strncpy(getVia(getPersona(&s,true)), token, sizeof(getVia(getPersona(&s,true))) - 1);
+            {
+                strncpy(getVia(getPersona(s, true)), token, sizeof(char) * 99);
 
                 break;
+            }
             case 10:
-                strncpy(getCitta(getPersona(&s,true)), token, sizeof(getCitta(getPersona(&s,true))) - 1);
+            {
+                strncpy(getCitta(getPersona(s, true)), token, sizeof(char) * 49);
 
                 break;
+            }
             case 11:
-                strncpy(getProv(getPersona(&s,true)), token, sizeof(getProv(getPersona(&s,true))) - 1);
+            {
+                strncpy(getProv(getPersona(s, true)), token, sizeof(char) * 2);
 
                 break;
+            }
             case 12:
-                strncpy(getCAP(getPersona(&s,true)), token, sizeof(getCAP(getPersona(&s,true))) - 1);
+            {
+                strncpy(getCAP(getPersona(s, true)), token, sizeof(char) * 5);
 
-                break; 
+                break;
+            }
             case 13:
-                strncpy(getMail(getPersona(&s,true)), token, sizeof(getMail(getPersona(&s,true))) - 1);
+            {
+                strncpy(getMail(getPersona(s, true)), token, sizeof(char) * 49);
 
                 break;
-            case 14:  //detinatario
-                strncpy(getNome(getPersona(&s,false)), token, sizeof(getNome(getPersona(&s,false))) - 1);
+            }
+            case 14:
+            { // detinatario
+                strncpy(getNome(getPersona(s, false)), token, sizeof(char) * 29);
 
                 break;
+            }
             case 15:
-                strncpy(getCognome(getPersona(&s,false)), token, sizeof(getCognome(getPersona(&s,false))) - 1);
+            {
+                strncpy(getCognome(getPersona(s, false)), token, sizeof(char) * 29);
 
                 break;
+            }
             case 16:
-                strncpy(getTelefono(getPersona(&s,false)), token, sizeof(getTelefono(getPersona(&s,false))) - 1);
+            {
+                strncpy(getTelefono(getPersona(s, false)), token, sizeof(char) * 16);
 
                 break;
+            }
             case 17:
-                strncpy(getVia(getPersona(&s,false)), token, sizeof(getVia(getPersona(&s,false))) - 1);
+            {
+                strncpy(getVia(getPersona(s, false)), token, sizeof(char) * 99);
 
                 break;
+            }
             case 18:
-                strncpy(getCitta(getPersona(&s,false)), token, sizeof(getCitta(getPersona(&s,false))) - 1);
+            {
+                strncpy(getCitta(getPersona(s, false)), token, sizeof(char) * 49);
 
                 break;
+            }
             case 19:
-                strncpy(getProv(getPersona(&s,false)), token, sizeof(getProv(getPersona(&s,false))) - 1);
+            {
+                strncpy(getProv(getPersona(s, false)), token, sizeof(char) * 2);
 
                 break;
+            }
             case 20:
-                strncpy(getCAP(getPersona(&s,false)), token, sizeof(getCAP(getPersona(&s,false))) - 1);
+            {
+                strncpy(getCAP(getPersona(s, false)), token, sizeof(char) * 5);
 
                 break;
+            }
             case 21:
-                strncpy(getMail(getPersona(&s,false)), token, sizeof(getMail(getPersona(&s,false))) - 1);
+            {
+                strncpy(getMail(getPersona(s, false)), token, sizeof(char) * 49);
 
                 break;
+            }
             case 22:
-                //s.stato = atoi(token);
-                setStato(atoi(token),&s);
+                // s.stato = atoi(token);
+                setStato(atoi(token), s);
                 break;
             default:
                 break;
@@ -211,10 +254,7 @@ bool apri_file(char *nome_file, char *modo)
     }
 }
 
-
 void chiudi_file()
 {
     fclose(fp);
 }
-
-
