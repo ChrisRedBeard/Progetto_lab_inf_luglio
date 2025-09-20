@@ -223,6 +223,12 @@ int confronta_id(char * id1,char * id2)
 }
 
 
+/**
+ * @brief Inserisce una spedizione nella coda ordinata.
+ * @param ordinata Puntatore alla coda ordinata.
+ * @param nuova Puntatore alla nuova Spedizione da inserire.
+ */
+void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione *nuova);
 
 void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione *nuova)
 {

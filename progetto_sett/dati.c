@@ -60,35 +60,6 @@ typedef struct _coda_spedizione
     NodoSpedizione *codaPtr;
 } CodaSpedizione;
 
-Persona *creaPersona()
-{
-    Persona *p = malloc(sizeof(Persona));
-    if (p == NULL)
-    {
-        printf("%sErrore di allocazione memoria per la persona%s\n", RED, RESET);
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        memset(p, 0, sizeof(Persona));
-        return p;
-    }
-}
-
-Pacco *creaPacco()
-{
-    Pacco *p = malloc(sizeof(Pacco));
-    if (p == NULL)
-    {
-        printf("%sErrore di allocazione memoria per il pacco%s\n", RED, RESET);
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        memset(p, 0, sizeof(Pacco));
-        return p;
-    }
-}
 
 Spedizione* creaSpedizione(void)
 {
@@ -106,6 +77,12 @@ Spedizione* creaSpedizione(void)
         return s;
     }
 }
+
+/**
+ * @brief Crea un nuovo nodo per la coda delle spedizioni.
+ * @return Puntatore al nuovo NodoSpedizione allocato.
+ */
+NodoSpedizione *creaNodoSpedizione();
 
 NodoSpedizione *creaNodoSpedizione()
 {
@@ -215,6 +192,12 @@ char *getMail(Persona *p)
 {
     return p->email;
 }
+
+/**
+ * @brief Inserisce i dati di una Persona.
+ * @param p Puntatore alla Persona da inserire.
+ */
+void inserimento_Persona(Persona *p);
 
 void inserimento_Persona(Persona *p)
 {
@@ -330,6 +313,11 @@ float getVolume(Pacco *p)
 {
     return p->volume;
 }
+/**
+ * @brief Inserisce i dati di un Pacco.
+ * @param p Puntatore al Pacco da inserire.
+ */
+void inserimento_pacco(Pacco *p);
 
 void inserimento_pacco(Pacco *p)
 {
@@ -387,6 +375,14 @@ int getStato(Spedizione *s)
 {
     return s->stato;
 }
+
+/**
+ * @brief Inserisce una data in una spedizione.
+ * @param prompt Messaggio da visualizzare.
+ * @param s Puntatore alla Spedizione.
+ * @param tipo true per data di consegna, false per spedizione.
+ */
+void inserimentoData(const char *prompt, Spedizione *s, bool tipo);
 
 void inserimentoData(const char *prompt, Spedizione *s, bool scelta)
 {
@@ -530,6 +526,13 @@ NodoSpedizione *getNodoTesta(CodaSpedizione *c)
     return c->testaPtr;
 }
 
+/**
+ * @brief Restituisce il nodo coda della CodaSpedizione.
+ * @param c Puntatore alla CodaSpedizione.
+ * @return Puntatore al NodoSpedizione.
+ */
+NodoSpedizione *getCodaNodo(CodaSpedizione *c);
+
 NodoSpedizione *getCodaNodo(CodaSpedizione *c)
 {
     return c->codaPtr;
@@ -545,6 +548,13 @@ NodoSpedizione *getProssimoNodo(NodoSpedizione *n)
     return n->nextPtr;
 }
 
+/**
+ * @brief Imposta la spedizione associata al nodo.
+ * @param n Puntatore al NodoSpedizione.
+ * @param sped Puntatore alla Spedizione da associare.
+ */
+void setSpedDaNodo(NodoSpedizione *n, Spedizione *sped);
+
 void setSpedDaNodo(NodoSpedizione *n, Spedizione *sped)
 {
     n->sped = *sped;
@@ -555,10 +565,25 @@ void setProssimoNodo(NodoSpedizione *n1, NodoSpedizione *n2)
     n1->nextPtr = n2;
 }
 
+/**
+ * @brief Imposta il nodo testa della coda.
+ * @param c Puntatore alla CodaSpedizione.
+ * @param n Puntatore al NodoSpedizione testa.
+ */
+void setNodoTesta(CodaSpedizione *c, NodoSpedizione *n);
+
 void setNodoTesta(CodaSpedizione *c, NodoSpedizione *n)
 {
     c->testaPtr = n;
 }
+
+/**
+ * @brief Imposta il nodo coda della coda.
+ * @param c Puntatore alla CodaSpedizione.
+ * @param n Puntatore al NodoSpedizione coda.
+ */
+void setCodaNodo(CodaSpedizione *c, NodoSpedizione *n);
+
 void setCodaNodo(CodaSpedizione *c, NodoSpedizione *n)
 {
     c->codaPtr = n;

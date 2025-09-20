@@ -45,11 +45,6 @@ bool salva_coda_su_file(CodaSpedizione *coda, char *nomeFile);
  */
 bool carica_coda_da_file(CodaSpedizione *coda, char *nomeFile);
 
-/**
- * @brief Rimuove gli spazi e tabulazioni a sinistra da una stringa.
- * @param str Stringa da elaborare.
- * @return Puntatore alla stringa senza spazi iniziali.
- */
-char *trim_left(char *str);
+
 
 #endif
