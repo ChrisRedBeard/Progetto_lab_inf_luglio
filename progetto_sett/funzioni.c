@@ -195,7 +195,9 @@ void stampa_coda_spedizioni(CodaSpedizione *coda)
     }
 }
 
-// --- Funzioni confronto ---
+// --- Funzioni confronto --- 
+
+// implementazione relazione d'ordine tra due spedizioni
 int confronta_spedizioni(Spedizione *s1, Spedizione *s2)
 {
     // Priorità: true prima di false
@@ -230,6 +232,8 @@ int confronta_id(char * id1,char * id2)
  */
 void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione *nuova);
 
+
+// Implementazione dell'Insertion Sort con una coda delle spedizioni
 void inserisciOrdinato(CodaSpedizione *ordinata, Spedizione *nuova)
 {
     CodaSpedizione *temp = creaCoda();
